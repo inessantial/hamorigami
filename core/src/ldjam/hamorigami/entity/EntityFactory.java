@@ -1,7 +1,12 @@
 package ldjam.hamorigami.entity;
 
+import aurelienribon.tweenengine.Tween;
 import de.bitbrain.braingdx.context.GameContext2D;
+import de.bitbrain.braingdx.tweens.GameObjectTween;
+import de.bitbrain.braingdx.tweens.SharedTweenManager;
 import de.bitbrain.braingdx.world.GameObject;
+import ldjam.hamorigami.model.HealthData;
+import ldjam.hamorigami.model.Movement;
 import ldjam.hamorigami.model.ObjectType;
 import ldjam.hamorigami.model.SpiritType;
 
@@ -17,8 +22,15 @@ public class EntityFactory {
       GameObject object = context.getGameWorld().addObject();
       object.setZIndex(3);
       object.setType(spiritType);
-      object.setPosition(context.getGameCamera().getLeft() + x,context.getGameCamera().getTop() + y);
+      object.setPosition(context.getGameCamera().getLeft() + x, context.getGameCamera().getTop() + y);
       object.setDimensions(32f, 32f);
+      object.setAttribute(HealthData.class, new HealthData(spiritType.getHealth()));
+      object.setAttribute(Movement.class, new Movement(spiritType.getMaxSpeed(), context.getGameCamera()));
+      context.getBehaviorManager().apply(object.getAttribute(Movement.class), object);
+      Tween.to(object, GameObjectTween.OFFSET_Y, 0.6f)
+            .target(4f)
+            .repeatYoyo(Tween.INFINITY, 0f)
+            .start(SharedTweenManager.getInstance());
       return object;
    }
 

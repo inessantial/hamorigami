@@ -6,25 +6,26 @@ import com.badlogic.gdx.controllers.ControllerAdapter;
 import com.badlogic.gdx.controllers.mappings.Xbox;
 import com.badlogic.gdx.math.Vector2;
 import de.bitbrain.braingdx.util.Updateable;
+import de.bitbrain.braingdx.world.GameObject;
 import ldjam.hamorigami.model.Movement;
 
 public class IngameControllerAdapter extends ControllerAdapter implements Updateable {
 
    private final Vector2 moveDirection = new Vector2();
 
-   private final Movement playerMovement;
+   private final GameObject playerObject;
    private float horizontalValue;
    private float verticalValue;
 
-   public IngameControllerAdapter(Movement playerMovement) {
-      this.playerMovement = playerMovement;
+   public IngameControllerAdapter(GameObject playerObject) {
+      this.playerObject = playerObject;
    }
 
    @Override
    public void update(float delta) {
       moveDirection.set(horizontalValue, verticalValue);
       if (moveDirection.len() > 0.2f) {
-         playerMovement.move(moveDirection);
+         playerObject.getAttribute(Movement.class).move(moveDirection);
       }
    }
 
