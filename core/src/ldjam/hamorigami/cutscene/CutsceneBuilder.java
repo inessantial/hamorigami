@@ -25,7 +25,7 @@ public class CutsceneBuilder {
       return this;
    }
 
-   public CutsceneBuilder wait(float seconds) {
+   public CutsceneBuilder delay(float seconds) {
       // TODO
       return this;
    }
@@ -49,6 +49,18 @@ public class CutsceneBuilder {
    }
 
    public CutsceneBuilder shakeScreen(float intensity, float seconds) {
+      return this;
+   }
+
+   public CutsceneBuilder playSound(String soundPath, float x, float y) {
+      return this;
+   }
+
+   public CutsceneBuilder playMusic(String musicPath) {
+      return this;
+   }
+
+   public CutsceneBuilder stopMusic() {
       return this;
    }
 

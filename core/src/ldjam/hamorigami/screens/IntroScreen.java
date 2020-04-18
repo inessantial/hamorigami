@@ -23,10 +23,10 @@ public class IntroScreen extends BrainGdxScreen2D<HamorigamiGame> {
          }
       };
       Cutscene cutscene = new CutsceneBuilder(cutsceneListener)
-            .fadeIn(2f)
             .positionCamera(200, 200)
+            .fadeIn(2f)
             .initiateDialog(null)
-            .wait(3f)
+            .delay(3f)
             .moveCameraTo(200, -200,2f)
             .initiateDialog(null)
             .moveCameraTo(50, -100, 1.5f)
