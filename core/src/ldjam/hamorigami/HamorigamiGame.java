@@ -1,33 +1,84 @@
 package ldjam.hamorigami;
 
-import com.badlogic.gdx.ApplicationAdapter;
+import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import de.bitbrain.braingdx.BrainGdxGame;
+import de.bitbrain.braingdx.GameSettings;
+import de.bitbrain.braingdx.assets.GameAssetLoader;
+import de.bitbrain.braingdx.assets.SmartAssetLoader;
+import de.bitbrain.braingdx.debug.BrainGdxDebug;
+import de.bitbrain.braingdx.event.GameEventManagerImpl;
+import de.bitbrain.braingdx.graphics.GraphicsSettings;
+import de.bitbrain.braingdx.graphics.postprocessing.filters.RadialBlur;
+import de.bitbrain.braingdx.screens.AbstractScreen;
+import ldjam.hamorigami.i18n.Bundle;
+import ldjam.hamorigami.screens.IngameScreen;
+import ldjam.hamorigami.ui.Styles;
+import org.apache.commons.lang.SystemUtils;
 
-public class HamorigamiGame extends ApplicationAdapter {
-	SpriteBatch batch;
-	Texture img;
-	
-	@Override
-	public void create () {
-		batch = new SpriteBatch();
-		img = new Texture("badlogic.jpg");
+public class HamorigamiGame extends BrainGdxGame {
+
+   private ScreenMode screenMode = ScreenMode.FULLSCREEN;
+
+   private enum ScreenMode {
+      SCREENSHOT,
+      GIF,
+      FULLSCREEN
+   }
+
+   private boolean debug;
+
+	public HamorigamiGame(String[] args) {
+		screenMode = ScreenMode.FULLSCREEN;
+		for (String arg : args) {
+			if (arg.equals("screenshot")) {
+				screenMode = ScreenMode.SCREENSHOT;
+			}
+			if (arg.equals("gif")) {
+				screenMode = ScreenMode.GIF;
+			}
+			if (arg.equals("debug")) {
+				debug = true;
+			}
+		}
 	}
 
-	@Override
-	public void render () {
-		Gdx.gl.glClearColor(1, 0, 0, 1);
-		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-		batch.begin();
-		batch.draw(img, 0, 0);
-		batch.end();
+	public boolean isDebug() {
+		return debug;
 	}
-	
-	@Override
-	public void dispose () {
-		batch.dispose();
-		img.dispose();
-	}
+
+   @Override
+   protected GameAssetLoader getAssetLoader() {
+      return new SmartAssetLoader(Assets.class);
+   }
+
+   @Override
+   protected AbstractScreen<?, ?> getInitialScreen() {
+      Bundle.load();
+      Styles.init();
+      BrainGdxDebug.setLabelStyle(Styles.LABEL_DEBUG);
+      configureSettings();
+      return new IngameScreen(this);
+   }
+
+   private void configureSettings() {
+      GameSettings settings = new GameSettings(new GameEventManagerImpl());
+      GraphicsSettings graphicsSettings = settings.getGraphics();
+      if (Gdx.app.getType() == Application.ApplicationType.Desktop) {
+         if (screenMode == ScreenMode.SCREENSHOT) {
+            Gdx.graphics.setWindowedMode(3840, 2160);
+         } else if (screenMode == ScreenMode.GIF) {
+            Gdx.graphics.setWindowedMode(1248, 770);
+         } else if (SystemUtils.IS_OS_WINDOWS) {
+            Gdx.graphics.setUndecorated(true);
+            Gdx.graphics.setWindowedMode(Gdx.graphics.getDisplayMode().width, Gdx.graphics.getDisplayMode().height);
+         } else {
+            Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());
+         }
+         graphicsSettings.setRadialBlurQuality(RadialBlur.Quality.High);
+         graphicsSettings.setRenderScale(0.1f);
+         graphicsSettings.setParticleMultiplier(0.7f);
+         graphicsSettings.save();
+      }
+   }
 }

@@ -5,9 +5,9 @@ import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import ldjam.hamorigami.HamorigamiGame;
 
 public class DesktopLauncher {
-	public static void main (String[] arg) {
+	public static void main (String[] args) {
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
 		config.title = "hamorigami";
-		new LwjglApplication(new HamorigamiGame(), config);
+		new LwjglApplication(new HamorigamiGame(args), config);
 	}
 }
