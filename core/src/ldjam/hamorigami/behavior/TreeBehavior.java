@@ -39,9 +39,9 @@ public class TreeBehavior extends BehaviorAdapter {
       // tree heals otherwise
       float absoluteLevel = Math.abs(status.getTreeWateredLevel());
       if (absoluteLevel >= 0.5f) {
-         treeHealth.reduceHealth((int) (120 * absoluteLevel));
+         treeHealth.reduceHealth((int) (180 * absoluteLevel));
       } else {
-         treeHealth.addHealth((int) (60 * (1f - absoluteLevel)));
+         treeHealth.addHealth((int) (260 * (1f - absoluteLevel)));
       }
    }
 }
