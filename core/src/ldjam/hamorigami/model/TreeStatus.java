@@ -22,6 +22,6 @@ public class TreeStatus {
    }
 
    public int calculateHealing() {
-      return Math.max(0, 13 - (int) (13 * Math.abs(0.5f - waterLevel)));
+      return (int) (50 * (0.5f - Math.abs(0.5f - waterLevel)));
    }
 }

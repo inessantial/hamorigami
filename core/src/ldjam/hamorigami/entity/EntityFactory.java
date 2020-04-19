@@ -1,6 +1,8 @@
 package ldjam.hamorigami.entity;
 
+import aurelienribon.tweenengine.BaseTween;
 import aurelienribon.tweenengine.Tween;
+import aurelienribon.tweenengine.TweenCallback;
 import com.badlogic.gdx.graphics.Color;
 import de.bitbrain.braingdx.behavior.BehaviorAdapter;
 import de.bitbrain.braingdx.context.GameContext2D;
@@ -62,7 +64,7 @@ public class EntityFactory {
    }
 
    public GameObject spawnDamageTelegraph(final GameObject owner, final float centerX, final float centerY, final float width, final float height, final float rotation) {
-      GameObject damage = context.getGameWorld().addObject(new Mutator<GameObject>() {
+      final GameObject damage = context.getGameWorld().addObject(new Mutator<GameObject>() {
          @Override
          public void mutate(GameObject target) {
             target.setType("DAMAGE");
@@ -72,6 +74,12 @@ public class EntityFactory {
             target.setAttribute("owner", owner);
          }
       }, false);
+      Tween.call(new TweenCallback() {
+         @Override
+         public void onEvent(int type, BaseTween<?> source) {
+            context.getGameWorld().remove(damage);
+         }
+      }).delay(0.5f).start(SharedTweenManager.getInstance());
       context.getBehaviorManager().apply(new BehaviorAdapter() {
 
          private boolean applicableForRemoval;
@@ -93,10 +101,12 @@ public class EntityFactory {
                   return;
                }
                if (target.hasAttribute(HealthData.class) && target.getType() != ObjectType.TREE) {
-                  target.getAttribute(HealthData.class).reduceHealth(10);
-                  target.setColor(1f, 0f, 0f, 1f);
-                  TweenUtils.toColor(target.getColor(), Color.WHITE.cpy(), 0.5f);
-                  applicableForRemoval = true;
+                  if (!target.getAttribute(HealthData.class).isDead()) {
+                     target.getAttribute(HealthData.class).reduceHealth(10);
+                     target.setColor(1f, 0f, 0f, 1f);
+                     TweenUtils.toColor(target.getColor(), Color.WHITE.cpy(), 0.5f);
+                     applicableForRemoval = true;
+                  }
                }
             }
          }

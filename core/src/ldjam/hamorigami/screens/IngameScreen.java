@@ -11,7 +11,7 @@ import ldjam.hamorigami.Assets;
 import ldjam.hamorigami.HamorigamiGame;
 import ldjam.hamorigami.entity.AttackHandler;
 import ldjam.hamorigami.behavior.SpiritSpawner;
-import ldjam.hamorigami.entity.DeathMachine;
+import ldjam.hamorigami.entity.SpiritedAway;
 import ldjam.hamorigami.entity.EntityFactory;
 import ldjam.hamorigami.input.ingame.IngameControllerAdapter;
 import ldjam.hamorigami.input.ingame.IngameKeyboardAdapter;
@@ -67,7 +67,7 @@ public class IngameScreen extends BrainGdxScreen2D<HamorigamiGame> {
       // Spirit spawning
       spawner = new SpiritSpawner(5f, entityFactory, context, treeObject);
       attackHandler = new AttackHandler(playerObject, entityFactory);
-      context.getBehaviorManager().apply(new DeathMachine(context));
+      context.getBehaviorManager().apply(new SpiritedAway(context));
 
    }
 
