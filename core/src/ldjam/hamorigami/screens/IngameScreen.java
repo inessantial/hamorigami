@@ -19,6 +19,7 @@ import ldjam.hamorigami.behavior.SpiritSpawner;
 import ldjam.hamorigami.entity.AttackHandler;
 import ldjam.hamorigami.entity.EntityFactory;
 import ldjam.hamorigami.entity.SpiritedAway;
+import ldjam.hamorigami.graphics.EntityOrderComparator;
 import ldjam.hamorigami.input.ingame.IngameControllerAdapter;
 import ldjam.hamorigami.input.ingame.IngameKeyboardAdapter;
 import ldjam.hamorigami.model.*;
@@ -78,6 +79,7 @@ public class IngameScreen extends BrainGdxScreen2D<HamorigamiGame> {
    }
 
    private void setupGraphics(GameContext2D context) {
+      context.getRenderManager().setRenderOrderComparator(new EntityOrderComparator());
       AnimationSpriteSheet kodamaSpritesheet = new AnimationSpriteSheet(
             SPIRIT_EARTH_KODAMA_SRITESHEET, 32, 64
       );
@@ -143,25 +145,25 @@ public class IngameScreen extends BrainGdxScreen2D<HamorigamiGame> {
       context.getRenderManager().register(SpiritType.SPIRIT_FIRE, new AnimationRenderer(hiSpritesheet, AnimationConfig.builder()
             .registerFrames(SpiritAnimationType.HOVERING_EAST, AnimationFrames.builder()
                   .origin(0, 1)
-                  .frames(1)
+                  .frames(8)
                   .duration(0.2f)
                   .playMode(LOOP)
                   .build())
             .registerFrames(SpiritAnimationType.HOVERING_WEST, AnimationFrames.builder()
                   .origin(0, 0)
-                  .frames(1)
+                  .frames(8)
                   .duration(0.2f)
                   .playMode(LOOP)
                   .build())
             .registerFrames(SpiritAnimationType.HOVERING_NORTH, AnimationFrames.builder()
                   .origin(0, 2)
-                  .frames(1)
+                  .frames(8)
                   .duration(0.2f)
                   .playMode(LOOP)
                   .build())
             .registerFrames(SpiritAnimationType.HOVERING_SOUTH, AnimationFrames.builder()
                   .origin(0, 3)
-                  .frames(1)
+                  .frames(8)
                   .duration(0.2f)
                   .playMode(LOOP)
                   .build())
