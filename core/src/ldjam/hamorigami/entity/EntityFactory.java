@@ -51,10 +51,10 @@ public class EntityFactory {
       GameObject object = context.getGameWorld().addObject();
       object.setType(ObjectType.TREE);
       object.setZIndex(2);
+      object.setDimensions(300, 230);
       object.setPosition(
-            context.getGameCamera().getLeft() + context.getGameCamera().getScaledCameraWidth() / 2f - 100,
+            context.getGameCamera().getLeft() + (context.getGameCamera().getScaledCameraWidth() / 2f - object.getWidth() / 2f),
             context.getGameCamera().getTop() + 45);
-      object.setDimensions(200, 200);
       object.setAttribute(TreeStatus.class, new TreeStatus());
       object.setAttribute(HealthData.class, new HealthData(1000));
       context.getBehaviorManager().apply(new TreeBehavior(), object);
