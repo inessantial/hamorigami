@@ -15,7 +15,7 @@ import ldjam.hamorigami.model.SpiritType;
 public class ChasingBehavior extends BehaviorAdapter {
 
    public static final float MIN_DISTANCE = 20f;
-   public static final float ATTACK_INTERVAL = 3f;
+   public static final float ATTACK_INTERVAL = 1f;
 
    public static final float ARRIVAL_HEALTH = 8f;
 
@@ -29,7 +29,6 @@ public class ChasingBehavior extends BehaviorAdapter {
    public ChasingBehavior(GameObject target, float offsetX, float offsetY) {
       this.target = target;
       offset.set(offsetX, offsetY);
-      attackTimer.update(ATTACK_INTERVAL);
 
    }
 
@@ -55,7 +54,7 @@ public class ChasingBehavior extends BehaviorAdapter {
                   @Override
                   public void onEvent(int type, BaseTween<?> tween) {
                      if (source.hasAttribute(HealthData.class)) {
-                        //source.getAttribute(HealthData.class).kill();
+                        source.getAttribute(HealthData.class).kill();
                      }
                   }
                }).delay(ARRIVAL_HEALTH).start(SharedTweenManager.getInstance());

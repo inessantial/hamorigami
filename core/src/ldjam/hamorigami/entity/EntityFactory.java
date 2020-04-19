@@ -3,6 +3,7 @@ package ldjam.hamorigami.entity;
 import aurelienribon.tweenengine.BaseTween;
 import aurelienribon.tweenengine.Tween;
 import aurelienribon.tweenengine.TweenCallback;
+import box2dLight.Light;
 import com.badlogic.gdx.graphics.Color;
 import de.bitbrain.braingdx.behavior.BehaviorAdapter;
 import de.bitbrain.braingdx.context.GameContext2D;
@@ -41,6 +42,8 @@ public class EntityFactory {
       object.setAttribute(HealthData.class, new HealthData(spiritType.getHealth()));
       object.setAttribute(Movement.class, new Movement(spiritType.getMaxSpeed(), context.getGameCamera()));
       context.getBehaviorManager().apply(object.getAttribute(Movement.class), object);
+      //Light light = context.getLightingManager().createPointLight(200, spiritType.getLightingColor());
+      // context.getLightingManager().attach(light, object);
       return object;
    }
 
@@ -55,6 +58,8 @@ public class EntityFactory {
       object.setAttribute(TreeStatus.class, new TreeStatus());
       object.setAttribute(HealthData.class, new HealthData(1000));
       context.getBehaviorManager().apply(new TreeBehavior(), object);
+      //Light light = context.getLightingManager().createPointLight(500, Color.valueOf("e5a656"));
+      //context.getLightingManager().attach(light, object, true);
       return object;
    }
 

@@ -1,5 +1,6 @@
 package ldjam.hamorigami.model;
 
+import com.badlogic.gdx.graphics.Color;
 import de.bitbrain.braingdx.context.GameContext2D;
 import de.bitbrain.braingdx.world.GameObject;
 import ldjam.hamorigami.effects.*;
@@ -17,21 +18,27 @@ public enum SpiritType {
       public void onSpawnSpirit(GameObject spirit, GameObject tree, GameContext2D context) {
          // noOp
       }
-   }),
-   SPIRIT_WATER(80, 5, new AddWaterEffect(), new SpawnWaterSpiritEffect()),
-   SPIRIT_FIRE(45, 10, new AddSunlightEffect(), new SpawnFireEffect());
+   }, Color.valueOf("a3ffdb")),
+   SPIRIT_WATER(80, 5, new AddWaterEffect(), new SpawnWaterSpiritEffect(), Color.valueOf("306eff")),
+   SPIRIT_FIRE(45, 10, new AddSunlightEffect(), new SpawnFireEffect(), Color.valueOf("ff8367"));
 
    private final int health;
    private final float maxSpeed;
    private final SpiritAbsorbEffect absorbEffect;
    private final SpiritSpawnEffect spawnEffect;
+   private final Color lightingColor;
 
 
-   SpiritType(int health, float maxSpeed, SpiritAbsorbEffect absorbEffect, SpiritSpawnEffect spawnEffect) {
+   SpiritType(int health, float maxSpeed, SpiritAbsorbEffect absorbEffect, SpiritSpawnEffect spawnEffect, Color lightingColor) {
       this.health = health;
       this.maxSpeed = maxSpeed;
       this.absorbEffect = absorbEffect;
       this.spawnEffect = spawnEffect;
+      this.lightingColor = lightingColor;
+   }
+
+   public Color getLightingColor() {
+      return lightingColor;
    }
 
    public SpiritAbsorbEffect getAbsorbEffect() {

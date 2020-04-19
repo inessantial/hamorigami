@@ -9,6 +9,7 @@ import de.bitbrain.braingdx.graphics.GameCamera;
 import de.bitbrain.braingdx.graphics.animation.AnimationConfig;
 import de.bitbrain.braingdx.graphics.animation.AnimationFrames;
 import de.bitbrain.braingdx.graphics.animation.AnimationSpriteSheet;
+import de.bitbrain.braingdx.graphics.lighting.LightingConfig;
 import de.bitbrain.braingdx.graphics.renderer.SpriteRenderer;
 import de.bitbrain.braingdx.screen.BrainGdxScreen2D;
 import de.bitbrain.braingdx.world.GameObject;
@@ -53,6 +54,7 @@ public class IngameScreen extends BrainGdxScreen2D<HamorigamiGame> {
       setupLevel(context);
       setupGraphics(context);
       setupInput(context);
+      setupLighting(context);
       setupDebugUi(context);
    }
 
@@ -61,6 +63,10 @@ public class IngameScreen extends BrainGdxScreen2D<HamorigamiGame> {
       super.onUpdate(delta);
       spawner.update(delta);
       attackHandler.update(delta);
+   }
+
+   private void setupLighting(GameContext2D context) {
+      //context.getLightingManager().setAmbientLight(Color.valueOf("ffffff"));
    }
 
    private void setupLevel(GameContext2D context) {
