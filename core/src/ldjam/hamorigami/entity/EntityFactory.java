@@ -5,10 +5,8 @@ import de.bitbrain.braingdx.context.GameContext2D;
 import de.bitbrain.braingdx.tweens.GameObjectTween;
 import de.bitbrain.braingdx.tweens.SharedTweenManager;
 import de.bitbrain.braingdx.world.GameObject;
-import ldjam.hamorigami.model.HealthData;
-import ldjam.hamorigami.model.Movement;
-import ldjam.hamorigami.model.ObjectType;
-import ldjam.hamorigami.model.SpiritType;
+import ldjam.hamorigami.behavior.TreeBehavior;
+import ldjam.hamorigami.model.*;
 
 public class EntityFactory {
 
@@ -42,6 +40,9 @@ public class EntityFactory {
             context.getGameCamera().getLeft() + context.getGameCamera().getScaledCameraWidth() / 2f - 100,
             context.getGameCamera().getTop() + 30);
       object.setDimensions(200, 200);
+      object.setAttribute(TreeStatus.class, new TreeStatus());
+      object.setAttribute(HealthData.class, new HealthData(1000));
+      context.getBehaviorManager().apply(new TreeBehavior(), object);
       return object;
    }
 

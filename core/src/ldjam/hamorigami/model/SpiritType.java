@@ -1,20 +1,35 @@
 package ldjam.hamorigami.model;
 
+import de.bitbrain.braingdx.world.GameObject;
+import ldjam.hamorigami.tree.AddSunlightEffect;
+import ldjam.hamorigami.tree.AddWaterEffect;
+import ldjam.hamorigami.tree.TreeEffect;
+
 public enum SpiritType {
 
-   SPIRIT_EARTH(80, 30, 20),
-   SPIRIT_WATER(40, 2, 10),
-   SPIRIT_FIRE(25, 3, 50);
+   SPIRIT_EARTH(80, 30, new TreeEffect() {
+      @Override
+      public boolean applyEffect(GameObject treeObject) {
+         // NoOp
+         return true;
+      }
+   }),
+   SPIRIT_WATER(40, 2, new AddWaterEffect()),
+   SPIRIT_FIRE(25, 3, new AddSunlightEffect());
 
    private final int health;
    private final float maxSpeed;
-   private final int damage;
+   private final TreeEffect effect;
 
 
-   SpiritType(int health, float maxSpeed, int damage) {
+   SpiritType(int health, float maxSpeed, TreeEffect effect) {
       this.health = health;
       this.maxSpeed = maxSpeed;
-      this.damage = damage;
+      this.effect = effect;
+   }
+
+   public TreeEffect getEffect() {
+      return effect;
    }
 
    public int getHealth() {
@@ -23,9 +38,5 @@ public enum SpiritType {
 
    public float getMaxSpeed() {
       return maxSpeed;
-   }
-
-   public int getDamage() {
-      return damage;
    }
 }

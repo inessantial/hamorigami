@@ -14,6 +14,7 @@ public class IngameKeyboardAdapter extends InputAdapter implements Updateable {
 
    private final GameObject playerObject;
    private final Vector2 moveDirection = new Vector2();
+   private final Vector2 speed = new Vector2();
 
    public IngameKeyboardAdapter(GameObject playerObject) {
       this.playerObject = playerObject;
@@ -25,7 +26,7 @@ public class IngameKeyboardAdapter extends InputAdapter implements Updateable {
          Gdx.app.exit();
       }
       if (input.isKeyPressed(W)) {
-         moveDirection.y = 1f;
+         moveDirection.y = 1;
       }
       if (input.isKeyPressed(A)) {
          moveDirection.x = -1;
@@ -36,8 +37,13 @@ public class IngameKeyboardAdapter extends InputAdapter implements Updateable {
       if (input.isKeyPressed(D)) {
          moveDirection.x = 1;
       }
+      if (input.isKeyPressed(SPACE)) {
+         playerObject.getAttribute(Movement.class).jump();
+      }
       playerObject.getAttribute(Movement.class).move(moveDirection);
       moveDirection.x = 0;
       moveDirection.y = 0;
+      speed.x = 0;
+      speed.y = 0;
    }
 }

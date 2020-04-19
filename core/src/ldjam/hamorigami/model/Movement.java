@@ -23,11 +23,16 @@ public class Movement extends BehaviorAdapter {
    }
 
    public void move(Vector2 direction, float amount) {
-      moveDirection.x = direction.x;
-      moveDirection.y = direction.y;
-      moveDirection.nor();
-      movement.x += moveDirection.x * amount;
-      movement.y += moveDirection.y * amount;
+      if (gameObject == null) {
+         return;
+      }
+      if (!gameObject.hasAttribute("gravity") || (gameObject.hasAttribute("gravity") && gameObject.getTop() == gameCamera.getTop())) {
+         moveDirection.x = direction.x;
+         moveDirection.y = direction.y;
+         moveDirection.nor();
+         movement.x += moveDirection.x * amount;
+         movement.y += moveDirection.y * amount;
+      }
    }
 
    public void move(Vector2 direction) {
@@ -52,6 +57,15 @@ public class Movement extends BehaviorAdapter {
       }
    }
 
+   public void jump() {
+      if (gameObject == null) {
+         return;
+      }
+      if (gameObject.hasAttribute("gravity") && gameObject.getTop() == gameCamera.getTop()) {
+         movement.y += 1000;
+      }
+   }
+
    @Override
    public void onAttach(GameObject source) {
       this.gameObject = source;
@@ -62,7 +76,17 @@ public class Movement extends BehaviorAdapter {
       float moveX = movement.x * delta;
       float moveY = movement.y * delta;
       gameObject.move(moveX, moveY);
-      movement.scl(0.9f);
+
+      if (gameObject.hasAttribute("gravity")) {
+         if (gameObject.getTop() > gameCamera.getTop()) {
+            movement.y *= 0.9f;
+            gameObject.move(0f, -(410 - gameObject.getTop()) * delta);
+         } else {
+            movement.scl(0.9f);
+         }
+      } else {
+         movement.scl(0.9f);
+      }
 
       // Avoid clipping outside of the screen
       if (gameObject.getLeft() < gameCamera.getLeft()) {

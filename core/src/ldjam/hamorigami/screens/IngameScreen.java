@@ -2,6 +2,7 @@ package ldjam.hamorigami.screens;
 
 import com.badlogic.gdx.graphics.Color;
 import de.bitbrain.braingdx.context.GameContext2D;
+import de.bitbrain.braingdx.debug.DebugMetric;
 import de.bitbrain.braingdx.graphics.GameCamera;
 import de.bitbrain.braingdx.graphics.renderer.SpriteRenderer;
 import de.bitbrain.braingdx.screen.BrainGdxScreen2D;
@@ -12,13 +13,16 @@ import ldjam.hamorigami.behavior.SpiritSpawner;
 import ldjam.hamorigami.entity.EntityFactory;
 import ldjam.hamorigami.input.ingame.IngameControllerAdapter;
 import ldjam.hamorigami.input.ingame.IngameKeyboardAdapter;
+import ldjam.hamorigami.model.HealthData;
 import ldjam.hamorigami.model.ObjectType;
 import ldjam.hamorigami.model.SpiritType;
+import ldjam.hamorigami.model.TreeStatus;
 
 public class IngameScreen extends BrainGdxScreen2D<HamorigamiGame> {
 
    private SpiritSpawner spawner;
    private GameObject playerObject;
+   private GameObject treeObject;
 
    public IngameScreen(HamorigamiGame game) {
       super(game);
@@ -31,6 +35,7 @@ public class IngameScreen extends BrainGdxScreen2D<HamorigamiGame> {
       setupLevel(context);
       setupGraphics(context);
       setupInput(context);
+      setupDebugUi(context);
    }
 
    @Override
@@ -50,7 +55,7 @@ public class IngameScreen extends BrainGdxScreen2D<HamorigamiGame> {
       );
 
       // add tree
-      GameObject treeObject = entityFactory.spawnTree();
+      this.treeObject = entityFactory.spawnTree();
 
       // add floor
       GameObject floorObject = entityFactory.spawnFloor();
@@ -74,5 +79,24 @@ public class IngameScreen extends BrainGdxScreen2D<HamorigamiGame> {
       context.getInputManager().register(new IngameControllerAdapter(playerObject));
    }
 
-
+   private void setupDebugUi(GameContext2D context) {
+      context.getDebugPanel().addMetric("tree water level", new DebugMetric() {
+         @Override
+         public String getCurrentValue() {
+            return String.valueOf(treeObject.getAttribute(TreeStatus.class).getWaterLevel());
+         }
+      });
+      context.getDebugPanel().addMetric("tree sunlight level", new DebugMetric() {
+         @Override
+         public String getCurrentValue() {
+            return String.valueOf(treeObject.getAttribute(TreeStatus.class).getSunlightLevel());
+         }
+      });
+      context.getDebugPanel().addMetric("tree health", new DebugMetric() {
+         @Override
+         public String getCurrentValue() {
+            return (treeObject.getAttribute(HealthData.class).getHealthPercentage() * 100f) + "%";
+         }
+      });
+   }
 }
