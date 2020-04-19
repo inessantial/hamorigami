@@ -1,8 +1,8 @@
-package ldjam.hamorigami.tree;
+package ldjam.hamorigami.effects;
 
 import de.bitbrain.braingdx.world.GameObject;
 
-public interface TreeEffect {
+public interface SpiritAbsorbEffect {
 
    boolean applyEffect(GameObject treeObject);
 }

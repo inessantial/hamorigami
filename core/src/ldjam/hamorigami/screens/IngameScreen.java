@@ -72,7 +72,7 @@ public class IngameScreen extends BrainGdxScreen2D<HamorigamiGame> {
       GameObject floorObject = entityFactory.spawnFloor();
 
       // Spirit spawning
-      spawner = new SpiritSpawner(5f, entityFactory, context, treeObject);
+      spawner = new SpiritSpawner(3f, entityFactory, context, treeObject);
       attackHandler = new AttackHandler(playerObject, entityFactory);
       context.getBehaviorManager().apply(new SpiritedAway(context));
 
@@ -118,25 +118,37 @@ public class IngameScreen extends BrainGdxScreen2D<HamorigamiGame> {
             .build(), new SpiritAnimationTypeResolver()));
       context.getRenderManager().register(SpiritType.SPIRIT_WATER, new AnimationRenderer(ameSpritesheet, AnimationConfig.builder()
             .registerFrames(SpiritAnimationType.HOVERING_EAST, AnimationFrames.builder()
-                  .origin(0, 1)
+                  .origin(0, 4)
                   .frames(1)
                   .duration(0.2f)
                   .playMode(LOOP)
                   .build())
             .registerFrames(SpiritAnimationType.HOVERING_WEST, AnimationFrames.builder()
-                  .origin(0, 0)
+                  .origin(0, 5)
                   .frames(1)
                   .duration(0.2f)
                   .playMode(LOOP)
                   .build())
             .registerFrames(SpiritAnimationType.HOVERING_NORTH, AnimationFrames.builder()
-                  .origin(0, 2)
+                  .origin(0, 4) // TODO fixme
                   .frames(1)
                   .duration(0.2f)
                   .playMode(LOOP)
                   .build())
             .registerFrames(SpiritAnimationType.HOVERING_SOUTH, AnimationFrames.builder()
-                  .origin(0, 3)
+                  .origin(0, 5) // TODO fixme
+                  .frames(1)
+                  .duration(0.2f)
+                  .playMode(LOOP)
+                  .build())
+            .registerFrames(SpiritAnimationType.FALLING_EAST, AnimationFrames.builder()
+                  .origin(0, 0)
+                  .frames(1)
+                  .duration(0.2f)
+                  .playMode(LOOP)
+                  .build())
+            .registerFrames(SpiritAnimationType.FALLING_WEST, AnimationFrames.builder()
+                  .origin(0, 1)
                   .frames(1)
                   .duration(0.2f)
                   .playMode(LOOP)

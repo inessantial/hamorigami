@@ -92,18 +92,20 @@ public class Movement extends BehaviorAdapter {
          movement.scl(0.9f);
       }
 
-      // Avoid clipping outside of the screen
-      if (gameObject.getLeft() < gameCamera.getLeft()) {
-         gameObject.setPosition(gameCamera.getLeft(), gameObject.getTop());
-      }
-      if (gameObject.getRight() > gameCamera.getLeft() + gameCamera.getScaledCameraWidth()) {
-         gameObject.setPosition(gameCamera.getLeft() + gameCamera.getScaledCameraWidth() - gameObject.getWidth(), gameObject.getTop());
-      }
-      if (gameObject.getTop() <  gameCamera.getTop()) {
-         gameObject.setPosition(gameObject.getLeft(), gameCamera.getTop());
-      }
-      if (gameObject.getBottom() > gameCamera.getTop() + gameCamera.getScaledCameraHeight()) {
-         gameObject.setPosition(gameObject.getLeft(), gameCamera.getTop() + gameCamera.getScaledCameraHeight() - gameObject.getHeight());
+      if (!gameObject.hasAttribute("falling")) {
+         // Avoid clipping outside of the screen
+         if (gameObject.getLeft() < gameCamera.getLeft()) {
+            gameObject.setPosition(gameCamera.getLeft(), gameObject.getTop());
+         }
+         if (gameObject.getRight() > gameCamera.getLeft() + gameCamera.getScaledCameraWidth()) {
+            gameObject.setPosition(gameCamera.getLeft() + gameCamera.getScaledCameraWidth() - gameObject.getWidth(), gameObject.getTop());
+         }
+         if (gameObject.getTop() < gameCamera.getTop()) {
+            gameObject.setPosition(gameObject.getLeft(), gameCamera.getTop());
+         }
+         if (gameObject.getBottom() > gameCamera.getTop() + gameCamera.getScaledCameraHeight()) {
+            gameObject.setPosition(gameObject.getLeft(), gameCamera.getTop() + gameCamera.getScaledCameraHeight() - gameObject.getHeight());
+         }
       }
    }
 }

@@ -38,19 +38,8 @@ public class SpiritSpawner implements Updateable {
 
    private void spawnRandomSpirit() {
       SpiritType randomType = SpiritType.values()[1 + (int) ((SpiritType.values().length - 1) * Math.random())];
-      boolean spawnLeftSide = Math.random() < 0.5f;
-      float x;
-      if (spawnLeftSide) {
-         x = (float) (10f + 20f * Math.random());
-      } else {
-         x = (float) (context.getGameCamera().getScaledCameraWidth() - 64f - 20f * Math.random());
-      }
-      float y = (float) (Math.random() * (context.getGameCamera().getScaledCameraHeight() - 128));
-      GameObject spirit = entityFactory.spawnSpirit(randomType, x, y);
-      float padding = 35f;
-      float targetX = padding + (float) Math.random() * (treeObject.getWidth() - padding * 2f);
-      float targetY = padding + (float) Math.random() * (treeObject.getHeight() - padding * 2f);
-      context.getBehaviorManager().apply(new ChasingBehavior(treeObject, targetX, targetY), spirit);
+      GameObject spirit = entityFactory.spawnSpirit(randomType, -32, -64);
+      randomType.getSpawnEffect().onSpawnSpirit(spirit, treeObject, context);
    }
 
    private int getSpiritSpawnCount() {

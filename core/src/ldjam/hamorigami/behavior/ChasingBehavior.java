@@ -36,7 +36,7 @@ public class ChasingBehavior extends BehaviorAdapter {
          if (attackTimer.reached(ATTACK_INTERVAL)) {
             attackTimer.reset();
             SpiritType type = (SpiritType) source.getType();
-            type.getEffect().applyEffect(target);
+            type.getAbsorbEffect().applyEffect(target);
          }
       } else {
          mover.move(direction);
