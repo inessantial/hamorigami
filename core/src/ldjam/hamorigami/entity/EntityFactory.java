@@ -26,7 +26,7 @@ public class EntityFactory {
    public GameObject spawnGauge(float x, float y) {
       GameObject object = context.getGameWorld().addObject();
       object.setPosition(context.getGameCamera().getLeft() + x, context.getGameCamera().getTop() + y);
-      object.setDimensions(32f, 128f);
+      object.setDimensions(16f, 64f);
       object.setType(GAUGE);
       object.setActive(false);
       return object;
@@ -50,7 +50,7 @@ public class EntityFactory {
       object.setZIndex(2);
       object.setPosition(
             context.getGameCamera().getLeft() + context.getGameCamera().getScaledCameraWidth() / 2f - 100,
-            context.getGameCamera().getTop() + 30);
+            context.getGameCamera().getTop() + 45);
       object.setDimensions(200, 200);
       object.setAttribute(TreeStatus.class, new TreeStatus());
       object.setAttribute(HealthData.class, new HealthData(1000));
@@ -64,7 +64,7 @@ public class EntityFactory {
       object.setZIndex(1);
       object.setPosition(
             context.getGameCamera().getLeft() + context.getGameCamera().getScaledCameraWidth() / 2f - 400,
-            context.getGameCamera().getTop());
+            context.getGameCamera().getTop() - 30f);
       object.setDimensions(800, 100);
       return object;
    }

@@ -23,6 +23,10 @@ public class SpiritAnimationTypeResolver implements AnimationTypeResolver<GameOb
          type = "FALLING";
       } else if (movement.getMovement().len() < 25f) {
          type = "IDLE";
+      } else if (object.hasAttribute("landing")) {
+         type = "LANDING";
+      } else if (object.hasAttribute("attacking")) {
+         type = "ATTACKING";
       }
       SpiritAnimationType animationType = SpiritAnimationType.valueOf(type + "_" + direction);
       object.setAttribute(SpiritAnimationType.class, animationType);

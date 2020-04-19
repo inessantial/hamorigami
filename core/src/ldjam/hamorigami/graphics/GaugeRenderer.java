@@ -32,10 +32,10 @@ public class GaugeRenderer extends SpriteRenderer {
          waterLevelSprite.setPosition(object.getLeft(), object.getTop());
          waterLevelSprite.setSize(object.getWidth(), object.getHeight() * level);
          waterLevelSprite.draw(batch, 1f);
-         int height = (int) (object.getHeight() / 2f * level);
+         int height = (int) (object.getHeight() * level);
          waterLevelSprite.setRegion(0, height, 16, -height);
-         waterLevelTopSprite.setPosition(object.getLeft(), object.getTop() + object.getHeight() * level - 8f);
-         waterLevelTopSprite.setSize(32f, 16);
+         waterLevelTopSprite.setPosition(object.getLeft(), object.getTop() + object.getHeight() * level - 4f);
+         waterLevelTopSprite.setSize(16f, 8f);
          waterLevelTopSprite.draw(batch, 1f);
       }
       super.render(object, batch, delta);

@@ -21,4 +21,8 @@ public interface Assets {
       String GAUGE_WATER_TOP = "texture/gauge-water-top.png";
       String GAUGE_OVERLAY = "texture/gauge-overlay.png";
    }
+
+   interface Musics {
+      String BACKGROUND_01 = "music/bgm_01.ogg";
+   }
 }

@@ -37,7 +37,8 @@ public class SpiritSpawner implements Updateable {
    }
 
    private void spawnRandomSpirit() {
-      SpiritType randomType = SpiritType.values()[1 + (int) ((SpiritType.values().length - 1) * Math.random())];
+      //SpiritType randomType = SpiritType.values()[1 + (int) ((SpiritType.values().length - 1) * Math.random())];
+      SpiritType randomType = SpiritType.SPIRIT_WATER;
       GameObject spirit = entityFactory.spawnSpirit(randomType, -32, -64);
       randomType.getSpawnEffect().onSpawnSpirit(spirit, treeObject, context);
    }

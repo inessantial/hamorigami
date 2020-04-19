@@ -11,6 +11,7 @@ import de.bitbrain.braingdx.graphics.animation.AnimationSpriteSheet;
 import de.bitbrain.braingdx.world.GameObject;
 import ldjam.hamorigami.Assets;
 import ldjam.hamorigami.animation.SpiritAnimationTypeResolver;
+import ldjam.hamorigami.model.SpiritType;
 
 public class SpiritRenderer extends AnimationRenderer {
 
@@ -31,7 +32,11 @@ public class SpiritRenderer extends AnimationRenderer {
       float offset = 64f * (1f - heightPercentage);
       final Texture texture = SharedAssetManager.getInstance().get(Assets.Textures.DROPSHADOW, Texture.class);
       float y = Math.min(object.getTop() , gameCamera.getTop() + offset);
-      batch.draw(texture, object.getLeft(), y, size, size);
+      if (object.getType() == SpiritType.SPIRIT_EARTH) {
+         batch.draw(texture, object.getLeft() + 16f, y, size, size);
+      } else {
+         batch.draw(texture, object.getLeft(), y, size, size);
+      }
       batch.setColor(originalColor);
       super.render(object, batch, delta);
 

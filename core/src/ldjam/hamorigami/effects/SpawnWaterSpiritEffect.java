@@ -30,13 +30,21 @@ public class SpawnWaterSpiritEffect implements SpiritSpawnEffect {
             .setCallback(new TweenCallback() {
                @Override
                public void onEvent(int type, BaseTween<?> source) {
-                  spirit.setActive(true);
-                  float padding = 35f;
                   spirit.removeAttribute("falling");
-                  float targetX = padding + (float) Math.random() * (tree.getWidth() - padding * 2f);
-                  float targetY = padding + (float) Math.random() * (tree.getHeight() - padding * 2f);
-                  context.getBehaviorManager().apply(new ChasingBehavior(tree, targetX, targetY), spirit);
-                  context.getBehaviorManager().apply(new ChasingBehavior(tree, targetX, targetY), spirit);
+                  spirit.setAttribute("landing", true);
+                  Tween.call(new TweenCallback() {
+                     @Override
+                     public void onEvent(int type, BaseTween<?> source) {
+                        spirit.setActive(true);
+                        float padding = 35f;
+                        spirit.removeAttribute("landing");
+                        float targetX = padding + (float) Math.random() * (tree.getWidth() - padding * 2f);
+                        float targetY = padding + (float) Math.random() * (tree.getHeight() - padding * 2f);
+                        context.getBehaviorManager().apply(new ChasingBehavior(tree, targetX, targetY), spirit);
+                        context.getBehaviorManager().apply(new ChasingBehavior(tree, targetX, targetY), spirit);
+                     }
+                  }).delay(0.3f).start(SharedTweenManager.getInstance());
+
                }
             })
             .ease(TweenEquations.easeInCubic)

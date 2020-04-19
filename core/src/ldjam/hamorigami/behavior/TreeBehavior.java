@@ -32,8 +32,8 @@ public class TreeBehavior extends BehaviorAdapter {
          status.increaseTreeWateredLevel(0.08f * value);
       }
       // dryness
-      status.decreaseTreeWateredLevel(0.01f);
-      status.decreaseSoilWater(0.01f);
+      status.decreaseTreeWateredLevel(0.08f);
+      status.decreaseSoilWater(0.4f);
 
       // tree takes damage when watered level is below -0.5 or above 0.5
       // tree heals otherwise
