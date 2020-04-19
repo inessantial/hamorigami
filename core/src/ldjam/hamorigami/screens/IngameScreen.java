@@ -19,6 +19,7 @@ import ldjam.hamorigami.entity.SpiritedAway;
 import ldjam.hamorigami.graphics.EntityOrderComparator;
 import ldjam.hamorigami.graphics.GaugeRenderer;
 import ldjam.hamorigami.graphics.SpiritRenderer;
+import ldjam.hamorigami.graphics.TreeRenderer;
 import ldjam.hamorigami.input.ingame.IngameControllerAdapter;
 import ldjam.hamorigami.input.ingame.IngameKeyboardAdapter;
 import ldjam.hamorigami.model.*;
@@ -231,7 +232,7 @@ public class IngameScreen extends BrainGdxScreen2D<HamorigamiGame> {
                   .build())
             .build()));
 
-      context.getRenderManager().register(ObjectType.TREE, new SpriteRenderer(Textures.TREE));
+      context.getRenderManager().register(ObjectType.TREE, new TreeRenderer());
       context.getRenderManager().register(ObjectType.FLOOR, new SpriteRenderer(Textures.BACKGROUND_FLOOR));
       context.getRenderManager().register(ObjectType.GAUGE, new GaugeRenderer(treeObject));
    }
