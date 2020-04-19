@@ -21,7 +21,6 @@ public class TreeBehavior extends BehaviorAdapter {
       if (decayTimer.reached(DECAY_RATE)) {
          decayTimer.reset();
          TreeStatus status = source.getAttribute(TreeStatus.class);
-         status.decreaseSunlight(0.01f);
          status.decreaseWater(0.01f);
          source.getAttribute(HealthData.class).reduceHealth(status.calculateDamage());
       }

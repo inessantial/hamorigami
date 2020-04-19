@@ -7,8 +7,8 @@ public class AddSunlightEffect implements TreeEffect {
 
    @Override
    public boolean applyEffect(GameObject treeObject) {
-      treeObject.getAttribute(TreeStatus.class).increaseSunlight(0.05f);
-      if (treeObject.getAttribute(TreeStatus.class).getSunlightLevel() == 1f) {
+      treeObject.getAttribute(TreeStatus.class).decreaseWater(0.05f);
+      if (treeObject.getAttribute(TreeStatus.class).getWaterLevel() == 0f) {
          // tree dead
          return false;
       }
