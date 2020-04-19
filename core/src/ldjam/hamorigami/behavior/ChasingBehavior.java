@@ -48,7 +48,7 @@ public class ChasingBehavior extends BehaviorAdapter {
                type.getAbsorbEffect().applyEffect(target);
             }
 
-            if (!deathInitiated) {
+            /*if (!deathInitiated) {
                deathInitiated = true;
                Tween.call(new TweenCallback() {
                   @Override
@@ -58,7 +58,7 @@ public class ChasingBehavior extends BehaviorAdapter {
                      }
                   }
                }).delay(ARRIVAL_HEALTH).start(SharedTweenManager.getInstance());
-            }
+            }*/
          } else {
             mover.move(direction);
          }

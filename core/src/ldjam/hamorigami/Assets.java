@@ -20,6 +20,7 @@ public interface Assets {
       String GAUGE_WATER = "texture/gauge-water.png";
       String GAUGE_WATER_TOP = "texture/gauge-water-top.png";
       String GAUGE_OVERLAY = "texture/gauge-overlay.png";
+      String GAUGE_GRASS = "texture/gauge-grass.png";
    }
 
    interface Musics {
