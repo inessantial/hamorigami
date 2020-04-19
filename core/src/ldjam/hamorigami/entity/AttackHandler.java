@@ -3,10 +3,13 @@ package ldjam.hamorigami.entity;
 import aurelienribon.tweenengine.BaseTween;
 import aurelienribon.tweenengine.Tween;
 import aurelienribon.tweenengine.TweenCallback;
+import de.bitbrain.braingdx.audio.AudioManager;
 import de.bitbrain.braingdx.tweens.SharedTweenManager;
 import de.bitbrain.braingdx.util.DeltaTimer;
 import de.bitbrain.braingdx.util.Updateable;
 import de.bitbrain.braingdx.world.GameObject;
+import ldjam.hamorigami.Assets;
+import ldjam.hamorigami.audio.JukeBox;
 
 public class AttackHandler implements Updateable {
 
@@ -16,12 +19,15 @@ public class AttackHandler implements Updateable {
 
    private final GameObject attacker;
    private final EntityFactory entityFactory;
+   private final JukeBox jukeBox;
 
    private boolean attacking = false;
 
-   public AttackHandler(GameObject attacker, EntityFactory entityFactory) {
+   public AttackHandler(GameObject attacker, EntityFactory entityFactory, AudioManager audioManager) {
       this.attacker = attacker;
       this.entityFactory = entityFactory;
+      this.jukeBox = new JukeBox(audioManager, 400f, Assets.Sounds.BRUSH_01, Assets.Sounds.BRUSH_02, Assets.Sounds.BRUSH_03);
+      jukeBox.setVolume(0.05f);
    }
 
    public void attack() {
@@ -34,6 +40,7 @@ public class AttackHandler implements Updateable {
       if (attacking && attackTimer.reached(ATTACK_INTERVAL)) {
          attackTimer.reset();
          attacker.setAttribute("attacking", true);
+         jukeBox.playSound(attacker.getLeft(), attacker.getTop());
          Tween.call(new TweenCallback() {
             @Override
             public void onEvent(int type, BaseTween<?> source) {

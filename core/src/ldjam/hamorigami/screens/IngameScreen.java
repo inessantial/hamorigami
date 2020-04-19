@@ -82,11 +82,11 @@ public class IngameScreen extends BrainGdxScreen2D<HamorigamiGame> {
       GameObject floorObject = entityFactory.spawnFloor();
 
       // add gauge
-      GameObject gaugeObject = entityFactory.spawnGauge(210, 70);
+      GameObject gaugeObject = entityFactory.spawnGauge(210, 85);
 
       // Spirit spawning
       spawner = new SpiritSpawner(3f, entityFactory, context, treeObject);
-      attackHandler = new AttackHandler(playerObject, entityFactory);
+      attackHandler = new AttackHandler(playerObject, entityFactory, context.getAudioManager());
       context.getBehaviorManager().apply(new SpiritedAway(context));
 
    }

@@ -8,12 +8,18 @@ import de.bitbrain.braingdx.context.GameContext2D;
 import de.bitbrain.braingdx.tweens.GameObjectTween;
 import de.bitbrain.braingdx.tweens.SharedTweenManager;
 import de.bitbrain.braingdx.world.GameObject;
+import ldjam.hamorigami.Assets;
+import ldjam.hamorigami.audio.JukeBox;
 import ldjam.hamorigami.behavior.ChasingBehavior;
 
 public class SpawnWaterSpiritEffect implements SpiritSpawnEffect {
 
    @Override
    public void onSpawnSpirit(final GameObject spirit, final GameObject tree, final GameContext2D context) {
+      final JukeBox jukeBox = new JukeBox(context.getAudioManager(), 500f,
+            Assets.Sounds.WATER_DEATH_01, Assets.Sounds.WATER_DEATH_02, Assets.Sounds.WATER_DEATH_03);
+      jukeBox.setVolume(0.2f);
+
       float top = context.getGameCamera().getTop() + context.getGameCamera().getScaledCameraHeight();
       float left = (float) (context.getGameCamera().getLeft() + Math.random() * (context.getGameCamera().getScaledCameraWidth() - 64f));
       spirit.setPosition(left, top);
@@ -32,6 +38,7 @@ public class SpawnWaterSpiritEffect implements SpiritSpawnEffect {
                public void onEvent(int type, BaseTween<?> source) {
                   spirit.removeAttribute("falling");
                   spirit.setAttribute("landing", true);
+                  jukeBox.playSound(spirit.getLeft(), spirit.getTop());
                   Tween.call(new TweenCallback() {
                      @Override
                      public void onEvent(int type, BaseTween<?> source) {

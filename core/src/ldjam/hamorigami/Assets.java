@@ -24,5 +24,21 @@ public interface Assets {
 
    interface Musics {
       String BACKGROUND_01 = "music/bgm_01.ogg";
+      String CITYSCAPE = "music/city_01.ogg";
+   }
+
+   interface Sounds {
+      String WATER_DEATH_01 = "sound/waterdeath_01.ogg";
+      String WATER_DEATH_02 = "sound/waterdeath_02.ogg";
+      String WATER_DEATH_03 = "sound/waterdeath_03.ogg";
+
+      String DEATH_01 = "sound/death_01.ogg";
+      String DEATH_02 = "sound/death_02.ogg";
+
+      String BRUSH_01 = "sound/brush_01.ogg";
+      String BRUSH_02 = "sound/brush_02.ogg";
+      String BRUSH_03 = "sound/brush_03.ogg";
+
+      String WOOSH = "sound/woosh_short.ogg";
    }
 }
