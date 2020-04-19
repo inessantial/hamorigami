@@ -76,8 +76,8 @@ public class EntityFactory {
       object.setZIndex(1);
       object.setPosition(
             context.getGameCamera().getLeft() + context.getGameCamera().getScaledCameraWidth() / 2f - 400,
-            context.getGameCamera().getTop() - 30f);
-      object.setDimensions(800, 100);
+            context.getGameCamera().getTop());
+      object.setDimensions(800, 50);
       return object;
    }
 

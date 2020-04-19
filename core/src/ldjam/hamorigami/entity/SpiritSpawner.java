@@ -1,4 +1,4 @@
-package ldjam.hamorigami.behavior;
+package ldjam.hamorigami.entity;
 
 import de.bitbrain.braingdx.context.GameContext2D;
 import de.bitbrain.braingdx.util.DeltaTimer;
