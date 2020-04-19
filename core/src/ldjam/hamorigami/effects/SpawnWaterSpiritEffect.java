@@ -19,6 +19,11 @@ public class SpawnWaterSpiritEffect implements SpiritSpawnEffect {
       spirit.setPosition(left, top);
       spirit.setActive(false);
       spirit.setAttribute("falling", true);
+      spirit.getColor().a = 0f;
+      Tween.to(spirit, GameObjectTween.ALPHA, 0.4f)
+            .target(1f)
+            .start(SharedTweenManager.getInstance());
+
       Tween.to(spirit, GameObjectTween.POS_Y, 0.6f)
             .target(context.getGameCamera().getTop() + 8f)
             .setCallbackTriggers(TweenCallback.COMPLETE)
@@ -27,14 +32,14 @@ public class SpawnWaterSpiritEffect implements SpiritSpawnEffect {
                public void onEvent(int type, BaseTween<?> source) {
                   spirit.setActive(true);
                   float padding = 35f;
-                  spirit.setAttribute("falling", false);
+                  spirit.removeAttribute("falling");
                   float targetX = padding + (float) Math.random() * (tree.getWidth() - padding * 2f);
                   float targetY = padding + (float) Math.random() * (tree.getHeight() - padding * 2f);
                   context.getBehaviorManager().apply(new ChasingBehavior(tree, targetX, targetY), spirit);
                   context.getBehaviorManager().apply(new ChasingBehavior(tree, targetX, targetY), spirit);
                }
             })
-            .ease(TweenEquations.easeOutBounce)
+            .ease(TweenEquations.easeInCubic)
             .start(SharedTweenManager.getInstance());
    }
 }

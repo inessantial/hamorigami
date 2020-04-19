@@ -19,7 +19,7 @@ public enum SpiritType {
       }
    }),
    SPIRIT_WATER(80, 2, new AddWaterEffect(), new SpawnWaterSpiritEffect()),
-   SPIRIT_FIRE(45, 3, new AddSunlightEffect(), new SpawnFireEffect());
+   SPIRIT_FIRE(45, 10, new AddSunlightEffect(), new SpawnFireEffect());
 
    private final int health;
    private final float maxSpeed;
