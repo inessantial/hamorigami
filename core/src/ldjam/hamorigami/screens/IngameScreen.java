@@ -9,7 +9,9 @@ import de.bitbrain.braingdx.screen.BrainGdxScreen2D;
 import de.bitbrain.braingdx.world.GameObject;
 import ldjam.hamorigami.Assets;
 import ldjam.hamorigami.HamorigamiGame;
+import ldjam.hamorigami.entity.AttackHandler;
 import ldjam.hamorigami.behavior.SpiritSpawner;
+import ldjam.hamorigami.entity.DeathMachine;
 import ldjam.hamorigami.entity.EntityFactory;
 import ldjam.hamorigami.input.ingame.IngameControllerAdapter;
 import ldjam.hamorigami.input.ingame.IngameKeyboardAdapter;
@@ -23,6 +25,7 @@ public class IngameScreen extends BrainGdxScreen2D<HamorigamiGame> {
    private SpiritSpawner spawner;
    private GameObject playerObject;
    private GameObject treeObject;
+   private AttackHandler attackHandler;
 
    public IngameScreen(HamorigamiGame game) {
       super(game);
@@ -42,6 +45,7 @@ public class IngameScreen extends BrainGdxScreen2D<HamorigamiGame> {
    protected void onUpdate(float delta) {
       super.onUpdate(delta);
       spawner.update(delta);
+      attackHandler.update(delta);
    }
 
    private void setupLevel(GameContext2D context) {
@@ -62,6 +66,8 @@ public class IngameScreen extends BrainGdxScreen2D<HamorigamiGame> {
 
       // Spirit spawning
       spawner = new SpiritSpawner(5f, entityFactory, context, treeObject);
+      attackHandler = new AttackHandler(playerObject, entityFactory);
+      context.getBehaviorManager().apply(new DeathMachine(context));
 
    }
 
@@ -75,8 +81,8 @@ public class IngameScreen extends BrainGdxScreen2D<HamorigamiGame> {
    }
 
    private void setupInput(GameContext2D context) {
-      context.getInputManager().register(new IngameKeyboardAdapter(playerObject));
-      context.getInputManager().register(new IngameControllerAdapter(playerObject));
+      context.getInputManager().register(new IngameKeyboardAdapter(playerObject, attackHandler));
+      context.getInputManager().register(new IngameControllerAdapter(playerObject, attackHandler));
    }
 
    private void setupDebugUi(GameContext2D context) {

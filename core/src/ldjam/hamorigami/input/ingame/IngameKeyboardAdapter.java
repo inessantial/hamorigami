@@ -1,10 +1,12 @@
 package ldjam.hamorigami.input.ingame;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.math.Vector2;
 import de.bitbrain.braingdx.util.Updateable;
 import de.bitbrain.braingdx.world.GameObject;
+import ldjam.hamorigami.entity.AttackHandler;
 import ldjam.hamorigami.model.Movement;
 
 import static com.badlogic.gdx.Gdx.input;
@@ -15,9 +17,11 @@ public class IngameKeyboardAdapter extends InputAdapter implements Updateable {
    private final GameObject playerObject;
    private final Vector2 moveDirection = new Vector2();
    private final Vector2 speed = new Vector2();
+   private final AttackHandler attackHandler;
 
-   public IngameKeyboardAdapter(GameObject playerObject) {
+   public IngameKeyboardAdapter(GameObject playerObject, AttackHandler attackHandler) {
       this.playerObject = playerObject;
+      this.attackHandler = attackHandler;
    }
 
    @Override
@@ -39,6 +43,9 @@ public class IngameKeyboardAdapter extends InputAdapter implements Updateable {
       }
       if (input.isKeyPressed(SPACE)) {
          playerObject.getAttribute(Movement.class).jump();
+      }
+      if (input.isTouched() || input.isKeyPressed(ENTER)) {
+         attackHandler.attack();
       }
       playerObject.getAttribute(Movement.class).move(moveDirection);
       moveDirection.x = 0;

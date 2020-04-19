@@ -1,9 +1,13 @@
 package ldjam.hamorigami.entity;
 
 import aurelienribon.tweenengine.Tween;
+import com.badlogic.gdx.graphics.Color;
+import de.bitbrain.braingdx.behavior.BehaviorAdapter;
 import de.bitbrain.braingdx.context.GameContext2D;
 import de.bitbrain.braingdx.tweens.GameObjectTween;
 import de.bitbrain.braingdx.tweens.SharedTweenManager;
+import de.bitbrain.braingdx.tweens.TweenUtils;
+import de.bitbrain.braingdx.util.Mutator;
 import de.bitbrain.braingdx.world.GameObject;
 import ldjam.hamorigami.behavior.TreeBehavior;
 import ldjam.hamorigami.model.*;
@@ -55,5 +59,48 @@ public class EntityFactory {
             context.getGameCamera().getTop());
       object.setDimensions(800, 100);
       return object;
+   }
+
+   public GameObject spawnDamageTelegraph(final GameObject owner, final float centerX, final float centerY, final float width, final float height, final float rotation) {
+      GameObject damage = context.getGameWorld().addObject(new Mutator<GameObject>() {
+         @Override
+         public void mutate(GameObject target) {
+            target.setType("DAMAGE");
+            target.setPosition(centerX, centerY);
+            target.setRotation(rotation);
+            target.setDimensions(width, height);
+            target.setAttribute("owner", owner);
+         }
+      }, false);
+      context.getBehaviorManager().apply(new BehaviorAdapter() {
+
+         private boolean applicableForRemoval;
+
+         @Override
+         public void update(GameObject source, float delta) {
+            super.update(source, delta);
+            if (applicableForRemoval) {
+               context.getGameWorld().remove(source);
+            }
+         }
+
+         @Override
+         public void update(GameObject source, GameObject target, float delta) {
+            super.update(source, target, delta);
+            if ("DAMAGE".equals(source.getType()) && source.collidesWith(target)) {
+               if (target.equals(source.getAttribute("owner"))) {
+                  // let's not hit ourselves ;)
+                  return;
+               }
+               if (target.hasAttribute(HealthData.class) && target.getType() != ObjectType.TREE) {
+                  target.getAttribute(HealthData.class).reduceHealth(10);
+                  target.setColor(1f, 0f, 0f, 1f);
+                  TweenUtils.toColor(target.getColor(), Color.WHITE.cpy(), 0.5f);
+                  applicableForRemoval = true;
+               }
+            }
+         }
+      }, damage);
+      return damage;
    }
 }

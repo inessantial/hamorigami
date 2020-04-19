@@ -7,6 +7,7 @@ import com.badlogic.gdx.controllers.mappings.Xbox;
 import com.badlogic.gdx.math.Vector2;
 import de.bitbrain.braingdx.util.Updateable;
 import de.bitbrain.braingdx.world.GameObject;
+import ldjam.hamorigami.entity.AttackHandler;
 import ldjam.hamorigami.model.Movement;
 
 public class IngameControllerAdapter extends ControllerAdapter implements Updateable {
@@ -16,9 +17,11 @@ public class IngameControllerAdapter extends ControllerAdapter implements Update
    private final GameObject playerObject;
    private float horizontalValue;
    private float verticalValue;
+   private final AttackHandler attackHandler;
 
-   public IngameControllerAdapter(GameObject playerObject) {
+   public IngameControllerAdapter(GameObject playerObject, AttackHandler attackHandler) {
       this.playerObject = playerObject;
+      this.attackHandler = attackHandler;
    }
 
    @Override
@@ -42,7 +45,18 @@ public class IngameControllerAdapter extends ControllerAdapter implements Update
          Gdx.app.exit();
          return true;
       }
+      if (buttonIndex == getAttackButton(controller)) {
+         attackHandler.attack();
+         return true;
+      }
       return false;
+   }
+
+   private int getAttackButton(Controller controller) {
+      if (Xbox.isXboxController(controller)) {
+         return Xbox.A;
+      }
+      return -1;
    }
 
    private int getEscapeButton(Controller controller) {
