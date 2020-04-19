@@ -6,6 +6,9 @@ public enum SpiritAnimationType {
    HOVERING_EAST,
    HOVERING_SOUTH,
 
+   IDLE_WEST,
+   IDLE_EAST,
+
    FALLING_WEST,
    FALLING_EAST,
 

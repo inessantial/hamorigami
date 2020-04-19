@@ -47,6 +47,10 @@ public class Movement extends BehaviorAdapter {
       return moveDirection;
    }
 
+   public Vector2 getMovement() {
+      return movement;
+   }
+
    public void lookAtScreen(float screenX, float screenY) {
       tmp.set(screenX, screenY, 0f);
       gameCamera.getInternalCamera().unproject(tmp);
