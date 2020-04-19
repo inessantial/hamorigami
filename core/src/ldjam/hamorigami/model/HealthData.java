@@ -38,4 +38,8 @@ public class HealthData {
    public boolean isFullHealth() {
       return currentHealth == maximumHealth;
    }
+
+   public void kill() {
+      currentHealth = 0;
+   }
 }

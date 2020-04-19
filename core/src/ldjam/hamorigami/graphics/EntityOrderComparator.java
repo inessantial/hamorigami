@@ -15,9 +15,21 @@ public class EntityOrderComparator implements Comparator<GameObject> {
       if (o1.getType() == ObjectType.FLOOR) {
          return -1;
       }
+      if (o1.getType() == ObjectType.GAUGE) {
+         if (o2.getType() == ObjectType.TREE) {
+            return 1;
+         }
+         if (o2.getType() instanceof SpiritType) {
+            return -1;
+         }
+         return 1;
+      }
       if (o1.getType() == ObjectType.TREE) {
          if (o2.getType() == ObjectType.FLOOR) {
             return 1;
+         }
+         if (o2.getType() == ObjectType.GAUGE) {
+            return -1;
          }
          return -1;
       }

@@ -17,6 +17,7 @@ import ldjam.hamorigami.entity.AttackHandler;
 import ldjam.hamorigami.entity.EntityFactory;
 import ldjam.hamorigami.entity.SpiritedAway;
 import ldjam.hamorigami.graphics.EntityOrderComparator;
+import ldjam.hamorigami.graphics.GaugeRenderer;
 import ldjam.hamorigami.graphics.SpiritRenderer;
 import ldjam.hamorigami.input.ingame.IngameControllerAdapter;
 import ldjam.hamorigami.input.ingame.IngameKeyboardAdapter;
@@ -68,6 +69,9 @@ public class IngameScreen extends BrainGdxScreen2D<HamorigamiGame> {
 
       // add floor
       GameObject floorObject = entityFactory.spawnFloor();
+
+      // add gauge
+      GameObject gaugeObject = entityFactory.spawnGauge(210, 70);
 
       // Spirit spawning
       spawner = new SpiritSpawner(3f, entityFactory, context, treeObject);
@@ -229,6 +233,7 @@ public class IngameScreen extends BrainGdxScreen2D<HamorigamiGame> {
 
       context.getRenderManager().register(ObjectType.TREE, new SpriteRenderer(Textures.TREE));
       context.getRenderManager().register(ObjectType.FLOOR, new SpriteRenderer(Textures.BACKGROUND_FLOOR));
+      context.getRenderManager().register(ObjectType.GAUGE, new GaugeRenderer(treeObject));
    }
 
    private void setupInput(GameContext2D context) {
