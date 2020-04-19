@@ -76,7 +76,7 @@ public class IngameScreen extends BrainGdxScreen2D<HamorigamiGame> {
             0f, 0f
       );
       playerObject.setDimensions(64f, 64f);
-      context.getBehaviorManager().apply(new TreeHealthBindingBehavior(treeObject), playerObject);
+      context.getBehaviorManager().apply(new TreeHealthBindingBehavior(treeObject, context.getAudioManager(), context), playerObject);
 
       // add floor
       GameObject floorObject = entityFactory.spawnFloor();
@@ -167,13 +167,13 @@ public class IngameScreen extends BrainGdxScreen2D<HamorigamiGame> {
                   .playMode(LOOP)
                   .build())
             .registerFrames(SpiritAnimationType.HOVERING_EAST, AnimationFrames.builder()
-                  .origin(0, 5)
+                  .origin(0, 4)
                   .frames(4)
                   .duration(0.2f)
                   .playMode(LOOP)
                   .build())
             .registerFrames(SpiritAnimationType.HOVERING_WEST, AnimationFrames.builder()
-                  .origin(0, 4)
+                  .origin(0, 5)
                   .frames(4)
                   .duration(0.2f)
                   .playMode(LOOP)
