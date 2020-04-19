@@ -41,4 +41,10 @@ public interface Assets {
 
       String WOOSH = "sound/woosh_short.ogg";
    }
+
+   interface Particles {
+      String EARTH = "particles/earth.p";
+      String FIRE = "particles/fire.p";
+      String WATER = "particles/water.p";
+   }
 }

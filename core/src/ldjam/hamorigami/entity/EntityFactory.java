@@ -42,6 +42,13 @@ public class EntityFactory {
       object.setAttribute(HealthData.class, new HealthData(spiritType.getHealth()));
       object.setAttribute(Movement.class, new Movement(spiritType.getMaxSpeed(), context.getGameCamera()));
       context.getBehaviorManager().apply(object.getAttribute(Movement.class), object);
+      if (spiritType.getParticleId() != null) {
+         if (spiritType == SpiritType.SPIRIT_EARTH) {
+            context.getParticleManager().attachEffect(spiritType.getParticleId(), object, 32f, 32f);
+         } else {
+            context.getParticleManager().attachEffect(spiritType.getParticleId(), object, 16f, 32f);
+         }
+      }
       //Light light = context.getLightingManager().createPointLight(200, spiritType.getLightingColor());
       // context.getLightingManager().attach(light, object);
       return object;
