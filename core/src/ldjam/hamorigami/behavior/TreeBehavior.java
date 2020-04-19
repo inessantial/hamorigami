@@ -8,7 +8,7 @@ import ldjam.hamorigami.model.TreeStatus;
 
 public class TreeBehavior extends BehaviorAdapter {
 
-   public static final float DECAY_RATE = 2f;
+   public static final float DECAY_RATE = 0.3f;
 
    private final DeltaTimer decayTimer = new DeltaTimer();
 
@@ -28,20 +28,20 @@ public class TreeBehavior extends BehaviorAdapter {
       // consume water
       if (status.getSoilWaterLevel() > 0f) {
          float value = 1f - Math.min(status.getTreeWateredLevel(), 0);
-         status.decreaseSoilWater(0.04f * value);
-         status.increaseTreeWateredLevel(0.08f * value);
+         status.decreaseSoilWater(0.005f * value);
+         status.increaseTreeWateredLevel(0.01f * value);
       }
       // dryness
-      status.decreaseTreeWateredLevel(0.01f);
+      status.decreaseTreeWateredLevel(0.005f);
       status.decreaseSoilWater(0.01f);
 
       // tree takes damage when watered level is below -0.5 or above 0.5
       // tree heals otherwise
       float absoluteLevel = Math.abs(status.getTreeWateredLevel());
       if (absoluteLevel >= 0.5f) {
-         treeHealth.reduceHealth((int) (180 * absoluteLevel));
+         treeHealth.reduceHealth((int) (50 * absoluteLevel));
       } else {
-         treeHealth.addHealth((int) (260 * (1f - absoluteLevel)));
+         treeHealth.addHealth((int) (80 * (1f - absoluteLevel)));
       }
    }
 }

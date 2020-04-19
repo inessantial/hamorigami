@@ -1,12 +1,15 @@
 package ldjam.hamorigami.screens;
 
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
+import de.bitbrain.braingdx.assets.SharedAssetManager;
 import de.bitbrain.braingdx.context.GameContext2D;
 import de.bitbrain.braingdx.debug.DebugMetric;
 import de.bitbrain.braingdx.graphics.GameCamera;
 import de.bitbrain.braingdx.graphics.animation.AnimationConfig;
 import de.bitbrain.braingdx.graphics.animation.AnimationFrames;
 import de.bitbrain.braingdx.graphics.animation.AnimationSpriteSheet;
+import de.bitbrain.braingdx.graphics.lighting.LightingConfig;
 import de.bitbrain.braingdx.graphics.renderer.SpriteRenderer;
 import de.bitbrain.braingdx.screen.BrainGdxScreen2D;
 import de.bitbrain.braingdx.world.GameObject;
@@ -26,6 +29,7 @@ import ldjam.hamorigami.input.ingame.IngameKeyboardAdapter;
 import ldjam.hamorigami.model.*;
 
 import static com.badlogic.gdx.graphics.g2d.Animation.PlayMode.LOOP;
+import static ldjam.hamorigami.Assets.Musics.BACKGROUND_01;
 import static ldjam.hamorigami.Assets.Textures.*;
 
 public class IngameScreen extends BrainGdxScreen2D<HamorigamiGame> {
@@ -41,11 +45,16 @@ public class IngameScreen extends BrainGdxScreen2D<HamorigamiGame> {
 
    @Override
    protected void onCreate(GameContext2D context) {
+      Music music = SharedAssetManager.getInstance().get(BACKGROUND_01, Music.class);
+      music.setLooping(true);
+      music.setVolume(0.1f);
+      music.play();
       context.setBackgroundColor(Color.valueOf("7766ff"));
       context.setDebug(getGame().isDebug());
       setupLevel(context);
       setupGraphics(context);
       setupInput(context);
+      setupLighting(context);
       setupDebugUi(context);
    }
 
@@ -54,6 +63,10 @@ public class IngameScreen extends BrainGdxScreen2D<HamorigamiGame> {
       super.onUpdate(delta);
       spawner.update(delta);
       attackHandler.update(delta);
+   }
+
+   private void setupLighting(GameContext2D context) {
+      //context.getLightingManager().setAmbientLight(Color.valueOf("ffffff"));
    }
 
    private void setupLevel(GameContext2D context) {
@@ -68,17 +81,18 @@ public class IngameScreen extends BrainGdxScreen2D<HamorigamiGame> {
             SpiritType.SPIRIT_EARTH,
             0f, 0f
       );
-      context.getBehaviorManager().apply(new TreeHealthBindingBehavior(treeObject), playerObject);
+      playerObject.setDimensions(64f, 64f);
+      context.getBehaviorManager().apply(new TreeHealthBindingBehavior(treeObject, context.getAudioManager(), context), playerObject);
 
       // add floor
       GameObject floorObject = entityFactory.spawnFloor();
 
       // add gauge
-      GameObject gaugeObject = entityFactory.spawnGauge(210, 70);
+      GameObject gaugeObject = entityFactory.spawnGauge(190, 90);
 
       // Spirit spawning
       spawner = new SpiritSpawner(3f, entityFactory, context, treeObject);
-      attackHandler = new AttackHandler(playerObject, entityFactory);
+      attackHandler = new AttackHandler(playerObject, entityFactory, context.getAudioManager());
       context.getBehaviorManager().apply(new SpiritedAway(context));
 
    }
@@ -86,7 +100,7 @@ public class IngameScreen extends BrainGdxScreen2D<HamorigamiGame> {
    private void setupGraphics(GameContext2D context) {
       context.getRenderManager().setRenderOrderComparator(new EntityOrderComparator());
       AnimationSpriteSheet kodamaSpritesheet = new AnimationSpriteSheet(
-            SPIRIT_EARTH_KODAMA_SRITESHEET, 32, 64
+            SPIRIT_EARTH_KODAMA_SRITESHEET, 64, 64
       );
       AnimationSpriteSheet hiSpritesheet = new AnimationSpriteSheet(
             SPIRIT_FIRE_HI_SPRITESHEET, 32, 64
@@ -96,6 +110,18 @@ public class IngameScreen extends BrainGdxScreen2D<HamorigamiGame> {
       );
 
       context.getRenderManager().register(SpiritType.SPIRIT_EARTH, new SpiritRenderer(context.getGameCamera(), kodamaSpritesheet, AnimationConfig.builder()
+            .registerFrames(SpiritAnimationType.ATTACKING_EAST, AnimationFrames.builder()
+                  .origin(0, 5)
+                  .frames(1)
+                  .duration(0.2f)
+                  .playMode(LOOP)
+                  .build())
+            .registerFrames(SpiritAnimationType.ATTACKING_WEST, AnimationFrames.builder()
+                  .origin(0, 4)
+                  .frames(1)
+                  .duration(0.2f)
+                  .playMode(LOOP)
+                  .build())
             .registerFrames(SpiritAnimationType.IDLE_EAST, AnimationFrames.builder()
                   .origin(0, 1)
                   .frames(5)
@@ -120,53 +146,41 @@ public class IngameScreen extends BrainGdxScreen2D<HamorigamiGame> {
                   .duration(0.2f)
                   .playMode(LOOP)
                   .build())
-            .registerFrames(SpiritAnimationType.HOVERING_NORTH, AnimationFrames.builder()
-                  .origin(0, 2)
-                  .frames(4)
-                  .duration(0.2f)
-                  .playMode(LOOP)
-                  .build())
-            .registerFrames(SpiritAnimationType.HOVERING_SOUTH, AnimationFrames.builder()
-                  .origin(0, 3)
-                  .frames(4)
-                  .duration(0.2f)
-                  .playMode(LOOP)
-                  .build())
             .build()));
       context.getRenderManager().register(SpiritType.SPIRIT_WATER, new SpiritRenderer(context.getGameCamera(), ameSpritesheet, AnimationConfig.builder()
+            .registerFrames(SpiritAnimationType.LANDING_WEST, AnimationFrames.builder()
+                  .origin(0, 2)
+                  .frames(1)
+                  .duration(0.2f)
+                  .playMode(LOOP)
+                  .build())
+            .registerFrames(SpiritAnimationType.LANDING_EAST, AnimationFrames.builder()
+                  .origin(0, 3)
+                  .frames(1)
+                  .duration(0.2f)
+                  .playMode(LOOP)
+                  .build())
             .registerFrames(SpiritAnimationType.IDLE_EAST, AnimationFrames.builder()
                   .origin(0, 5)
-                  .frames(1)
+                  .frames(4)
                   .duration(0.2f)
                   .playMode(LOOP)
                   .build())
             .registerFrames(SpiritAnimationType.IDLE_WEST, AnimationFrames.builder()
                   .origin(0, 4)
-                  .frames(1)
+                  .frames(4)
                   .duration(0.2f)
                   .playMode(LOOP)
                   .build())
             .registerFrames(SpiritAnimationType.HOVERING_EAST, AnimationFrames.builder()
-                  .origin(0, 5)
-                  .frames(1)
+                  .origin(0, 4)
+                  .frames(4)
                   .duration(0.2f)
                   .playMode(LOOP)
                   .build())
             .registerFrames(SpiritAnimationType.HOVERING_WEST, AnimationFrames.builder()
-                  .origin(0, 4)
-                  .frames(1)
-                  .duration(0.2f)
-                  .playMode(LOOP)
-                  .build())
-            .registerFrames(SpiritAnimationType.HOVERING_NORTH, AnimationFrames.builder()
-                  .origin(0, 4) // TODO fixme
-                  .frames(1)
-                  .duration(0.2f)
-                  .playMode(LOOP)
-                  .build())
-            .registerFrames(SpiritAnimationType.HOVERING_SOUTH, AnimationFrames.builder()
-                  .origin(0, 5) // TODO fixme
-                  .frames(1)
+                  .origin(0, 5)
+                  .frames(4)
                   .duration(0.2f)
                   .playMode(LOOP)
                   .build())
@@ -203,18 +217,6 @@ public class IngameScreen extends BrainGdxScreen2D<HamorigamiGame> {
                   .playMode(LOOP)
                   .build())
             .registerFrames(SpiritAnimationType.HOVERING_WEST, AnimationFrames.builder()
-                  .origin(0, 0)
-                  .frames(8)
-                  .duration(0.2f)
-                  .playMode(LOOP)
-                  .build())
-            .registerFrames(SpiritAnimationType.HOVERING_NORTH, AnimationFrames.builder()
-                  .origin(0, 0)
-                  .frames(8)
-                  .duration(0.2f)
-                  .playMode(LOOP)
-                  .build())
-            .registerFrames(SpiritAnimationType.HOVERING_SOUTH, AnimationFrames.builder()
                   .origin(0, 0)
                   .frames(8)
                   .duration(0.2f)

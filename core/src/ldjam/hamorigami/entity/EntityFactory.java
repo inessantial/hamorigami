@@ -3,6 +3,7 @@ package ldjam.hamorigami.entity;
 import aurelienribon.tweenengine.BaseTween;
 import aurelienribon.tweenengine.Tween;
 import aurelienribon.tweenengine.TweenCallback;
+import box2dLight.Light;
 import com.badlogic.gdx.graphics.Color;
 import de.bitbrain.braingdx.behavior.BehaviorAdapter;
 import de.bitbrain.braingdx.context.GameContext2D;
@@ -26,7 +27,7 @@ public class EntityFactory {
    public GameObject spawnGauge(float x, float y) {
       GameObject object = context.getGameWorld().addObject();
       object.setPosition(context.getGameCamera().getLeft() + x, context.getGameCamera().getTop() + y);
-      object.setDimensions(32f, 128f);
+      object.setDimensions(16f, 64f);
       object.setType(GAUGE);
       object.setActive(false);
       return object;
@@ -41,6 +42,15 @@ public class EntityFactory {
       object.setAttribute(HealthData.class, new HealthData(spiritType.getHealth()));
       object.setAttribute(Movement.class, new Movement(spiritType.getMaxSpeed(), context.getGameCamera()));
       context.getBehaviorManager().apply(object.getAttribute(Movement.class), object);
+      if (spiritType.getParticleId() != null) {
+         if (spiritType == SpiritType.SPIRIT_EARTH) {
+            context.getParticleManager().attachEffect(spiritType.getParticleId(), object, 32f, 32f);
+         } else {
+            context.getParticleManager().attachEffect(spiritType.getParticleId(), object, 16f, 32f);
+         }
+      }
+      //Light light = context.getLightingManager().createPointLight(200, spiritType.getLightingColor());
+      // context.getLightingManager().attach(light, object);
       return object;
    }
 
@@ -48,13 +58,15 @@ public class EntityFactory {
       GameObject object = context.getGameWorld().addObject();
       object.setType(ObjectType.TREE);
       object.setZIndex(2);
+      object.setDimensions(300, 230);
       object.setPosition(
-            context.getGameCamera().getLeft() + context.getGameCamera().getScaledCameraWidth() / 2f - 100,
-            context.getGameCamera().getTop() + 30);
-      object.setDimensions(200, 200);
+            context.getGameCamera().getLeft() + (context.getGameCamera().getScaledCameraWidth() / 2f - object.getWidth() / 2f),
+            context.getGameCamera().getTop() + 45);
       object.setAttribute(TreeStatus.class, new TreeStatus());
       object.setAttribute(HealthData.class, new HealthData(1000));
       context.getBehaviorManager().apply(new TreeBehavior(), object);
+      //Light light = context.getLightingManager().createPointLight(500, Color.valueOf("e5a656"));
+      //context.getLightingManager().attach(light, object, true);
       return object;
    }
 
@@ -64,7 +76,7 @@ public class EntityFactory {
       object.setZIndex(1);
       object.setPosition(
             context.getGameCamera().getLeft() + context.getGameCamera().getScaledCameraWidth() / 2f - 400,
-            context.getGameCamera().getTop());
+            context.getGameCamera().getTop() - 30f);
       object.setDimensions(800, 100);
       return object;
    }

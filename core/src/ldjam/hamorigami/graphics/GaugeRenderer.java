@@ -1,10 +1,14 @@
 package ldjam.hamorigami.graphics;
 
+import aurelienribon.tweenengine.Tween;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import de.bitbrain.braingdx.assets.SharedAssetManager;
 import de.bitbrain.braingdx.graphics.renderer.SpriteRenderer;
+import de.bitbrain.braingdx.tweens.SharedTweenManager;
+import de.bitbrain.braingdx.tweens.ValueTween;
+import de.bitbrain.braingdx.util.ValueProvider;
 import de.bitbrain.braingdx.world.GameObject;
 import ldjam.hamorigami.Assets;
 import ldjam.hamorigami.model.TreeStatus;
@@ -14,28 +18,41 @@ public class GaugeRenderer extends SpriteRenderer {
    private final GameObject treeObject;
    private final Sprite waterLevelSprite;
    private final Sprite waterLevelTopSprite;
+   private final ValueProvider valueProvider = new ValueProvider();
+
+   private float oldLevel = -999f;
 
    public GaugeRenderer(GameObject treeObject) {
       super(Assets.Textures.GAUGE_OVERLAY);
       this.treeObject = treeObject;
+      valueProvider.setValue(0.3f);
       waterLevelSprite = new Sprite(SharedAssetManager.getInstance().get(Assets.Textures.GAUGE_WATER, Texture.class));
       waterLevelTopSprite = new Sprite(SharedAssetManager.getInstance().get(Assets.Textures.GAUGE_WATER_TOP, Texture.class));
    }
 
    @Override
    public void render(GameObject object, Batch batch, float delta) {
-      float level = treeObject.getAttribute(TreeStatus.class).getSoilWaterLevel() * 1.05f;
+      float currentLevel = treeObject.getAttribute(TreeStatus.class).getSoilWaterLevel() * 1.05f;
+
+      if (oldLevel < -1 || oldLevel != currentLevel) {
+         SharedTweenManager.getInstance().killTarget(valueProvider);
+         Tween.to(valueProvider, ValueTween.VALUE, 0.3f)
+               .target(currentLevel)
+               .start(SharedTweenManager.getInstance());
+      }
+      oldLevel = currentLevel;
+      float level = valueProvider.getValue();
       if (level > 0.85f) {
          level = 0.85f;
       }
-      if (level > 0.05f) {
+      if (level > 0.07f) {
          waterLevelSprite.setPosition(object.getLeft(), object.getTop());
          waterLevelSprite.setSize(object.getWidth(), object.getHeight() * level);
          waterLevelSprite.draw(batch, 1f);
-         int height = (int) (object.getHeight() / 2f * level);
+         int height = (int) (object.getHeight() * level);
          waterLevelSprite.setRegion(0, height, 16, -height);
-         waterLevelTopSprite.setPosition(object.getLeft(), object.getTop() + object.getHeight() * level - 8f);
-         waterLevelTopSprite.setSize(32f, 16);
+         waterLevelTopSprite.setPosition(object.getLeft(), object.getTop() + object.getHeight() * level - 4f);
+         waterLevelTopSprite.setSize(16f, 8f);
          waterLevelTopSprite.draw(batch, 1f);
       }
       super.render(object, batch, delta);
