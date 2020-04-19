@@ -18,6 +18,7 @@ public class GaugeRenderer extends SpriteRenderer {
    private final GameObject treeObject;
    private final Sprite waterLevelSprite;
    private final Sprite waterLevelTopSprite;
+   private final Sprite gaugeGrassSprite;
    private final ValueProvider valueProvider = new ValueProvider();
 
    private float oldLevel = -999f;
@@ -28,6 +29,7 @@ public class GaugeRenderer extends SpriteRenderer {
       valueProvider.setValue(0.3f);
       waterLevelSprite = new Sprite(SharedAssetManager.getInstance().get(Assets.Textures.GAUGE_WATER, Texture.class));
       waterLevelTopSprite = new Sprite(SharedAssetManager.getInstance().get(Assets.Textures.GAUGE_WATER_TOP, Texture.class));
+      gaugeGrassSprite = new Sprite(SharedAssetManager.getInstance().get(Assets.Textures.GAUGE_GRASS, Texture.class));
    }
 
    @Override
@@ -56,5 +58,8 @@ public class GaugeRenderer extends SpriteRenderer {
          waterLevelTopSprite.draw(batch, 1f);
       }
       super.render(object, batch, delta);
+      gaugeGrassSprite.setPosition(object.getLeft() - 5f, object.getTop() -4f);
+      gaugeGrassSprite.setSize(24f, 16f);
+      gaugeGrassSprite.draw(batch, 1f);
    }
 }

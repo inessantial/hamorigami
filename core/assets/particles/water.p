@@ -2,8 +2,8 @@ Untitled
 - Delay -
 active: false
 - Duration - 
-lowMin: 1500.0
-lowMax: 1500.0
+lowMin: 800.0
+lowMax: 800.0
 - Count - 
 min: 0
 max: 60
@@ -20,8 +20,8 @@ timeline0: 0.0
 - Life - 
 lowMin: 0.0
 lowMax: 0.0
-highMin: 500.0
-highMax: 1000.0
+highMin: 200.0
+highMax: 600.0
 relative: false
 scalingCount: 3
 scaling0: 1.0
@@ -62,10 +62,10 @@ scaling0: 1.0
 timelineCount: 1
 timeline0: 0.0
 - X Scale - 
-lowMin: 4.0
+lowMin: 2.0
 lowMax: 0.0
-highMin: 8.0
-highMax: 4.0
+highMin: 4.0
+highMax: 2.0
 relative: false
 scalingCount: 3
 scaling0: 1.0
@@ -175,24 +175,24 @@ highMax: 1.0
 relative: false
 scalingCount: 8
 scaling0: 0.0
-scaling1: 0.24561404
-scaling2: 0.28070176
-scaling3: 0.36842105
-scaling4: 0.22807017
-scaling5: 0.22807017
-scaling6: 0.15789473
+scaling1: 0.10526316
+scaling2: 0.0877193
+scaling3: 0.10526316
+scaling4: 0.0877193
+scaling5: 0.07017544
+scaling6: 0.07017544
 scaling7: 0.0
 timelineCount: 8
 timeline0: 0.0
-timeline1: 0.15068494
-timeline2: 0.36301368
-timeline3: 0.45890412
-timeline4: 0.6232877
-timeline5: 0.7671233
-timeline6: 0.84931505
+timeline1: 0.23287672
+timeline2: 0.34246576
+timeline3: 0.5068493
+timeline4: 0.65068495
+timeline5: 0.7808219
+timeline6: 0.8767123
 timeline7: 1.0
 - Options - 
-attached: false
+attached: true
 continuous: true
 aligned: false
 additive: true
