@@ -14,9 +14,9 @@ public class SpiritAnimationTypeResolver implements AnimationTypeResolver<GameOb
          return object.getAttribute(SpiritAnimationType.class);
       }
       float directionAngle = movement.getMoveDirection().angle();
-      String direction = "WEST";
-      if (directionAngle < 180 || directionAngle >= 180) {
-         direction = "EAST";
+      String direction = "EAST";
+      if (directionAngle < 90f || directionAngle >= 270) {
+         direction = "WEST";
       }
       String type = "HOVERING";
       if (object.hasAttribute("falling")) {
