@@ -18,7 +18,7 @@ public enum SpiritType {
          // noOp
       }
    }),
-   SPIRIT_WATER(80, 2, new AddWaterEffect(), new SpawnWaterSpiritEffect()),
+   SPIRIT_WATER(80, 5, new AddWaterEffect(), new SpawnWaterSpiritEffect()),
    SPIRIT_FIRE(45, 10, new AddSunlightEffect(), new SpawnFireEffect());
 
    private final int health;

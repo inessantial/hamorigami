@@ -243,10 +243,16 @@ public class IngameScreen extends BrainGdxScreen2D<HamorigamiGame> {
    }
 
    private void setupDebugUi(GameContext2D context) {
-      context.getDebugPanel().addMetric("tree water level", new DebugMetric() {
+      context.getDebugPanel().addMetric("tree watered level", new DebugMetric() {
          @Override
          public String getCurrentValue() {
-            return String.valueOf(treeObject.getAttribute(TreeStatus.class).getWaterLevel());
+            return String.valueOf(treeObject.getAttribute(TreeStatus.class).getTreeWateredLevel());
+         }
+      });
+      context.getDebugPanel().addMetric("soil water level", new DebugMetric() {
+         @Override
+         public String getCurrentValue() {
+            return String.valueOf(treeObject.getAttribute(TreeStatus.class).getSoilWaterLevel());
          }
       });
       context.getDebugPanel().addMetric("tree health", new DebugMetric() {
