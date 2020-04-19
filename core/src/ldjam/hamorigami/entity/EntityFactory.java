@@ -27,14 +27,10 @@ public class EntityFactory {
       object.setZIndex(3);
       object.setType(spiritType);
       object.setPosition(context.getGameCamera().getLeft() + x, context.getGameCamera().getTop() + y);
-      object.setDimensions(32f, 32f);
+      object.setDimensions(32f, 64f);
       object.setAttribute(HealthData.class, new HealthData(spiritType.getHealth()));
       object.setAttribute(Movement.class, new Movement(spiritType.getMaxSpeed(), context.getGameCamera()));
       context.getBehaviorManager().apply(object.getAttribute(Movement.class), object);
-      Tween.to(object, GameObjectTween.OFFSET_Y, 0.6f)
-            .target(4f)
-            .repeatYoyo(Tween.INFINITY, 0f)
-            .start(SharedTweenManager.getInstance());
       return object;
    }
 
@@ -79,7 +75,7 @@ public class EntityFactory {
          public void onEvent(int type, BaseTween<?> source) {
             context.getGameWorld().remove(damage);
          }
-      }).delay(0.5f).start(SharedTweenManager.getInstance());
+      }).delay(0.1f).start(SharedTweenManager.getInstance());
       context.getBehaviorManager().apply(new BehaviorAdapter() {
 
          private boolean applicableForRemoval;
@@ -103,8 +99,8 @@ public class EntityFactory {
                if (target.hasAttribute(HealthData.class) && target.getType() != ObjectType.TREE) {
                   if (!target.getAttribute(HealthData.class).isDead()) {
                      target.getAttribute(HealthData.class).reduceHealth(10);
-                     target.setColor(1f, 0f, 0f, 1f);
-                     TweenUtils.toColor(target.getColor(), Color.WHITE.cpy(), 0.5f);
+                     target.setColor(1f, 1f, 1f, 0.5f);
+                     TweenUtils.toColor(target.getColor(), Color.WHITE.cpy(), 1f);
                      applicableForRemoval = true;
                   }
                }
