@@ -13,6 +13,7 @@ import de.bitbrain.braingdx.world.GameObject;
 import ldjam.hamorigami.Assets.Textures;
 import ldjam.hamorigami.HamorigamiGame;
 import ldjam.hamorigami.behavior.SpiritSpawner;
+import ldjam.hamorigami.behavior.TreeHealthBindingBehavior;
 import ldjam.hamorigami.entity.AttackHandler;
 import ldjam.hamorigami.entity.EntityFactory;
 import ldjam.hamorigami.entity.SpiritedAway;
@@ -57,16 +58,17 @@ public class IngameScreen extends BrainGdxScreen2D<HamorigamiGame> {
 
    private void setupLevel(GameContext2D context) {
       EntityFactory entityFactory = new EntityFactory(context);
+      context.getGameCamera().setZoom(300, GameCamera.ZoomMode.TO_HEIGHT);
+
+      // add tree
+      this.treeObject = entityFactory.spawnTree();
 
       // add player
-      context.getGameCamera().setZoom(300, GameCamera.ZoomMode.TO_HEIGHT);
       this.playerObject = entityFactory.spawnSpirit(
             SpiritType.SPIRIT_EARTH,
             0f, 0f
       );
-
-      // add tree
-      this.treeObject = entityFactory.spawnTree();
+      context.getBehaviorManager().apply(new TreeHealthBindingBehavior(treeObject), playerObject);
 
       // add floor
       GameObject floorObject = entityFactory.spawnFloor();
@@ -243,10 +245,16 @@ public class IngameScreen extends BrainGdxScreen2D<HamorigamiGame> {
    }
 
    private void setupDebugUi(GameContext2D context) {
-      context.getDebugPanel().addMetric("tree water level", new DebugMetric() {
+      context.getDebugPanel().addMetric("tree watered level", new DebugMetric() {
          @Override
          public String getCurrentValue() {
-            return String.valueOf(treeObject.getAttribute(TreeStatus.class).getWaterLevel());
+            return String.valueOf(treeObject.getAttribute(TreeStatus.class).getTreeWateredLevel());
+         }
+      });
+      context.getDebugPanel().addMetric("soil water level", new DebugMetric() {
+         @Override
+         public String getCurrentValue() {
+            return String.valueOf(treeObject.getAttribute(TreeStatus.class).getSoilWaterLevel());
          }
       });
       context.getDebugPanel().addMetric("tree health", new DebugMetric() {

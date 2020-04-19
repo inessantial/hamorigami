@@ -2,26 +2,33 @@ package ldjam.hamorigami.model;
 
 public class TreeStatus {
 
-   // 0.5f is perfect
-   private float waterLevel = 0.5f;
+   private float soilWaterLevel = 0.3f;
+   // -1 = super dry
+   // 0  = perfect
+   // 1  = over-watered
+   private float treeWateredLevel = 0.0f;
 
-   public void decreaseWater(float water) {
-      this.waterLevel = Math.max(this.waterLevel - water, 0);
+   public void decreaseSoilWater(float water) {
+      this.soilWaterLevel = Math.max(this.soilWaterLevel - water, 0);
    }
 
-   public void increaseWater(float water) {
-      this.waterLevel = Math.min(this.waterLevel + water, 1f);
+   public void increaseSoilWater(float water) {
+      this.soilWaterLevel = Math.min(this.soilWaterLevel + water, 1f);
    }
 
-   public float getWaterLevel() {
-      return waterLevel;
+   public float getTreeWateredLevel() {
+      return treeWateredLevel;
    }
 
-   public int calculateDamage() {
-      return (int) (300 * Math.abs(0.5f - waterLevel));
+   public float getSoilWaterLevel() {
+      return soilWaterLevel;
    }
 
-   public int calculateHealing() {
-      return (int) (50 * (0.5f - Math.abs(0.5f - waterLevel)));
+   public void decreaseTreeWateredLevel(float water) {
+      this.treeWateredLevel = Math.max(this.treeWateredLevel - water, -1);
+   }
+
+   public void increaseTreeWateredLevel(float water) {
+      this.treeWateredLevel = Math.min(this.treeWateredLevel + water, 1f);
    }
 }

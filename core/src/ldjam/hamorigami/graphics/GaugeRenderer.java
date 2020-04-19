@@ -24,7 +24,7 @@ public class GaugeRenderer extends SpriteRenderer {
 
    @Override
    public void render(GameObject object, Batch batch, float delta) {
-      float level = treeObject.getAttribute(TreeStatus.class).getWaterLevel() * 1.05f;
+      float level = treeObject.getAttribute(TreeStatus.class).getSoilWaterLevel() * 1.05f;
       if (level > 0.85f) {
          level = 0.85f;
       }

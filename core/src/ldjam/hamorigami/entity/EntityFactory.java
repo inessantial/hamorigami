@@ -108,7 +108,7 @@ public class EntityFactory {
                }
                if (target.hasAttribute(HealthData.class) && target.getType() != ObjectType.TREE) {
                   if (!target.getAttribute(HealthData.class).isDead()) {
-                     target.getAttribute(HealthData.class).reduceHealth(10);
+                     target.getAttribute(HealthData.class).reduceHealth(20);
                      target.setColor(1f, 1f, 1f, 0.5f);
                      TweenUtils.toColor(target.getColor(), Color.WHITE.cpy(), 1f);
                      applicableForRemoval = true;

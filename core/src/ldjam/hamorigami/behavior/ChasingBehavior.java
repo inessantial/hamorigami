@@ -55,7 +55,7 @@ public class ChasingBehavior extends BehaviorAdapter {
                   @Override
                   public void onEvent(int type, BaseTween<?> tween) {
                      if (source.hasAttribute(HealthData.class)) {
-                        source.getAttribute(HealthData.class).kill();
+                        //source.getAttribute(HealthData.class).kill();
                      }
                   }
                }).delay(ARRIVAL_HEALTH).start(SharedTweenManager.getInstance());
