@@ -6,7 +6,6 @@ import aurelienribon.tweenengine.TweenCallback;
 import com.badlogic.gdx.graphics.Color;
 import de.bitbrain.braingdx.behavior.BehaviorAdapter;
 import de.bitbrain.braingdx.context.GameContext2D;
-import de.bitbrain.braingdx.tweens.GameObjectTween;
 import de.bitbrain.braingdx.tweens.SharedTweenManager;
 import de.bitbrain.braingdx.tweens.TweenUtils;
 import de.bitbrain.braingdx.util.Mutator;
@@ -14,12 +13,23 @@ import de.bitbrain.braingdx.world.GameObject;
 import ldjam.hamorigami.behavior.TreeBehavior;
 import ldjam.hamorigami.model.*;
 
+import static ldjam.hamorigami.model.ObjectType.GAUGE;
+
 public class EntityFactory {
 
    private final GameContext2D context;
 
    public EntityFactory(GameContext2D context) {
       this.context = context;
+   }
+
+   public GameObject spawnGauge(float x, float y) {
+      GameObject object = context.getGameWorld().addObject();
+      object.setPosition(context.getGameCamera().getLeft() + x, context.getGameCamera().getTop() + y);
+      object.setDimensions(32f, 128f);
+      object.setType(GAUGE);
+      object.setActive(false);
+      return object;
    }
 
    public GameObject spawnSpirit(SpiritType spiritType, float x, float y) {

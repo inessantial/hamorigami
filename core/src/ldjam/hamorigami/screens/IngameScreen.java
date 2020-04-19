@@ -17,6 +17,7 @@ import ldjam.hamorigami.entity.AttackHandler;
 import ldjam.hamorigami.entity.EntityFactory;
 import ldjam.hamorigami.entity.SpiritedAway;
 import ldjam.hamorigami.graphics.EntityOrderComparator;
+import ldjam.hamorigami.graphics.GaugeRenderer;
 import ldjam.hamorigami.graphics.SpiritRenderer;
 import ldjam.hamorigami.input.ingame.IngameControllerAdapter;
 import ldjam.hamorigami.input.ingame.IngameKeyboardAdapter;
@@ -69,6 +70,9 @@ public class IngameScreen extends BrainGdxScreen2D<HamorigamiGame> {
       // add floor
       GameObject floorObject = entityFactory.spawnFloor();
 
+      // add gauge
+      GameObject gaugeObject = entityFactory.spawnGauge(210, 70);
+
       // Spirit spawning
       spawner = new SpiritSpawner(3f, entityFactory, context, treeObject);
       attackHandler = new AttackHandler(playerObject, entityFactory);
@@ -89,14 +93,26 @@ public class IngameScreen extends BrainGdxScreen2D<HamorigamiGame> {
       );
 
       context.getRenderManager().register(SpiritType.SPIRIT_EARTH, new SpiritRenderer(context.getGameCamera(), kodamaSpritesheet, AnimationConfig.builder()
-            .registerFrames(SpiritAnimationType.HOVERING_EAST, AnimationFrames.builder()
+            .registerFrames(SpiritAnimationType.IDLE_EAST, AnimationFrames.builder()
                   .origin(0, 1)
+                  .frames(5)
+                  .duration(0.2f)
+                  .playMode(LOOP)
+                  .build())
+            .registerFrames(SpiritAnimationType.IDLE_WEST, AnimationFrames.builder()
+                  .origin(0, 0)
+                  .frames(5)
+                  .duration(0.2f)
+                  .playMode(LOOP)
+                  .build())
+            .registerFrames(SpiritAnimationType.HOVERING_EAST, AnimationFrames.builder()
+                  .origin(0, 3)
                   .frames(4)
                   .duration(0.2f)
                   .playMode(LOOP)
                   .build())
             .registerFrames(SpiritAnimationType.HOVERING_WEST, AnimationFrames.builder()
-                  .origin(0, 0)
+                  .origin(0, 2)
                   .frames(4)
                   .duration(0.2f)
                   .playMode(LOOP)
@@ -115,6 +131,18 @@ public class IngameScreen extends BrainGdxScreen2D<HamorigamiGame> {
                   .build())
             .build()));
       context.getRenderManager().register(SpiritType.SPIRIT_WATER, new SpiritRenderer(context.getGameCamera(), ameSpritesheet, AnimationConfig.builder()
+            .registerFrames(SpiritAnimationType.IDLE_EAST, AnimationFrames.builder()
+                  .origin(0, 5)
+                  .frames(1)
+                  .duration(0.2f)
+                  .playMode(LOOP)
+                  .build())
+            .registerFrames(SpiritAnimationType.IDLE_WEST, AnimationFrames.builder()
+                  .origin(0, 4)
+                  .frames(1)
+                  .duration(0.2f)
+                  .playMode(LOOP)
+                  .build())
             .registerFrames(SpiritAnimationType.HOVERING_EAST, AnimationFrames.builder()
                   .origin(0, 5)
                   .frames(1)
@@ -153,6 +181,18 @@ public class IngameScreen extends BrainGdxScreen2D<HamorigamiGame> {
                   .build())
             .build()));
       context.getRenderManager().register(SpiritType.SPIRIT_FIRE, new SpiritRenderer(context.getGameCamera(), hiSpritesheet, AnimationConfig.builder()
+            .registerFrames(SpiritAnimationType.IDLE_EAST, AnimationFrames.builder()
+                  .origin(0, 0)
+                  .frames(8)
+                  .duration(0.2f)
+                  .playMode(LOOP)
+                  .build())
+            .registerFrames(SpiritAnimationType.IDLE_WEST, AnimationFrames.builder()
+                  .origin(0, 0)
+                  .frames(8)
+                  .duration(0.2f)
+                  .playMode(LOOP)
+                  .build())
             .registerFrames(SpiritAnimationType.HOVERING_EAST, AnimationFrames.builder()
                   .origin(0, 0)
                   .frames(8)
@@ -193,6 +233,7 @@ public class IngameScreen extends BrainGdxScreen2D<HamorigamiGame> {
 
       context.getRenderManager().register(ObjectType.TREE, new SpriteRenderer(Textures.TREE));
       context.getRenderManager().register(ObjectType.FLOOR, new SpriteRenderer(Textures.BACKGROUND_FLOOR));
+      context.getRenderManager().register(ObjectType.GAUGE, new GaugeRenderer(treeObject));
    }
 
    private void setupInput(GameContext2D context) {

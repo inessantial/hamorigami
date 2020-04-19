@@ -16,5 +16,9 @@ public interface Assets {
       String BACKGROUND_FLOOR = "texture/background-floor.png";
 
       String DROPSHADOW = "texture/dropshadow.png";
+
+      String GAUGE_WATER = "texture/gauge-water.png";
+      String GAUGE_WATER_TOP = "texture/gauge-water-top.png";
+      String GAUGE_OVERLAY = "texture/gauge-overlay.png";
    }
 }
