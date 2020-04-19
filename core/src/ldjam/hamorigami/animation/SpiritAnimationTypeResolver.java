@@ -14,15 +14,14 @@ public class SpiritAnimationTypeResolver implements AnimationTypeResolver<GameOb
          return object.getAttribute(SpiritAnimationType.class);
       }
       float directionAngle = movement.getMoveDirection().angle();
-      String direction = "SOUTH";
-      if (directionAngle < 65f || directionAngle >= 335f) {
-         direction = "EAST";
-      } else if (directionAngle < 145f && directionAngle >= 75f) {
-         direction = "NORTH";
-      } else if (directionAngle < 195f && directionAngle >= 165f) {
+      String direction = "EAST";
+      if (directionAngle < 90f || directionAngle >= 270) {
          direction = "WEST";
       }
       String type = "HOVERING";
+      if (object.hasAttribute("falling")) {
+         type = "FALLING";
+      }
       SpiritAnimationType animationType = SpiritAnimationType.valueOf(type + "_" + direction);
       if (animationType.toString().contains("WEST") || (animationType.toString().contains("EAST"))) {
          object.setAttribute(SpiritAnimationType.class, animationType);

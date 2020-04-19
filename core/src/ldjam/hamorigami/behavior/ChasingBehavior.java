@@ -28,18 +28,20 @@ public class ChasingBehavior extends BehaviorAdapter {
    public void update(GameObject source, float delta) {
       super.update(source, delta);
       Movement mover = source.getAttribute(Movement.class);
-      direction.x = (target.getLeft() + offset.x) - source.getLeft();
-      direction.y = (target.getTop() + offset.y) - source.getTop();
+      if (mover != null) {
+         direction.x = (target.getLeft() + offset.x) - source.getLeft();
+         direction.y = (target.getTop() + offset.y) - source.getTop();
 
-      if (direction.len() <= MIN_DISTANCE) {
-         attackTimer.update(delta);
-         if (attackTimer.reached(ATTACK_INTERVAL)) {
-            attackTimer.reset();
-            SpiritType type = (SpiritType) source.getType();
-            type.getEffect().applyEffect(target);
+         if (direction.len() <= MIN_DISTANCE) {
+            attackTimer.update(delta);
+            if (attackTimer.reached(ATTACK_INTERVAL)) {
+               attackTimer.reset();
+               SpiritType type = (SpiritType) source.getType();
+               type.getAbsorbEffect().applyEffect(target);
+            }
+         } else {
+            mover.move(direction);
          }
-      } else {
-         mover.move(direction);
       }
    }
 }

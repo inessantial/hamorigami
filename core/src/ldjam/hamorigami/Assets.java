@@ -14,5 +14,7 @@ public interface Assets {
       String TREE = "texture/tree.png";
 
       String BACKGROUND_FLOOR = "texture/background-floor.png";
+
+      String DROPSHADOW = "texture/dropshadow.png";
    }
 }

@@ -1,9 +1,9 @@
-package ldjam.hamorigami.tree;
+package ldjam.hamorigami.effects;
 
 import de.bitbrain.braingdx.world.GameObject;
 import ldjam.hamorigami.model.TreeStatus;
 
-public class AddWaterEffect implements TreeEffect {
+public class AddWaterEffect implements SpiritAbsorbEffect {
 
    @Override
    public boolean applyEffect(GameObject treeObject) {
