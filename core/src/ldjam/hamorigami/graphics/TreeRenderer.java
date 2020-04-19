@@ -15,14 +15,6 @@ public class TreeRenderer extends SpriteRenderer {
 
    @Override
    public void render(GameObject object, Batch batch, float delta) {
-      TreeStatus treeStatus = object.getAttribute(TreeStatus.class);
-      if (treeStatus.getTreeWateredLevel() < 0f) {
-         Color health = Color.RED.cpy().lerp(Color.WHITE, 1f - treeStatus.getTreeWateredLevel() / -1f);
-         object.setColor(health);
-      } else {
-         Color health = Color.BLUE.cpy().lerp(Color.WHITE, 1f - treeStatus.getTreeWateredLevel() / 1f);
-         object.setColor(health);
-      }
       super.render(object, batch, delta);
    }
 }

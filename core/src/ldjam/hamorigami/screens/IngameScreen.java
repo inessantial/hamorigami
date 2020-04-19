@@ -2,6 +2,7 @@ package ldjam.hamorigami.screens;
 
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import de.bitbrain.braingdx.assets.SharedAssetManager;
 import de.bitbrain.braingdx.context.GameContext2D;
 import de.bitbrain.braingdx.debug.DebugMetric;
@@ -9,13 +10,12 @@ import de.bitbrain.braingdx.graphics.GameCamera;
 import de.bitbrain.braingdx.graphics.animation.AnimationConfig;
 import de.bitbrain.braingdx.graphics.animation.AnimationFrames;
 import de.bitbrain.braingdx.graphics.animation.AnimationSpriteSheet;
-import de.bitbrain.braingdx.graphics.lighting.LightingConfig;
 import de.bitbrain.braingdx.graphics.renderer.SpriteRenderer;
 import de.bitbrain.braingdx.screen.BrainGdxScreen2D;
 import de.bitbrain.braingdx.world.GameObject;
 import ldjam.hamorigami.Assets.Textures;
 import ldjam.hamorigami.HamorigamiGame;
-import ldjam.hamorigami.behavior.SpiritSpawner;
+import ldjam.hamorigami.entity.SpiritSpawner;
 import ldjam.hamorigami.behavior.TreeHealthBindingBehavior;
 import ldjam.hamorigami.entity.AttackHandler;
 import ldjam.hamorigami.entity.EntityFactory;
@@ -146,7 +146,23 @@ public class IngameScreen extends BrainGdxScreen2D<HamorigamiGame> {
                   .duration(0.2f)
                   .playMode(LOOP)
                   .build())
-            .build()));
+            .build()) {
+         @Override
+         public void render(GameObject object, Batch batch, float delta) {
+            TreeStatus treeStatus = treeObject.getAttribute(TreeStatus.class);
+            float alpha = object.getColor().a;
+            if (treeStatus.getTreeWateredLevel() < 0f) {
+               Color health = Color.RED.cpy().lerp(Color.WHITE, 1f - treeStatus.getTreeWateredLevel() / -1f);
+               health.a = alpha;
+               object.setColor(health);
+            } else {
+               Color health = Color.BLUE.cpy().lerp(Color.WHITE, 1f - treeStatus.getTreeWateredLevel() / 1f);
+               health.a = alpha;
+               object.setColor(health);
+            }
+            super.render(object, batch, delta);
+         }
+      });
       context.getRenderManager().register(SpiritType.SPIRIT_WATER, new SpiritRenderer(context.getGameCamera(), ameSpritesheet, AnimationConfig.builder()
             .registerFrames(SpiritAnimationType.LANDING_WEST, AnimationFrames.builder()
                   .origin(0, 2)

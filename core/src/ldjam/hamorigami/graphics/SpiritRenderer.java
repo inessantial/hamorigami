@@ -24,7 +24,7 @@ public class SpiritRenderer extends AnimationRenderer {
 
    @Override
    public void render(GameObject object, Batch batch, float delta) {
-      Color originalColor = batch.getColor();
+      /*Color originalColor = batch.getColor();
       float heightPercentage = 1f - (object.getTop() - gameCamera.getTop()) / gameCamera.getScaledCameraHeight();
       float alpha  = 1f * heightPercentage * object.getColor().a;
       batch.setColor(1f, 1f, 1f, alpha);
@@ -37,7 +37,7 @@ public class SpiritRenderer extends AnimationRenderer {
       } else {
          batch.draw(texture, object.getLeft(), y, size, size);
       }
-      batch.setColor(originalColor);
+      batch.setColor(originalColor);*/
       super.render(object, batch, delta);
 
    }
