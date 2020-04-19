@@ -1,24 +1,31 @@
 package ldjam.hamorigami.screens;
 
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import de.bitbrain.braingdx.context.GameContext2D;
 import de.bitbrain.braingdx.debug.DebugMetric;
 import de.bitbrain.braingdx.graphics.GameCamera;
+import de.bitbrain.braingdx.graphics.animation.AnimationConfig;
+import de.bitbrain.braingdx.graphics.animation.AnimationFrames;
+import de.bitbrain.braingdx.graphics.animation.AnimationRenderer;
+import de.bitbrain.braingdx.graphics.animation.AnimationSpriteSheet;
 import de.bitbrain.braingdx.graphics.renderer.SpriteRenderer;
 import de.bitbrain.braingdx.screen.BrainGdxScreen2D;
 import de.bitbrain.braingdx.world.GameObject;
-import ldjam.hamorigami.Assets;
+import ldjam.hamorigami.Assets.Textures;
 import ldjam.hamorigami.HamorigamiGame;
-import ldjam.hamorigami.entity.AttackHandler;
+import ldjam.hamorigami.animation.SpiritAnimationTypeResolver;
 import ldjam.hamorigami.behavior.SpiritSpawner;
-import ldjam.hamorigami.entity.SpiritedAway;
+import ldjam.hamorigami.entity.AttackHandler;
 import ldjam.hamorigami.entity.EntityFactory;
+import ldjam.hamorigami.entity.SpiritedAway;
+import ldjam.hamorigami.graphics.EntityOrderComparator;
 import ldjam.hamorigami.input.ingame.IngameControllerAdapter;
 import ldjam.hamorigami.input.ingame.IngameKeyboardAdapter;
-import ldjam.hamorigami.model.HealthData;
-import ldjam.hamorigami.model.ObjectType;
-import ldjam.hamorigami.model.SpiritType;
-import ldjam.hamorigami.model.TreeStatus;
+import ldjam.hamorigami.model.*;
+
+import static com.badlogic.gdx.graphics.g2d.Animation.PlayMode.LOOP;
+import static ldjam.hamorigami.Assets.Textures.*;
 
 public class IngameScreen extends BrainGdxScreen2D<HamorigamiGame> {
 
@@ -72,12 +79,98 @@ public class IngameScreen extends BrainGdxScreen2D<HamorigamiGame> {
    }
 
    private void setupGraphics(GameContext2D context) {
-      context.getRenderManager().register(SpiritType.SPIRIT_EARTH, new SpriteRenderer(Assets.Textures.SPIRIT_EARTH));
-      context.getRenderManager().register(SpiritType.SPIRIT_WATER, new SpriteRenderer(Assets.Textures.SPIRIT_WATER));
-      context.getRenderManager().register(SpiritType.SPIRIT_FIRE, new SpriteRenderer(Assets.Textures.SPIRIT_FIRE));
+      context.getRenderManager().setRenderOrderComparator(new EntityOrderComparator());
+      AnimationSpriteSheet kodamaSpritesheet = new AnimationSpriteSheet(
+            SPIRIT_EARTH_KODAMA_SRITESHEET, 32, 64
+      );
+      AnimationSpriteSheet hiSpritesheet = new AnimationSpriteSheet(
+            SPIRIT_FIRE_HI_SPRITESHEET, 32, 64
+      );
+      AnimationSpriteSheet ameSpritesheet = new AnimationSpriteSheet(
+            SPIRIT_WATER_AME_SPRITESHEET, 32, 64
+      );
 
-      context.getRenderManager().register(ObjectType.TREE, new SpriteRenderer(Assets.Textures.TREE));
-      context.getRenderManager().register(ObjectType.FLOOR, new SpriteRenderer(Assets.Textures.BACKGROUND_FLOOR));
+      context.getRenderManager().register(SpiritType.SPIRIT_EARTH, new AnimationRenderer(kodamaSpritesheet, AnimationConfig.builder()
+            .registerFrames(SpiritAnimationType.HOVERING_EAST, AnimationFrames.builder()
+                  .origin(0, 1)
+                  .frames(8)
+                  .duration(0.2f)
+                  .playMode(LOOP)
+                  .build())
+            .registerFrames(SpiritAnimationType.HOVERING_WEST, AnimationFrames.builder()
+                  .origin(0, 0)
+                  .frames(8)
+                  .duration(0.2f)
+                  .playMode(LOOP)
+                  .build())
+            .registerFrames(SpiritAnimationType.HOVERING_NORTH, AnimationFrames.builder()
+                  .origin(0, 2)
+                  .frames(8)
+                  .duration(0.2f)
+                  .playMode(LOOP)
+                  .build())
+            .registerFrames(SpiritAnimationType.HOVERING_SOUTH, AnimationFrames.builder()
+                  .origin(0, 3)
+                  .frames(8)
+                  .duration(0.2f)
+                  .playMode(LOOP)
+                  .build())
+            .build(), new SpiritAnimationTypeResolver()));
+      context.getRenderManager().register(SpiritType.SPIRIT_WATER, new AnimationRenderer(ameSpritesheet, AnimationConfig.builder()
+            .registerFrames(SpiritAnimationType.HOVERING_EAST, AnimationFrames.builder()
+                  .origin(0, 1)
+                  .frames(1)
+                  .duration(0.2f)
+                  .playMode(LOOP)
+                  .build())
+            .registerFrames(SpiritAnimationType.HOVERING_WEST, AnimationFrames.builder()
+                  .origin(0, 0)
+                  .frames(1)
+                  .duration(0.2f)
+                  .playMode(LOOP)
+                  .build())
+            .registerFrames(SpiritAnimationType.HOVERING_NORTH, AnimationFrames.builder()
+                  .origin(0, 2)
+                  .frames(1)
+                  .duration(0.2f)
+                  .playMode(LOOP)
+                  .build())
+            .registerFrames(SpiritAnimationType.HOVERING_SOUTH, AnimationFrames.builder()
+                  .origin(0, 3)
+                  .frames(1)
+                  .duration(0.2f)
+                  .playMode(LOOP)
+                  .build())
+            .build(), new SpiritAnimationTypeResolver()));
+      context.getRenderManager().register(SpiritType.SPIRIT_FIRE, new AnimationRenderer(hiSpritesheet, AnimationConfig.builder()
+            .registerFrames(SpiritAnimationType.HOVERING_EAST, AnimationFrames.builder()
+                  .origin(0, 1)
+                  .frames(8)
+                  .duration(0.2f)
+                  .playMode(LOOP)
+                  .build())
+            .registerFrames(SpiritAnimationType.HOVERING_WEST, AnimationFrames.builder()
+                  .origin(0, 0)
+                  .frames(8)
+                  .duration(0.2f)
+                  .playMode(LOOP)
+                  .build())
+            .registerFrames(SpiritAnimationType.HOVERING_NORTH, AnimationFrames.builder()
+                  .origin(0, 2)
+                  .frames(8)
+                  .duration(0.2f)
+                  .playMode(LOOP)
+                  .build())
+            .registerFrames(SpiritAnimationType.HOVERING_SOUTH, AnimationFrames.builder()
+                  .origin(0, 3)
+                  .frames(8)
+                  .duration(0.2f)
+                  .playMode(LOOP)
+                  .build())
+            .build(), new SpiritAnimationTypeResolver()));
+
+      context.getRenderManager().register(ObjectType.TREE, new SpriteRenderer(Textures.TREE));
+      context.getRenderManager().register(ObjectType.FLOOR, new SpriteRenderer(Textures.BACKGROUND_FLOOR));
    }
 
    private void setupInput(GameContext2D context) {

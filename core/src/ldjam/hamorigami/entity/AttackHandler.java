@@ -6,7 +6,7 @@ import de.bitbrain.braingdx.world.GameObject;
 
 public class AttackHandler implements Updateable {
 
-   private static final float ATTACK_INTERVAL = 0.7f;
+   private static final float ATTACK_INTERVAL = 0.4f;
 
    private final DeltaTimer attackTimer = new DeltaTimer(ATTACK_INTERVAL);
 

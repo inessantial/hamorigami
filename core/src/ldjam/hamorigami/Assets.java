@@ -7,9 +7,9 @@ public interface Assets {
    }
 
    interface Textures {
-      String SPIRIT_EARTH = "texture/spirit-earth.png";
-      String SPIRIT_WATER = "texture/spirit-water.png";
-      String SPIRIT_FIRE = "texture/spirit-fire.png";
+      String SPIRIT_EARTH_KODAMA_SRITESHEET = "texture/kodama-sprite-sheet.png";
+      String SPIRIT_WATER_AME_SPRITESHEET = "texture/ame-sprite-sheet.png";
+      String SPIRIT_FIRE_HI_SPRITESHEET = "texture/hi-sprite-sheet.png";
 
       String TREE = "texture/tree.png";
 

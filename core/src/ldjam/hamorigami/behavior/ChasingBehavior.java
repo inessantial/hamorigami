@@ -30,8 +30,6 @@ public class ChasingBehavior extends BehaviorAdapter {
       Movement mover = source.getAttribute(Movement.class);
       direction.x = (target.getLeft() + offset.x) - source.getLeft();
       direction.y = (target.getTop() + offset.y) - source.getTop();
-      mover.lookAtWorld(source.getLeft() + direction.x, source.getTop() + direction.y);
-      mover.move(direction);
 
       if (direction.len() <= MIN_DISTANCE) {
          attackTimer.update(delta);
@@ -40,6 +38,8 @@ public class ChasingBehavior extends BehaviorAdapter {
             SpiritType type = (SpiritType) source.getType();
             type.getEffect().applyEffect(target);
          }
+      } else {
+         mover.move(direction);
       }
    }
 }
