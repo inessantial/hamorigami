@@ -25,7 +25,7 @@ public class SpiritRenderer extends AnimationRenderer {
    public void render(GameObject object, Batch batch, float delta) {
       Color originalColor = batch.getColor();
       float heightPercentage = 1f - (object.getTop() - gameCamera.getTop()) / gameCamera.getScaledCameraHeight();
-      float alpha  = 1f * heightPercentage;
+      float alpha  = 1f * heightPercentage * object.getColor().a;
       batch.setColor(1f, 1f, 1f, alpha);
       float size = 32f * heightPercentage;
       float offset = 16f + 32f * (1f - heightPercentage);

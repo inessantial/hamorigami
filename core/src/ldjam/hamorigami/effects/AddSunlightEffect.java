@@ -7,7 +7,7 @@ public class AddSunlightEffect implements SpiritAbsorbEffect {
 
    @Override
    public boolean applyEffect(GameObject treeObject) {
-      treeObject.getAttribute(TreeStatus.class).decreaseWater(0.05f);
+      treeObject.getAttribute(TreeStatus.class).decreaseWater(0.01f);
       if (treeObject.getAttribute(TreeStatus.class).getWaterLevel() == 0f) {
          // tree dead
          return false;
