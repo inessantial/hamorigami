@@ -25,7 +25,8 @@ public interface Assets {
       String GAUGE_OVERLAY = "texture/gauge-overlay.png";
       String GAUGE_GRASS = "texture/gauge-grass.png";
 
-      String CITYSCAPE = "texture/cityscape.png";
+      String SUNSET_BACKGROUND = "texture/sunset-background.png";
+      String SUNSET_TREE = "texture/sunset-tree.png";
    }
 
    interface Musics {

@@ -10,7 +10,7 @@ import ldjam.hamorigami.model.TreeStatus;
 public class TreeRenderer extends SpriteRenderer {
 
    public TreeRenderer() {
-      super(Assets.Textures.TREE);
+      super(Assets.Textures.SUNSET_TREE);
    }
 
    @Override

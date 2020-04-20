@@ -50,7 +50,7 @@ public abstract class BaseScreen extends BrainGdxScreen2D<HamorigamiGame> {
 
          @Override
          public void render(Batch batch, float delta) {
-            Texture background = SharedAssetManager.getInstance().get(CITYSCAPE, Texture.class);
+            Texture background = SharedAssetManager.getInstance().get(SUNSET_BACKGROUND, Texture.class);
             batch.begin();
             batch.draw(background, Gdx.graphics.getWidth() / 2f - 400, Gdx.graphics.getHeight() / 2f - 300);
             batch.end();
