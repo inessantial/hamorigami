@@ -49,8 +49,12 @@ public class EntityFactory {
             context.getParticleManager().attachEffect(spiritType.getParticleId(), object, 16f, 32f);
          }
       }
-      //Light light = context.getLightingManager().createPointLight(200, spiritType.getLightingColor());
-      // context.getLightingManager().attach(light, object);
+      /*Light light = context.getLightingManager().createPointLight(128f, spiritType.getLightingColor());
+      if (spiritType == SpiritType.SPIRIT_EARTH) {
+         context.getLightingManager().attach(light, object, 32f, 32f);
+      } else {
+         context.getLightingManager().attach(light, object, 16f, 32f);
+      }*/
       return object;
    }
 

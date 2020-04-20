@@ -29,7 +29,7 @@ public class SpiritSpawnPool {
       SpiritSpawn current = spawnList.get(currentIndex);
       currentIndex++;
       if (currentIndex == spawnList.size()) {
-         currentIndex = 0;
+         return null;
       }
       return current;
    }
