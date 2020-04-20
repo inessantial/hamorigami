@@ -1,17 +1,12 @@
 package ldjam.hamorigami.graphics;
 
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
-import de.bitbrain.braingdx.assets.SharedAssetManager;
 import de.bitbrain.braingdx.graphics.GameCamera;
 import de.bitbrain.braingdx.graphics.animation.AnimationConfig;
 import de.bitbrain.braingdx.graphics.animation.AnimationRenderer;
 import de.bitbrain.braingdx.graphics.animation.AnimationSpriteSheet;
 import de.bitbrain.braingdx.world.GameObject;
-import ldjam.hamorigami.Assets;
 import ldjam.hamorigami.animation.SpiritAnimationTypeResolver;
-import ldjam.hamorigami.model.SpiritType;
 
 public class SpiritRenderer extends AnimationRenderer {
 

@@ -64,7 +64,7 @@ public class GameplayPhase implements GamePhase {
    }
 
    @Override
-   public void enable(GameContext2D context, GameObject treeObject) {
+   public void enable(final GameContext2D context, final GameObject treeObject) {
       gameOver = false;
       this.context = context;
       this.treeObject = treeObject;
@@ -81,10 +81,23 @@ public class GameplayPhase implements GamePhase {
       // add player
       this.playerObject = entityFactory.spawnSpirit(
             SpiritType.SPIRIT_EARTH,
-            0f, 0f
+            context.getGameCamera().getScaledCameraWidth() / 2f, 0f
       );
+      this.playerObject.getColor().a = 0f;
+      final String playerId = playerObject.getId();
+      Tween.to(this.playerObject.getColor(), ColorTween.A, 3f)
+            .target(1f)
+            .setCallbackTriggers(TweenCallback.COMPLETE)
+            .setCallback(new TweenCallback() {
+               @Override
+               public void onEvent(int type, BaseTween<?> source) {
+                  if (context.getGameWorld().getObjectById(playerId) != null) {
+                     context.getBehaviorManager().apply(new TreeHealthBindingBehavior(treeObject, context.getAudioManager(), gamePhaseHandler, context), playerObject);
+                  }
+               }
+            })
+            .start(SharedTweenManager.getInstance());
       playerObject.setDimensions(64f, 64f);
-      context.getBehaviorManager().apply(new TreeHealthBindingBehavior(treeObject, context.getAudioManager(), gamePhaseHandler, context), playerObject);
 
       // Spirit spawning
       SpiritSpawnPool spiritSpawnPool = new SpiritSpawnPool();
