@@ -6,6 +6,7 @@ import de.bitbrain.braingdx.graphics.animation.AnimationConfig;
 import de.bitbrain.braingdx.graphics.animation.AnimationRenderer;
 import de.bitbrain.braingdx.graphics.animation.AnimationSpriteSheet;
 import de.bitbrain.braingdx.world.GameObject;
+import ldjam.hamorigami.animation.AnimationEnabler;
 import ldjam.hamorigami.animation.SpiritAnimationTypeResolver;
 
 public class SpiritRenderer extends AnimationRenderer {
@@ -13,7 +14,7 @@ public class SpiritRenderer extends AnimationRenderer {
    private final GameCamera gameCamera;
 
    public SpiritRenderer(GameCamera gameCamera, AnimationSpriteSheet spriteSheet, AnimationConfig config) {
-      super(spriteSheet, config, new SpiritAnimationTypeResolver());
+      super(spriteSheet, config, new SpiritAnimationTypeResolver(), new AnimationEnabler());
       this.gameCamera = gameCamera;
    }
 
