@@ -2,6 +2,7 @@ package ldjam.hamorigami.screens;
 
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import de.bitbrain.braingdx.assets.SharedAssetManager;
 import de.bitbrain.braingdx.context.GameContext2D;
@@ -10,16 +11,16 @@ import de.bitbrain.braingdx.graphics.GameCamera;
 import de.bitbrain.braingdx.graphics.animation.AnimationConfig;
 import de.bitbrain.braingdx.graphics.animation.AnimationFrames;
 import de.bitbrain.braingdx.graphics.animation.AnimationSpriteSheet;
+import de.bitbrain.braingdx.graphics.pipeline.RenderLayer;
+import de.bitbrain.braingdx.graphics.pipeline.RenderLayer2D;
+import de.bitbrain.braingdx.graphics.pipeline.layers.RenderPipeIds;
 import de.bitbrain.braingdx.graphics.renderer.SpriteRenderer;
 import de.bitbrain.braingdx.screen.BrainGdxScreen2D;
 import de.bitbrain.braingdx.world.GameObject;
 import ldjam.hamorigami.Assets.Textures;
 import ldjam.hamorigami.HamorigamiGame;
-import ldjam.hamorigami.entity.SpiritSpawner;
+import ldjam.hamorigami.entity.*;
 import ldjam.hamorigami.behavior.TreeHealthBindingBehavior;
-import ldjam.hamorigami.entity.AttackHandler;
-import ldjam.hamorigami.entity.EntityFactory;
-import ldjam.hamorigami.entity.SpiritedAway;
 import ldjam.hamorigami.graphics.EntityOrderComparator;
 import ldjam.hamorigami.graphics.GaugeRenderer;
 import ldjam.hamorigami.graphics.SpiritRenderer;
@@ -31,6 +32,8 @@ import ldjam.hamorigami.model.*;
 import static com.badlogic.gdx.graphics.g2d.Animation.PlayMode.LOOP;
 import static ldjam.hamorigami.Assets.Musics.BACKGROUND_01;
 import static ldjam.hamorigami.Assets.Textures.*;
+import static ldjam.hamorigami.model.SpiritType.SPIRIT_FIRE;
+import static ldjam.hamorigami.model.SpiritType.SPIRIT_WATER;
 
 public class IngameScreen extends BrainGdxScreen2D<HamorigamiGame> {
 
@@ -44,7 +47,18 @@ public class IngameScreen extends BrainGdxScreen2D<HamorigamiGame> {
    }
 
    @Override
-   protected void onCreate(GameContext2D context) {
+   protected void onCreate(final GameContext2D context) {
+      context.getRenderPipeline().putAfter(RenderPipeIds.BACKGROUND, "cityscape", new RenderLayer2D() {
+
+
+         @Override
+         public void render(Batch batch, float delta) {
+            Texture background = SharedAssetManager.getInstance().get(CITYSCAPE, Texture.class);
+            batch.begin();
+            batch.draw(background, context.getGameCamera().getLeft(), context.getGameCamera().getTop() + 50f, 600, 310);
+            batch.end();
+         }
+      });
       Music music = SharedAssetManager.getInstance().get(BACKGROUND_01, Music.class);
       music.setLooping(true);
       music.setVolume(0.1f);
@@ -91,7 +105,29 @@ public class IngameScreen extends BrainGdxScreen2D<HamorigamiGame> {
       GameObject gaugeObject = entityFactory.spawnGauge(215, 80);
 
       // Spirit spawning
-      spawner = new SpiritSpawner(3f, entityFactory, context, treeObject);
+      SpiritSpawnPool spiritSpawnPool = new SpiritSpawnPool();
+
+      spiritSpawnPool.addSpawnWave(5f, SPIRIT_WATER);
+
+      spiritSpawnPool.addSpawnWave(5f, SPIRIT_WATER);
+      spiritSpawnPool.addSpawnWave(1f, SPIRIT_WATER);
+
+      spiritSpawnPool.addSpawnWave(8f, SPIRIT_WATER, SPIRIT_WATER, SPIRIT_WATER);
+      spiritSpawnPool.addSpawnWave(2f, SPIRIT_WATER, SPIRIT_WATER);
+      spiritSpawnPool.addSpawnWave(2f, SPIRIT_WATER, SPIRIT_WATER);
+
+      spiritSpawnPool.addSpawnWave(5f, SPIRIT_FIRE);
+      spiritSpawnPool.addSpawnWave(3f, SPIRIT_FIRE);
+
+      spiritSpawnPool.addSpawnWave(8f, SPIRIT_WATER, SPIRIT_WATER, SPIRIT_FIRE);
+      spiritSpawnPool.addSpawnWave(2f, SPIRIT_WATER, SPIRIT_FIRE);
+      spiritSpawnPool.addSpawnWave(2f, SPIRIT_FIRE, SPIRIT_FIRE);
+
+      spiritSpawnPool.addSpawnWave(8f, SPIRIT_WATER, SPIRIT_WATER, SPIRIT_FIRE);
+      spiritSpawnPool.addSpawnWave(1f, SPIRIT_WATER, SPIRIT_WATER,  SPIRIT_WATER,  SPIRIT_WATER);
+      spiritSpawnPool.addSpawnWave(1f, SPIRIT_FIRE, SPIRIT_FIRE, SPIRIT_FIRE);
+
+      spawner = new SpiritSpawner(spiritSpawnPool, entityFactory, context, treeObject);
       attackHandler = new AttackHandler(playerObject, entityFactory, context.getAudioManager());
       context.getBehaviorManager().apply(new SpiritedAway(context));
 
@@ -163,7 +199,7 @@ public class IngameScreen extends BrainGdxScreen2D<HamorigamiGame> {
             super.render(object, batch, delta);
          }
       });
-      context.getRenderManager().register(SpiritType.SPIRIT_WATER, new SpiritRenderer(context.getGameCamera(), ameSpritesheet, AnimationConfig.builder()
+      context.getRenderManager().register(SPIRIT_WATER, new SpiritRenderer(context.getGameCamera(), ameSpritesheet, AnimationConfig.builder()
             .registerFrames(SpiritAnimationType.LANDING_WEST, AnimationFrames.builder()
                   .origin(0, 2)
                   .frames(1)
@@ -213,7 +249,7 @@ public class IngameScreen extends BrainGdxScreen2D<HamorigamiGame> {
                   .playMode(LOOP)
                   .build())
             .build()));
-      context.getRenderManager().register(SpiritType.SPIRIT_FIRE, new SpiritRenderer(context.getGameCamera(), hiSpritesheet, AnimationConfig.builder()
+      context.getRenderManager().register(SPIRIT_FIRE, new SpiritRenderer(context.getGameCamera(), hiSpritesheet, AnimationConfig.builder()
             .registerFrames(SpiritAnimationType.IDLE_EAST, AnimationFrames.builder()
                   .origin(0, 0)
                   .frames(8)
