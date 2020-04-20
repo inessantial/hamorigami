@@ -8,7 +8,10 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import de.bitbrain.braingdx.context.GameContext2D;
 import de.bitbrain.braingdx.graphics.GameCamera;
+import de.bitbrain.braingdx.graphics.VectorGameCamera;
 import de.bitbrain.braingdx.tweens.ActorTween;
+import de.bitbrain.braingdx.tweens.GameCameraTween;
+import de.bitbrain.braingdx.tweens.SharedTweenManager;
 import de.bitbrain.braingdx.world.GameObject;
 import ldjam.hamorigami.i18n.Bundle;
 import ldjam.hamorigami.i18n.Messages;
@@ -18,6 +21,10 @@ public class TitlePhase implements GamePhase {
 
    private Table layout;
    private boolean exiting;
+
+   static {
+      Tween.registerAccessor(VectorGameCamera.class, new GameCameraTween());
+   }
 
    private final GamePhaseHandler phaseHandler;
 

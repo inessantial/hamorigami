@@ -11,6 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.Align;
 import de.bitbrain.braingdx.context.GameContext2D;
 import de.bitbrain.braingdx.tweens.ActorTween;
+import de.bitbrain.braingdx.tweens.GameCameraTween;
 import de.bitbrain.braingdx.tweens.SharedTweenManager;
 import de.bitbrain.braingdx.world.GameObject;
 import ldjam.hamorigami.i18n.Bundle;
@@ -37,10 +38,17 @@ public class CutscenePhase implements GamePhase {
    @Override
    public void disable(GameContext2D context, GameObject treeObject) {
       context.getWorldStage().getActors().removeValue(layout, true);
+      Tween.to(context.getGameCamera(), GameCameraTween.ZOOM_WIDTH, 1f)
+            .target(800f)
+            .start(SharedTweenManager.getInstance());
    }
 
    @Override
    public void enable(GameContext2D context, GameObject treeObject) {
+
+      Tween.to(context.getGameCamera(), GameCameraTween.ZOOM_WIDTH, 4f)
+            .target(680f)
+            .start(SharedTweenManager.getInstance());
       aborted = false;
       teller = new StoryTeller(messages);
 

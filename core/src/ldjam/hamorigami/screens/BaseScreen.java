@@ -1,5 +1,6 @@
 package ldjam.hamorigami.screens;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
@@ -51,7 +52,7 @@ public abstract class BaseScreen extends BrainGdxScreen2D<HamorigamiGame> {
          public void render(Batch batch, float delta) {
             Texture background = SharedAssetManager.getInstance().get(CITYSCAPE, Texture.class);
             batch.begin();
-            batch.draw(background, context.getGameCamera().getLeft(), context.getGameCamera().getTop() + 50f);
+            batch.draw(background, Gdx.graphics.getWidth() / 2f - 400, Gdx.graphics.getHeight() / 2f - 300);
             batch.end();
          }
       });
