@@ -62,7 +62,7 @@ public class HamorigamiGame extends BrainGdxGame {
       configureSettings();
       Music cityscape = SharedAssetManager.getInstance().get(Assets.Musics.CITYSCAPE, Music.class);
       cityscape.setLooping(true);
-      cityscape.setVolume(0.8f);
+      cityscape.setVolume(0.4f);
       cityscape.play();
       return new IngameScreen(this);
    }

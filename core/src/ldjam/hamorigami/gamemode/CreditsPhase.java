@@ -15,11 +15,13 @@ import de.bitbrain.braingdx.world.GameObject;
 import ldjam.hamorigami.Assets;
 import ldjam.hamorigami.i18n.Bundle;
 import ldjam.hamorigami.i18n.Messages;
+import ldjam.hamorigami.input.Proceedable;
+import ldjam.hamorigami.input.ingame.ProceedableControllerAdapter;
 import ldjam.hamorigami.ui.Styles;
 
 import static ldjam.hamorigami.Assets.Musics.OUTRO;
 
-public class CreditsPhase implements GamePhase {
+public class CreditsPhase implements GamePhase, Proceedable {
 
    private boolean exiting;
 
@@ -40,6 +42,7 @@ public class CreditsPhase implements GamePhase {
 
    @Override
    public void enable(GameContext2D context, GameObject treeObject) {
+      context.getInputManager().register(new ProceedableControllerAdapter(this));
       exiting = false;
       SharedAssetManager.getInstance().get(Assets.Musics.CITYSCAPE, Music.class).setVolume(0.05f);
       this.music = SharedAssetManager.getInstance().get(OUTRO, Music.class);
@@ -90,11 +93,21 @@ public class CreditsPhase implements GamePhase {
    @Override
    public void update(float delta) {
       if (!exiting && Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
-         Gdx.app.exit();
+         skip();
       }
       if (!exiting && (Gdx.input.isTouched() || Gdx.input.isKeyJustPressed(Input.Keys.ANY_KEY))) {
-         exiting = true;
-         phaseHandler.changePhase(Phases.TITLE);
+         proceed();
       }
+   }
+
+   @Override
+   public void proceed() {
+      exiting = true;
+      phaseHandler.changePhase(Phases.TITLE);
+   }
+
+   @Override
+   public void skip() {
+      Gdx.app.exit();
    }
 }

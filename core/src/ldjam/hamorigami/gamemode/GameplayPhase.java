@@ -16,8 +16,10 @@ import ldjam.hamorigami.Assets;
 import ldjam.hamorigami.behavior.TreeBehavior;
 import ldjam.hamorigami.behavior.TreeHealthBindingBehavior;
 import ldjam.hamorigami.entity.*;
+import ldjam.hamorigami.input.Proceedable;
 import ldjam.hamorigami.input.ingame.IngameControllerAdapter;
 import ldjam.hamorigami.input.ingame.IngameKeyboardAdapter;
+import ldjam.hamorigami.input.ingame.ProceedableControllerAdapter;
 import ldjam.hamorigami.model.HealthData;
 import ldjam.hamorigami.model.SpiritType;
 
@@ -27,7 +29,7 @@ import java.util.List;
 import static ldjam.hamorigami.Assets.Musics.BACKGROUND_01;
 import static ldjam.hamorigami.model.SpiritType.*;
 
-public class GameplayPhase implements GamePhase {
+public class GameplayPhase implements GamePhase, Proceedable {
 
    private static final List<SpiritType> CANDIDATES = new ArrayList<SpiritType>();
 
@@ -60,11 +62,12 @@ public class GameplayPhase implements GamePhase {
    @Override
    public void disable(GameContext2D context, GameObject treeObject) {
       music.stop();
-      cityscape.setVolume(0.9f);
+      cityscape.setVolume(0.4f);
    }
 
    @Override
    public void enable(final GameContext2D context, final GameObject treeObject) {
+      SharedAssetManager.getInstance().get(Assets.Musics.MENU, Music.class).stop();
       gameOver = false;
       this.context = context;
       this.treeObject = treeObject;
@@ -153,34 +156,51 @@ public class GameplayPhase implements GamePhase {
 
          // game successful!
          if (!spiritStillAlive) {
+            kilAllSpirits();
             gameOver = true;
             gamePhaseHandler.changePhase(Phases.OUTRO);
-            // let all spirits fade away
-            for (GameObject spirit : context.getGameWorld().getGroup("spirits")) {
-               final String spiritId = spirit.getId();
-               SharedTweenManager.getInstance().killTarget(spirit);
-               SharedTweenManager.getInstance().killTarget(spirit.getColor());
-               Tween.to(spirit, GameObjectTween.OFFSET_Y, 1.5f)
-                     .target(180)
-                     .start(SharedTweenManager.getInstance());
-               Tween.to(spirit.getColor(), ColorTween.A, 1.5f)
-                     .target(0f)
-                     .setCallback(new TweenCallback() {
-                        @Override
-                        public void onEvent(int type, BaseTween<?> tween) {
-                           context.getGameWorld().remove(spiritId);
-                        }
-                     })
-                     .setCallbackTriggers(TweenCallback.COMPLETE)
-                     .ease(TweenEquations.easeOutCubic)
-                     .start(SharedTweenManager.getInstance());
-            }
          }
+      }
+   }
+
+   private void kilAllSpirits() {
+      // let all spirits fade away
+      for (GameObject spirit : context.getGameWorld().getGroup("spirits")) {
+         final String spiritId = spirit.getId();
+         SharedTweenManager.getInstance().killTarget(spirit);
+         SharedTweenManager.getInstance().killTarget(spirit.getColor());
+         Tween.to(spirit, GameObjectTween.OFFSET_Y, 1.5f)
+               .target(180)
+               .start(SharedTweenManager.getInstance());
+         Tween.to(spirit.getColor(), ColorTween.A, 1.5f)
+               .target(0f)
+               .setCallback(new TweenCallback() {
+                  @Override
+                  public void onEvent(int type, BaseTween<?> tween) {
+                     context.getGameWorld().remove(spiritId);
+                  }
+               })
+               .setCallbackTriggers(TweenCallback.COMPLETE)
+               .ease(TweenEquations.easeOutCubic)
+               .start(SharedTweenManager.getInstance());
       }
    }
 
    private void setupInput(GameContext2D context) {
       context.getInputManager().register(new IngameKeyboardAdapter(playerObject, attackHandler));
       context.getInputManager().register(new IngameControllerAdapter(playerObject, attackHandler));
+      context.getInputManager().register(new ProceedableControllerAdapter(this));
+   }
+
+   @Override
+   public void proceed() {
+
+   }
+
+   @Override
+   public void skip() {
+      kilAllSpirits();
+      gameOver = true;
+      gamePhaseHandler.changePhase(Phases.CREDITS);
    }
 }
