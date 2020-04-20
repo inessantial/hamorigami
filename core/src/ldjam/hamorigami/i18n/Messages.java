@@ -9,6 +9,8 @@ public enum Messages {
    STORY_INTRO_2("story.intro.02"),
    STORY_INTRO_3("story.intro.03"),
    STORY_INTRO_4("story.intro.04"),
+   STORY_INTRO_5("story.intro.05"),
+   STORY_INTRO_6("story.intro.06"),
    STORY_OUTRO_1("story.outro.01"),
    STORY_OUTRO_2("story.outro.02"),
    STORY_OUTRO_3("story.outro.03"),

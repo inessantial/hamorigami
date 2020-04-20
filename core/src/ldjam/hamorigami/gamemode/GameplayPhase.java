@@ -21,6 +21,7 @@ import ldjam.hamorigami.input.ingame.IngameControllerAdapter;
 import ldjam.hamorigami.input.ingame.IngameKeyboardAdapter;
 import ldjam.hamorigami.input.ingame.ProceedableControllerAdapter;
 import ldjam.hamorigami.model.HealthData;
+import ldjam.hamorigami.model.Movement;
 import ldjam.hamorigami.model.SpiritType;
 
 import java.util.ArrayList;
@@ -78,29 +79,39 @@ public class GameplayPhase implements GamePhase, Proceedable {
       music.setVolume(0.1f);
       music.play();
 
-
       EntityFactory entityFactory = new EntityFactory(context);
 
-      // add player
-      this.playerObject = entityFactory.spawnSpirit(
-            SpiritType.SPIRIT_EARTH,
-            context.getGameCamera().getScaledCameraWidth() / 2f, 0f
-      );
-      this.playerObject.getColor().a = 0f;
-      final String playerId = playerObject.getId();
-      Tween.to(this.playerObject.getColor(), ColorTween.A, 3f)
-            .target(1f)
-            .setCallbackTriggers(TweenCallback.COMPLETE)
-            .setCallback(new TweenCallback() {
-               @Override
-               public void onEvent(int type, BaseTween<?> source) {
-                  if (context.getGameWorld().getObjectById(playerId) != null) {
-                     context.getBehaviorManager().apply(new TreeHealthBindingBehavior(treeObject, context.getAudioManager(), gamePhaseHandler, context), playerObject);
+      this.playerObject = null;
+      for (GameObject existingSpirit : context.getGameWorld().getGroup("spirits")) {
+         if (existingSpirit.getType() == SPIRIT_EARTH) {
+            this.playerObject = existingSpirit;
+            context.getBehaviorManager().apply(new TreeHealthBindingBehavior(this.treeObject, context.getAudioManager(), gamePhaseHandler, context), this.playerObject);
+            context.getBehaviorManager().apply(playerObject.getAttribute(Movement.class), playerObject);
+            break;
+         }
+      }
+      if (playerObject == null) {
+         // add player
+         this.playerObject = entityFactory.spawnSpirit(
+               SpiritType.SPIRIT_EARTH,
+               context.getGameCamera().getScaledCameraWidth() / 2f, 0f
+         );
+         this.playerObject.getColor().a = 0f;
+         final String playerId = playerObject.getId();
+         Tween.to(this.playerObject.getColor(), ColorTween.A, 3f)
+               .target(1f)
+               .setCallbackTriggers(TweenCallback.COMPLETE)
+               .setCallback(new TweenCallback() {
+                  @Override
+                  public void onEvent(int type, BaseTween<?> source) {
+                     if (context.getGameWorld().getObjectById(playerId) != null) {
+                        context.getBehaviorManager().apply(new TreeHealthBindingBehavior(playerObject, context.getAudioManager(), gamePhaseHandler, context), playerObject);
+                     }
                   }
-               }
-            })
-            .start(SharedTweenManager.getInstance());
-      playerObject.setDimensions(64f, 64f);
+               })
+               .start(SharedTweenManager.getInstance());
+         playerObject.setDimensions(64f, 64f);
+      }
 
       // Spirit spawning
       SpiritSpawnPool spiritSpawnPool = new SpiritSpawnPool();

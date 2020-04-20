@@ -84,7 +84,6 @@ public class Movement extends BehaviorAdapter {
       float moveX = movement.x * delta;
       float moveY = movement.y * delta;
       gameObject.move(moveX, moveY);
-
       if (gameObject.hasAttribute("gravity")) {
          if (gameObject.getTop() > gameCamera.getTop()) {
             movement.y *= 0.9f;

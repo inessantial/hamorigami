@@ -1,6 +1,8 @@
 package ldjam.hamorigami.gamemode;
 
+import aurelienribon.tweenengine.BaseTween;
 import aurelienribon.tweenengine.Tween;
+import aurelienribon.tweenengine.TweenCallback;
 import aurelienribon.tweenengine.TweenEquations;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -11,6 +13,7 @@ import de.bitbrain.braingdx.assets.SharedAssetManager;
 import de.bitbrain.braingdx.context.GameContext2D;
 import de.bitbrain.braingdx.graphics.GameCamera;
 import de.bitbrain.braingdx.tweens.ActorTween;
+import de.bitbrain.braingdx.tweens.SharedTweenManager;
 import de.bitbrain.braingdx.world.GameObject;
 import ldjam.hamorigami.Assets;
 import ldjam.hamorigami.i18n.Bundle;
@@ -31,9 +34,18 @@ public class GameOverPhase implements GamePhase, Proceedable {
    }
 
    @Override
-   public void disable(GameContext2D context, GameObject treeObject) {
-      context.getWorldStage().getActors().removeValue(layout, true);
+   public void disable(final GameContext2D context, GameObject treeObject) {
       SharedAssetManager.getInstance().get(Assets.Musics.FAIL, Music.class).stop();
+      Tween.to(layout, ActorTween.ALPHA, 1f)
+            .target(0f)
+            .setCallbackTriggers(TweenCallback.COMPLETE)
+            .setCallback(new TweenCallback() {
+               @Override
+               public void onEvent(int type, BaseTween<?> source) {
+                  context.getWorldStage().getActors().removeValue(layout, true);
+               }
+            })
+            .start(SharedTweenManager.getInstance());
    }
 
    @Override
@@ -43,6 +55,10 @@ public class GameOverPhase implements GamePhase, Proceedable {
       exiting = false;
       this.layout = new Table();
       layout.setFillParent(true);
+      layout.getColor().a = 0f;
+      Tween.to(layout, ActorTween.ALPHA, 3f)
+            .target(1f)
+            .start(SharedTweenManager.getInstance());
 
       Label logo = new Label(Bundle.get(Messages.GAME_OVER), Styles.LABEL_CAPTION);
       layout.add(logo).row();

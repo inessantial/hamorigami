@@ -3,6 +3,8 @@ package ldjam.hamorigami.screens;
 import de.bitbrain.braingdx.context.GameContext2D;
 import de.bitbrain.braingdx.debug.DebugMetric;
 import ldjam.hamorigami.HamorigamiGame;
+import ldjam.hamorigami.cutscene.IntroCutscene;
+import ldjam.hamorigami.cutscene.OutroCutscene;
 import ldjam.hamorigami.gamemode.*;
 import ldjam.hamorigami.i18n.Messages;
 import ldjam.hamorigami.model.HealthData;
@@ -21,12 +23,22 @@ public class IngameScreen extends BaseScreen {
       super.onCreate(context);
       this.phaseHandler = new GamePhaseHandler(context, treeObject);
       this.phaseHandler.addPhase(Phases.TITLE, new TitlePhase(phaseHandler));
-      this.phaseHandler.addPhase(Phases.INTRO, new CutscenePhase(phaseHandler, Phases.GAMEPLAY,
-            Messages.STORY_INTRO_1, Messages.STORY_INTRO_2, Messages.STORY_INTRO_3, Messages.STORY_INTRO_4));
+      this.phaseHandler.addPhase(Phases.INTRO, new CutscenePhase(new IntroCutscene(), phaseHandler, Phases.GAMEPLAY,
+            Messages.STORY_INTRO_1,
+            Messages.STORY_INTRO_2,
+            Messages.STORY_INTRO_3,
+            Messages.STORY_INTRO_4,
+            Messages.STORY_INTRO_5,
+            Messages.STORY_INTRO_6
+      ));
       this.phaseHandler.addPhase(Phases.GAMEPLAY, new GameplayPhase(phaseHandler));
       this.phaseHandler.addPhase(Phases.GAMEOVER, new GameOverPhase(phaseHandler));
-      this.phaseHandler.addPhase(Phases.OUTRO, new CutscenePhase(phaseHandler, Phases.CREDITS,
-            Messages.STORY_OUTRO_1, Messages.STORY_OUTRO_2, Messages.STORY_OUTRO_3, Messages.STORY_OUTRO_4));
+      this.phaseHandler.addPhase(Phases.OUTRO, new CutscenePhase(new OutroCutscene(), phaseHandler, Phases.CREDITS,
+            Messages.STORY_OUTRO_1,
+            Messages.STORY_OUTRO_2,
+            Messages.STORY_OUTRO_3,
+            Messages.STORY_OUTRO_4
+      ));
       this.phaseHandler.addPhase(Phases.CREDITS, new CreditsPhase(phaseHandler));
 
       setupDebugUi(context);
