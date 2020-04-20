@@ -18,6 +18,8 @@ public interface Assets {
 
       String DROPSHADOW = "texture/dropshadow.png";
 
+      String LOGO = "texture/logo.png";
+
       String GAUGE_WATER = "texture/gauge-water.png";
       String GAUGE_WATER_TOP = "texture/gauge-water-top.png";
       String GAUGE_OVERLAY = "texture/gauge-overlay.png";
