@@ -1,47 +1,53 @@
-package ldjam.hamorigami.screens;
+package ldjam.hamorigami.gamemode;
 
 import aurelienribon.tweenengine.Tween;
 import aurelienribon.tweenengine.TweenEquations;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.audio.Music;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import de.bitbrain.braingdx.assets.SharedAssetManager;
 import de.bitbrain.braingdx.context.GameContext2D;
 import de.bitbrain.braingdx.graphics.GameCamera;
-import de.bitbrain.braingdx.screens.ColorTransition;
 import de.bitbrain.braingdx.tweens.ActorTween;
-import ldjam.hamorigami.HamorigamiGame;
+import de.bitbrain.braingdx.world.GameObject;
+import ldjam.hamorigami.Assets;
 import ldjam.hamorigami.i18n.Bundle;
 import ldjam.hamorigami.i18n.Messages;
 import ldjam.hamorigami.ui.Styles;
 
 import static ldjam.hamorigami.Assets.Musics.OUTRO;
 
-public class CreditsScreen extends BaseScreen {
+public class CreditsPhase implements GamePhase {
 
    private boolean exiting;
 
-   private GameContext2D context;
+   private final GamePhaseHandler phaseHandler;
    private Music music;
+   private Table layout;
 
-   public CreditsScreen(HamorigamiGame game) {
-      super(game);
+   public CreditsPhase(GamePhaseHandler phaseHandler) {
+      this.phaseHandler = phaseHandler;
    }
 
    @Override
-   protected void onCreate(final GameContext2D context) {
-      super.onCreate(context);
+   public void disable(GameContext2D context, GameObject treeObject) {
+      music.stop();
+      SharedAssetManager.getInstance().get(Assets.Musics.CITYSCAPE, Music.class).setVolume(0.9f);
+      context.getWorldStage().getActors().removeValue(layout, true);
+   }
+
+   @Override
+   public void enable(GameContext2D context, GameObject treeObject) {
+      exiting = false;
+      SharedAssetManager.getInstance().get(Assets.Musics.CITYSCAPE, Music.class).setVolume(0.05f);
       this.music = SharedAssetManager.getInstance().get(OUTRO, Music.class);
       music.setLooping(false);
       music.setVolume(0.1f);
       music.play();
 
-      this.context = context;
-
-      Table layout = new Table();
+      this.layout = new Table();
       layout.setFillParent(true);
 
       Label credits1 = new Label(Bundle.get(Messages.CREDITS_1), Styles.STORY);
@@ -77,22 +83,18 @@ public class CreditsScreen extends BaseScreen {
    }
 
    @Override
-   public void dispose() {
-      super.dispose();
-      music.stop();
+   public boolean isFinished() {
+      return exiting;
    }
 
    @Override
-   protected void onUpdate(float delta) {
+   public void update(float delta) {
       if (!exiting && Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
          Gdx.app.exit();
       }
       if (!exiting && (Gdx.input.isTouched() || Gdx.input.isKeyJustPressed(Input.Keys.ANY_KEY))) {
          exiting = true;
-         context.getInputManager().clear();
-         ColorTransition colorTransition = new ColorTransition();
-         colorTransition.setColor(Color.WHITE.cpy());
-         context.getScreenTransitions().out(colorTransition, new TitleScreen(getGame()), 1f);
+         phaseHandler.changePhase(Phases.TITLE);
       }
    }
 }

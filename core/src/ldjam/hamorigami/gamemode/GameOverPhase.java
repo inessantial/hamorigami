@@ -1,37 +1,39 @@
-package ldjam.hamorigami.screens;
+package ldjam.hamorigami.gamemode;
 
 import aurelienribon.tweenengine.Tween;
 import aurelienribon.tweenengine.TweenEquations;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import de.bitbrain.braingdx.context.GameContext2D;
 import de.bitbrain.braingdx.graphics.GameCamera;
-import de.bitbrain.braingdx.screens.ColorTransition;
 import de.bitbrain.braingdx.tweens.ActorTween;
-import ldjam.hamorigami.HamorigamiGame;
+import de.bitbrain.braingdx.world.GameObject;
 import ldjam.hamorigami.i18n.Bundle;
 import ldjam.hamorigami.i18n.Messages;
 import ldjam.hamorigami.ui.Styles;
 
-public class GameOverScreen extends BaseScreen {
+public class GameOverPhase implements GamePhase {
 
    private boolean exiting;
 
-   private GameContext2D context;
+   private final GamePhaseHandler phaseHandler;
+   private Table layout;
 
-   public GameOverScreen(HamorigamiGame game) {
-      super(game);
+   public GameOverPhase(GamePhaseHandler phaseHandler) {
+      this.phaseHandler = phaseHandler;
    }
 
    @Override
-   protected void onCreate(final GameContext2D context) {
-      super.onCreate(context);
-      this.context = context;
+   public void disable(GameContext2D context, GameObject treeObject) {
+      context.getWorldStage().getActors().removeValue(layout, true);
+   }
 
-      Table layout = new Table();
+   @Override
+   public void enable(GameContext2D context, GameObject treeObject) {
+      exiting = false;
+      this.layout = new Table();
       layout.setFillParent(true);
 
       Label logo = new Label(Bundle.get(Messages.GAME_OVER), Styles.LABEL_CAPTION);
@@ -57,16 +59,18 @@ public class GameOverScreen extends BaseScreen {
    }
 
    @Override
-   protected void onUpdate(float delta) {
+   public boolean isFinished() {
+      return exiting;
+   }
+
+   @Override
+   public void update(float delta) {
       if (!exiting && Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
          Gdx.app.exit();
       }
       if (!exiting && (Gdx.input.isTouched() || Gdx.input.isKeyJustPressed(Input.Keys.ANY_KEY))) {
          exiting = true;
-         context.getInputManager().clear();
-         ColorTransition colorTransition = new ColorTransition();
-         colorTransition.setColor(Color.WHITE.cpy());
-         context.getScreenTransitions().out(colorTransition, new IngameScreen(getGame()), 1f);
+         phaseHandler.changePhase(Phases.GAMEPLAY);
       }
    }
 }

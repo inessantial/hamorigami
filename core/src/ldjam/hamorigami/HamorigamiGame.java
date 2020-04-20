@@ -14,7 +14,7 @@ import de.bitbrain.braingdx.graphics.GraphicsSettings;
 import de.bitbrain.braingdx.graphics.postprocessing.filters.RadialBlur;
 import de.bitbrain.braingdx.screens.AbstractScreen;
 import ldjam.hamorigami.i18n.Bundle;
-import ldjam.hamorigami.screens.TitleScreen;
+import ldjam.hamorigami.screens.IngameScreen;
 import ldjam.hamorigami.ui.Styles;
 import org.apache.commons.lang.SystemUtils;
 
@@ -64,7 +64,7 @@ public class HamorigamiGame extends BrainGdxGame {
       cityscape.setLooping(true);
       cityscape.setVolume(0.8f);
       cityscape.play();
-      return new TitleScreen(this);
+      return new IngameScreen(this);
    }
 
    private void configureSettings() {

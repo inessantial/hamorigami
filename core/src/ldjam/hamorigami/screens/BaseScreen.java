@@ -44,7 +44,6 @@ public abstract class BaseScreen extends BrainGdxScreen2D<HamorigamiGame> {
    protected void onCreate(final GameContext2D context) {
       ColorTransition colorTransition = new ColorTransition();
       colorTransition.setColor(Color.WHITE.cpy());
-      context.getScreenTransitions().in(colorTransition, 2f);
       context.getRenderPipeline().putAfter(RenderPipeIds.BACKGROUND, "cityscape", new RenderLayer2D() {
 
 
