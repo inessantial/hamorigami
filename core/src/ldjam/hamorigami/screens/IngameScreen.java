@@ -8,6 +8,7 @@ import de.bitbrain.braingdx.context.GameContext2D;
 import de.bitbrain.braingdx.debug.DebugMetric;
 import de.bitbrain.braingdx.screens.ColorTransition;
 import de.bitbrain.braingdx.world.GameObject;
+import ldjam.hamorigami.Assets;
 import ldjam.hamorigami.HamorigamiGame;
 import ldjam.hamorigami.behavior.TreeHealthBindingBehavior;
 import ldjam.hamorigami.entity.*;
@@ -44,6 +45,7 @@ public class IngameScreen extends BaseScreen {
    private Music music;
 
    private boolean gameOver;
+   private Music cityscape;
 
    public IngameScreen(HamorigamiGame game) {
       super(game);
@@ -54,6 +56,8 @@ public class IngameScreen extends BaseScreen {
       super.onCreate(context);
       this.context = context;
       this.music = SharedAssetManager.getInstance().get(BACKGROUND_01, Music.class);
+      cityscape = SharedAssetManager.getInstance().get(Assets.Musics.CITYSCAPE, Music.class);
+      cityscape.setVolume(0.2f);
       music.setLooping(true);
       music.setVolume(0.1f);
       music.play();
@@ -94,6 +98,7 @@ public class IngameScreen extends BaseScreen {
    @Override
    public void dispose() {
       super.dispose();
+      cityscape.setVolume(0.8f);
       music.stop();
    }
 

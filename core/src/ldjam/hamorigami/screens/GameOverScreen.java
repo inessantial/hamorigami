@@ -9,7 +9,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import de.bitbrain.braingdx.context.GameContext2D;
 import de.bitbrain.braingdx.graphics.GameCamera;
-import de.bitbrain.braingdx.screen.BrainGdxScreen2D;
 import de.bitbrain.braingdx.screens.ColorTransition;
 import de.bitbrain.braingdx.tweens.ActorTween;
 import ldjam.hamorigami.HamorigamiGame;

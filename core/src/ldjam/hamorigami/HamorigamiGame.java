@@ -2,9 +2,11 @@ package ldjam.hamorigami;
 
 import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Music;
 import de.bitbrain.braingdx.BrainGdxGame;
 import de.bitbrain.braingdx.GameSettings;
 import de.bitbrain.braingdx.assets.GameAssetLoader;
+import de.bitbrain.braingdx.assets.SharedAssetManager;
 import de.bitbrain.braingdx.assets.SmartAssetLoader;
 import de.bitbrain.braingdx.debug.BrainGdxDebug;
 import de.bitbrain.braingdx.event.GameEventManagerImpl;
@@ -58,6 +60,10 @@ public class HamorigamiGame extends BrainGdxGame {
       Styles.init();
       BrainGdxDebug.setLabelStyle(Styles.LABEL_DEBUG);
       configureSettings();
+      Music cityscape = SharedAssetManager.getInstance().get(Assets.Musics.CITYSCAPE, Music.class);
+      cityscape.setLooping(true);
+      cityscape.setVolume(0.8f);
+      cityscape.play();
       return new TitleScreen(this);
    }
 
