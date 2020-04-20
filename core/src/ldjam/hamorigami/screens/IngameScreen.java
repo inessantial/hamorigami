@@ -55,7 +55,7 @@ public class IngameScreen extends BrainGdxScreen2D<HamorigamiGame> {
          public void render(Batch batch, float delta) {
             Texture background = SharedAssetManager.getInstance().get(CITYSCAPE, Texture.class);
             batch.begin();
-            batch.draw(background, context.getGameCamera().getLeft(), context.getGameCamera().getTop() + 50f, 600, 310);
+            batch.draw(background, context.getGameCamera().getLeft(), context.getGameCamera().getTop() + 50f);
             batch.end();
          }
       });
@@ -85,7 +85,7 @@ public class IngameScreen extends BrainGdxScreen2D<HamorigamiGame> {
 
    private void setupLevel(GameContext2D context) {
       EntityFactory entityFactory = new EntityFactory(context);
-      context.getGameCamera().setZoom(300, GameCamera.ZoomMode.TO_HEIGHT);
+      context.getGameCamera().setZoom(800, GameCamera.ZoomMode.TO_WIDTH);
 
       // add tree
       this.treeObject = entityFactory.spawnTree();
@@ -102,7 +102,7 @@ public class IngameScreen extends BrainGdxScreen2D<HamorigamiGame> {
       GameObject floorObject = entityFactory.spawnFloor();
 
       // add gauge
-      GameObject gaugeObject = entityFactory.spawnGauge(215, 80);
+      GameObject gaugeObject = entityFactory.spawnGauge(360, 65);
 
       // Spirit spawning
       SpiritSpawnPool spiritSpawnPool = new SpiritSpawnPool();
