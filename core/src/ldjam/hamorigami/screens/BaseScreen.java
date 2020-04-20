@@ -1,5 +1,6 @@
 package ldjam.hamorigami.screens;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
@@ -44,15 +45,14 @@ public abstract class BaseScreen extends BrainGdxScreen2D<HamorigamiGame> {
    protected void onCreate(final GameContext2D context) {
       ColorTransition colorTransition = new ColorTransition();
       colorTransition.setColor(Color.WHITE.cpy());
-      context.getScreenTransitions().in(colorTransition, 2f);
       context.getRenderPipeline().putAfter(RenderPipeIds.BACKGROUND, "cityscape", new RenderLayer2D() {
 
 
          @Override
          public void render(Batch batch, float delta) {
-            Texture background = SharedAssetManager.getInstance().get(CITYSCAPE, Texture.class);
+            Texture background = SharedAssetManager.getInstance().get(SUNSET_BACKGROUND, Texture.class);
             batch.begin();
-            batch.draw(background, context.getGameCamera().getLeft(), context.getGameCamera().getTop() + 50f);
+            batch.draw(background, Gdx.graphics.getWidth() / 2f - 400, Gdx.graphics.getHeight() / 2f - 300);
             batch.end();
          }
       });
@@ -100,13 +100,13 @@ public abstract class BaseScreen extends BrainGdxScreen2D<HamorigamiGame> {
             .registerFrames(SpiritAnimationType.ATTACKING_EAST, AnimationFrames.builder()
                   .origin(0, 5)
                   .frames(4)
-                  .duration(0.1f)
+                  .duration(0.05f)
                   .playMode(LOOP)
                   .build())
             .registerFrames(SpiritAnimationType.ATTACKING_WEST, AnimationFrames.builder()
                   .origin(0, 4)
                   .frames(4)
-                  .duration(0.1f)
+                  .duration(0.05f)
                   .playMode(LOOP)
                   .build())
             .registerFrames(SpiritAnimationType.IDLE_EAST, AnimationFrames.builder()

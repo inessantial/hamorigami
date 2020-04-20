@@ -36,6 +36,7 @@ public class SpiritedAway extends BehaviorAdapter {
             context.getBehaviorManager().remove(source);
             SharedTweenManager.getInstance().killTarget(source);
             SharedTweenManager.getInstance().killTarget(source.getColor());
+            final String sourceId = source.getId();
             Tween.to(source, GameObjectTween.OFFSET_Y, 1.5f)
                   .target(180)
                   .start(SharedTweenManager.getInstance());
@@ -44,7 +45,7 @@ public class SpiritedAway extends BehaviorAdapter {
                   .setCallback(new TweenCallback() {
                      @Override
                      public void onEvent(int type, BaseTween<?> tween) {
-                       context.getGameWorld().remove(source);
+                       context.getGameWorld().remove(sourceId);
                      }
                   })
                   .setCallbackTriggers(TweenCallback.COMPLETE)

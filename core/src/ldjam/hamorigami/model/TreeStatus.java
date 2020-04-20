@@ -31,4 +31,9 @@ public class TreeStatus {
    public void increaseTreeWateredLevel(float water) {
       this.treeWateredLevel = Math.min(this.treeWateredLevel + water, 1f);
    }
+
+   public void reset() {
+      this.soilWaterLevel = 0.3f;
+      this.treeWateredLevel = 0f;
+   }
 }

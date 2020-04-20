@@ -4,7 +4,7 @@ public interface Assets {
 
    interface Fonts {
       String VISITOR = "font/visitor.ttf";
-      String OPENSANS = "font/opensans.ttf";
+      String PINCHER = "font/pincher.ttf";
    }
 
    interface Textures {
@@ -18,12 +18,15 @@ public interface Assets {
 
       String DROPSHADOW = "texture/dropshadow.png";
 
+      String LOGO = "texture/logo.png";
+
       String GAUGE_WATER = "texture/gauge-water.png";
       String GAUGE_WATER_TOP = "texture/gauge-water-top.png";
       String GAUGE_OVERLAY = "texture/gauge-overlay.png";
       String GAUGE_GRASS = "texture/gauge-grass.png";
 
-      String CITYSCAPE = "texture/cityscape.png";
+      String SUNSET_BACKGROUND = "texture/sunset-background.png";
+      String SUNSET_TREE = "texture/sunset-tree.png";
    }
 
    interface Musics {

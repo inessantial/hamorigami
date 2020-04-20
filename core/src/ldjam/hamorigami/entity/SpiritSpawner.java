@@ -4,11 +4,7 @@ import de.bitbrain.braingdx.context.GameContext2D;
 import de.bitbrain.braingdx.util.DeltaTimer;
 import de.bitbrain.braingdx.util.Updateable;
 import de.bitbrain.braingdx.world.GameObject;
-import ldjam.hamorigami.HamorigamiGame;
-import ldjam.hamorigami.i18n.Messages;
 import ldjam.hamorigami.model.SpiritType;
-import ldjam.hamorigami.screens.CreditsScreen;
-import ldjam.hamorigami.screens.StoryScreen;
 
 public class SpiritSpawner implements Updateable {
 

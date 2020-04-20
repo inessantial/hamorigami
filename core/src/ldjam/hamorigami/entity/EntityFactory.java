@@ -34,7 +34,7 @@ public class EntityFactory {
    }
 
    public GameObject spawnSpirit(SpiritType spiritType, float x, float y) {
-      GameObject object = context.getGameWorld().addObject();
+      GameObject object = context.getGameWorld().addObject("spirits");
       object.setZIndex(3);
       object.setType(spiritType);
       object.setPosition(context.getGameCamera().getLeft() + x, context.getGameCamera().getTop() + y);
@@ -67,8 +67,7 @@ public class EntityFactory {
             context.getGameCamera().getLeft() + (context.getGameCamera().getScaledCameraWidth() / 2f - object.getWidth() / 2f),
             context.getGameCamera().getTop() + 31);
       object.setAttribute(TreeStatus.class, new TreeStatus());
-      object.setAttribute(HealthData.class, new HealthData(1000));
-      context.getBehaviorManager().apply(new TreeBehavior(), object);
+      object.setAttribute(HealthData.class, new HealthData(500));
       //Light light = context.getLightingManager().createPointLight(500, Color.valueOf("e5a656"));
       //context.getLightingManager().attach(light, object, true);
       return object;
