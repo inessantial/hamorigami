@@ -1,48 +1,49 @@
 package ldjam.hamorigami.screens;
 
-import aurelienribon.tweenengine.TweenEquations;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.utils.Array;
 import de.bitbrain.braingdx.assets.SharedAssetManager;
 import de.bitbrain.braingdx.context.GameContext2D;
 import de.bitbrain.braingdx.debug.DebugMetric;
-import de.bitbrain.braingdx.graphics.GameCamera;
-import de.bitbrain.braingdx.graphics.animation.AnimationConfig;
-import de.bitbrain.braingdx.graphics.animation.AnimationFrames;
-import de.bitbrain.braingdx.graphics.animation.AnimationSpriteSheet;
-import de.bitbrain.braingdx.graphics.pipeline.RenderLayer;
-import de.bitbrain.braingdx.graphics.pipeline.RenderLayer2D;
-import de.bitbrain.braingdx.graphics.pipeline.layers.RenderPipeIds;
-import de.bitbrain.braingdx.graphics.renderer.SpriteRenderer;
-import de.bitbrain.braingdx.screen.BrainGdxScreen2D;
+import de.bitbrain.braingdx.screens.ColorTransition;
 import de.bitbrain.braingdx.world.GameObject;
-import ldjam.hamorigami.Assets.Textures;
 import ldjam.hamorigami.HamorigamiGame;
-import ldjam.hamorigami.entity.*;
 import ldjam.hamorigami.behavior.TreeHealthBindingBehavior;
-import ldjam.hamorigami.graphics.EntityOrderComparator;
-import ldjam.hamorigami.graphics.GaugeRenderer;
-import ldjam.hamorigami.graphics.SpiritRenderer;
-import ldjam.hamorigami.graphics.TreeRenderer;
+import ldjam.hamorigami.entity.*;
+import ldjam.hamorigami.i18n.Messages;
 import ldjam.hamorigami.input.ingame.IngameControllerAdapter;
 import ldjam.hamorigami.input.ingame.IngameKeyboardAdapter;
-import ldjam.hamorigami.model.*;
+import ldjam.hamorigami.model.HealthData;
+import ldjam.hamorigami.model.SpiritType;
+import ldjam.hamorigami.model.TreeStatus;
 
-import static com.badlogic.gdx.graphics.g2d.Animation.PlayMode.LOOP;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import static ldjam.hamorigami.Assets.Musics.BACKGROUND_01;
-import static ldjam.hamorigami.Assets.Textures.*;
-import static ldjam.hamorigami.model.SpiritType.SPIRIT_FIRE;
-import static ldjam.hamorigami.model.SpiritType.SPIRIT_WATER;
+import static ldjam.hamorigami.model.SpiritType.*;
 
-public class IngameScreen extends BrainGdxScreen2D<HamorigamiGame> {
+public class IngameScreen extends BaseScreen {
 
+   private static final List<SpiritType> CANDIDATES = new ArrayList<SpiritType>();
+
+   static {
+      for (SpiritType type : SpiritType.values()) {
+         if (type != SPIRIT_EARTH) {
+            CANDIDATES.add(type);
+         }
+      }
+   }
+
+   private GameContext2D context;
    private SpiritSpawner spawner;
    private GameObject playerObject;
-   private GameObject treeObject;
    private AttackHandler attackHandler;
    private Music music;
+
+   private boolean gameOver;
 
    public IngameScreen(HamorigamiGame game) {
       super(game);
@@ -50,28 +51,14 @@ public class IngameScreen extends BrainGdxScreen2D<HamorigamiGame> {
 
    @Override
    protected void onCreate(final GameContext2D context) {
-      context.getScreenTransitions().in(2f);
-      context.getRenderPipeline().putAfter(RenderPipeIds.BACKGROUND, "cityscape", new RenderLayer2D() {
-
-
-         @Override
-         public void render(Batch batch, float delta) {
-            Texture background = SharedAssetManager.getInstance().get(CITYSCAPE, Texture.class);
-            batch.begin();
-            batch.draw(background, context.getGameCamera().getLeft(), context.getGameCamera().getTop() + 50f);
-            batch.end();
-         }
-      });
+      super.onCreate(context);
+      this.context = context;
       this.music = SharedAssetManager.getInstance().get(BACKGROUND_01, Music.class);
       music.setLooping(true);
       music.setVolume(0.1f);
       music.play();
-      context.setBackgroundColor(Color.valueOf("7766ff"));
-      context.setDebug(getGame().isDebug());
       setupLevel(context);
-      setupGraphics(context);
       setupInput(context);
-      setupLighting(context);
       setupDebugUi(context);
    }
 
@@ -80,6 +67,28 @@ public class IngameScreen extends BrainGdxScreen2D<HamorigamiGame> {
       super.onUpdate(delta);
       spawner.update(delta);
       attackHandler.update(delta);
+      if (!spawner.canSpawn() && !gameOver) {
+         // check that the only spirit left is the player
+         Array<GameObject> objects = context.getGameWorld().getObjects();
+         boolean spiritStillAlive = false;
+         for (GameObject object : objects) {
+            if (CANDIDATES.contains(object.getType())) {
+               spiritStillAlive = true;
+               break;
+            }
+         }
+
+         // game successful!
+         if (!spiritStillAlive) {
+            gameOver = true;
+            context.getBehaviorManager().clear();
+            CreditsScreen creditsScreen = new CreditsScreen((HamorigamiGame) context.getGame());
+            ColorTransition colorTransition = new ColorTransition();
+            colorTransition.setColor(Color.WHITE.cpy());
+            context.getScreenTransitions().out(colorTransition, new StoryScreen((HamorigamiGame) context.getGame(), creditsScreen,
+                  Messages.STORY_OUTRO_1, Messages.STORY_OUTRO_2, Messages.STORY_OUTRO_3, Messages.STORY_OUTRO_4), 1f);
+         }
+      }
    }
 
    @Override
@@ -88,16 +97,8 @@ public class IngameScreen extends BrainGdxScreen2D<HamorigamiGame> {
       music.stop();
    }
 
-   private void setupLighting(GameContext2D context) {
-      //context.getLightingManager().setAmbientLight(Color.valueOf("644595"), 30, TweenEquations.easeNone);
-   }
-
    private void setupLevel(GameContext2D context) {
       EntityFactory entityFactory = new EntityFactory(context);
-      context.getGameCamera().setZoom(800, GameCamera.ZoomMode.TO_WIDTH);
-
-      // add tree
-      this.treeObject = entityFactory.spawnTree();
 
       // add player
       this.playerObject = entityFactory.spawnSpirit(
@@ -106,12 +107,6 @@ public class IngameScreen extends BrainGdxScreen2D<HamorigamiGame> {
       );
       playerObject.setDimensions(64f, 64f);
       context.getBehaviorManager().apply(new TreeHealthBindingBehavior(treeObject, context.getAudioManager(), context), playerObject);
-
-      // add floor
-      GameObject floorObject = entityFactory.spawnFloor();
-
-      // add gauge
-      GameObject gaugeObject = entityFactory.spawnGauge(360, 65);
 
       // Spirit spawning
       SpiritSpawnPool spiritSpawnPool = new SpiritSpawnPool();
@@ -133,173 +128,13 @@ public class IngameScreen extends BrainGdxScreen2D<HamorigamiGame> {
       spiritSpawnPool.addSpawnWave(2f, SPIRIT_FIRE, SPIRIT_FIRE);
 
       spiritSpawnPool.addSpawnWave(8f, SPIRIT_WATER, SPIRIT_WATER, SPIRIT_FIRE);
-      spiritSpawnPool.addSpawnWave(1f, SPIRIT_WATER, SPIRIT_WATER,  SPIRIT_WATER,  SPIRIT_WATER);
+      spiritSpawnPool.addSpawnWave(1f, SPIRIT_WATER, SPIRIT_WATER, SPIRIT_WATER, SPIRIT_WATER);
       spiritSpawnPool.addSpawnWave(1f, SPIRIT_FIRE, SPIRIT_FIRE, SPIRIT_FIRE);
 
       spawner = new SpiritSpawner(spiritSpawnPool, entityFactory, context, treeObject);
       attackHandler = new AttackHandler(playerObject, entityFactory, context.getAudioManager());
       context.getBehaviorManager().apply(new SpiritedAway(context));
 
-   }
-
-   private void setupGraphics(GameContext2D context) {
-      context.getRenderManager().setRenderOrderComparator(new EntityOrderComparator());
-      AnimationSpriteSheet kodamaSpritesheet = new AnimationSpriteSheet(
-            SPIRIT_EARTH_KODAMA_SRITESHEET, 64, 64
-      );
-      AnimationSpriteSheet hiSpritesheet = new AnimationSpriteSheet(
-            SPIRIT_FIRE_HI_SPRITESHEET, 32, 64
-      );
-      AnimationSpriteSheet ameSpritesheet = new AnimationSpriteSheet(
-            SPIRIT_WATER_AME_SPRITESHEET, 32, 64
-      );
-
-      context.getRenderManager().register(SpiritType.SPIRIT_EARTH, new SpiritRenderer(context.getGameCamera(), kodamaSpritesheet, AnimationConfig.builder()
-            .registerFrames(SpiritAnimationType.ATTACKING_EAST, AnimationFrames.builder()
-                  .origin(0, 5)
-                  .frames(4)
-                  .duration(0.1f)
-                  .playMode(LOOP)
-                  .build())
-            .registerFrames(SpiritAnimationType.ATTACKING_WEST, AnimationFrames.builder()
-                  .origin(0, 4)
-                  .frames(4)
-                  .duration(0.1f)
-                  .playMode(LOOP)
-                  .build())
-            .registerFrames(SpiritAnimationType.IDLE_EAST, AnimationFrames.builder()
-                  .origin(0, 1)
-                  .frames(5)
-                  .duration(0.1f)
-                  .playMode(LOOP)
-                  .build())
-            .registerFrames(SpiritAnimationType.IDLE_WEST, AnimationFrames.builder()
-                  .origin(0, 0)
-                  .frames(5)
-                  .duration(0.2f)
-                  .playMode(LOOP)
-                  .build())
-            .registerFrames(SpiritAnimationType.HOVERING_EAST, AnimationFrames.builder()
-                  .origin(0, 3)
-                  .frames(4)
-                  .duration(0.2f)
-                  .playMode(LOOP)
-                  .build())
-            .registerFrames(SpiritAnimationType.HOVERING_WEST, AnimationFrames.builder()
-                  .origin(0, 2)
-                  .frames(4)
-                  .duration(0.2f)
-                  .playMode(LOOP)
-                  .build())
-            .build()) {
-         @Override
-         public void render(GameObject object, Batch batch, float delta) {
-            TreeStatus treeStatus = treeObject.getAttribute(TreeStatus.class);
-            float alpha = object.getColor().a;
-            if (treeStatus.getTreeWateredLevel() < 0f) {
-               Color health = Color.RED.cpy().lerp(Color.WHITE, 1f - treeStatus.getTreeWateredLevel() / -1f);
-               health.a = alpha;
-               object.setColor(health);
-            } else {
-               Color health = Color.BLUE.cpy().lerp(Color.WHITE, 1f - treeStatus.getTreeWateredLevel() / 1f);
-               health.a = alpha;
-               object.setColor(health);
-            }
-            super.render(object, batch, delta);
-         }
-      });
-      context.getRenderManager().register(SPIRIT_WATER, new SpiritRenderer(context.getGameCamera(), ameSpritesheet, AnimationConfig.builder()
-            .registerFrames(SpiritAnimationType.LANDING_WEST, AnimationFrames.builder()
-                  .origin(0, 2)
-                  .frames(1)
-                  .duration(0.2f)
-                  .playMode(LOOP)
-                  .build())
-            .registerFrames(SpiritAnimationType.LANDING_EAST, AnimationFrames.builder()
-                  .origin(0, 3)
-                  .frames(1)
-                  .duration(0.2f)
-                  .playMode(LOOP)
-                  .build())
-            .registerFrames(SpiritAnimationType.IDLE_EAST, AnimationFrames.builder()
-                  .origin(0, 5)
-                  .frames(4)
-                  .duration(0.2f)
-                  .playMode(LOOP)
-                  .build())
-            .registerFrames(SpiritAnimationType.IDLE_WEST, AnimationFrames.builder()
-                  .origin(0, 4)
-                  .frames(4)
-                  .duration(0.2f)
-                  .playMode(LOOP)
-                  .build())
-            .registerFrames(SpiritAnimationType.HOVERING_EAST, AnimationFrames.builder()
-                  .origin(0, 4)
-                  .frames(4)
-                  .duration(0.2f)
-                  .playMode(LOOP)
-                  .build())
-            .registerFrames(SpiritAnimationType.HOVERING_WEST, AnimationFrames.builder()
-                  .origin(0, 5)
-                  .frames(4)
-                  .duration(0.2f)
-                  .playMode(LOOP)
-                  .build())
-            .registerFrames(SpiritAnimationType.FALLING_EAST, AnimationFrames.builder()
-                  .origin(0, 0)
-                  .frames(1)
-                  .duration(0.2f)
-                  .playMode(LOOP)
-                  .build())
-            .registerFrames(SpiritAnimationType.FALLING_WEST, AnimationFrames.builder()
-                  .origin(0, 1)
-                  .frames(1)
-                  .duration(0.2f)
-                  .playMode(LOOP)
-                  .build())
-            .build()));
-      context.getRenderManager().register(SPIRIT_FIRE, new SpiritRenderer(context.getGameCamera(), hiSpritesheet, AnimationConfig.builder()
-            .registerFrames(SpiritAnimationType.IDLE_EAST, AnimationFrames.builder()
-                  .origin(0, 0)
-                  .frames(8)
-                  .duration(0.2f)
-                  .playMode(LOOP)
-                  .build())
-            .registerFrames(SpiritAnimationType.IDLE_WEST, AnimationFrames.builder()
-                  .origin(0, 0)
-                  .frames(8)
-                  .duration(0.2f)
-                  .playMode(LOOP)
-                  .build())
-            .registerFrames(SpiritAnimationType.HOVERING_EAST, AnimationFrames.builder()
-                  .origin(0, 0)
-                  .frames(8)
-                  .duration(0.2f)
-                  .playMode(LOOP)
-                  .build())
-            .registerFrames(SpiritAnimationType.HOVERING_WEST, AnimationFrames.builder()
-                  .origin(0, 0)
-                  .frames(8)
-                  .duration(0.2f)
-                  .playMode(LOOP)
-                  .build())
-            .registerFrames(SpiritAnimationType.FALLING_WEST, AnimationFrames.builder()
-                  .origin(0, 0)
-                  .frames(8)
-                  .duration(0.2f)
-                  .playMode(LOOP)
-                  .build())
-            .registerFrames(SpiritAnimationType.FALLING_EAST, AnimationFrames.builder()
-                  .origin(0, 0)
-                  .frames(8)
-                  .duration(0.2f)
-                  .playMode(LOOP)
-                  .build())
-            .build()));
-
-      context.getRenderManager().register(ObjectType.TREE, new TreeRenderer());
-      context.getRenderManager().register(ObjectType.FLOOR, new SpriteRenderer(Textures.BACKGROUND_FLOOR));
-      context.getRenderManager().register(ObjectType.GAUGE, new GaugeRenderer(treeObject));
    }
 
    private void setupInput(GameContext2D context) {

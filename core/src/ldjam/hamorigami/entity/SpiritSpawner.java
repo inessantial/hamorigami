@@ -29,6 +29,10 @@ public class SpiritSpawner implements Updateable {
       currentSpawn = spawnPool.getNext();
    }
 
+   public boolean canSpawn() {
+      return !gameOver;
+   }
+
    @Override
    public void update(float delta) {
       if (gameOver) {
@@ -43,11 +47,6 @@ public class SpiritSpawner implements Updateable {
          currentSpawn = spawnPool.getNext();
          if (currentSpawn == null) {
             gameOver = true;
-            // game successful!
-            context.getBehaviorManager().clear();
-            CreditsScreen creditsScreen = new CreditsScreen((HamorigamiGame) context.getGame());
-            context.getScreenTransitions().out(new StoryScreen((HamorigamiGame) context.getGame(), creditsScreen,
-                  Messages.STORY_OUTRO_1, Messages.STORY_OUTRO_2, Messages.STORY_OUTRO_3, Messages.STORY_OUTRO_4), 1f);
          }
       }
    }
