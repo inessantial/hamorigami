@@ -6,13 +6,14 @@ import aurelienribon.tweenengine.TweenCallback;
 import aurelienribon.tweenengine.TweenEquations;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.Align;
 import de.bitbrain.braingdx.context.GameContext2D;
 import de.bitbrain.braingdx.graphics.GameCamera;
-import de.bitbrain.braingdx.screen.BrainGdxScreen2D;
 import de.bitbrain.braingdx.screens.AbstractScreen;
+import de.bitbrain.braingdx.screens.ColorTransition;
 import de.bitbrain.braingdx.tweens.ActorTween;
 import de.bitbrain.braingdx.tweens.SharedTweenManager;
 import ldjam.hamorigami.HamorigamiGame;
@@ -21,7 +22,7 @@ import ldjam.hamorigami.i18n.Messages;
 import ldjam.hamorigami.story.StoryTeller;
 import ldjam.hamorigami.ui.Styles;
 
-public class StoryScreen extends BrainGdxScreen2D<HamorigamiGame> {
+public class StoryScreen extends BaseScreen {
 
    private Label label, action;
 
@@ -40,10 +41,9 @@ public class StoryScreen extends BrainGdxScreen2D<HamorigamiGame> {
 
    @Override
    protected void onCreate(GameContext2D context) {
-      context.getScreenTransitions().in(1.5f);
+      super.onCreate(context);
       this.context = context;
       teller = new StoryTeller(messageKeys);
-
 
       Table layout = new Table();
       layout.setFillParent(true);
@@ -61,7 +61,6 @@ public class StoryScreen extends BrainGdxScreen2D<HamorigamiGame> {
       layout.center().add(action).row();
 
       context.getWorldStage().addActor(layout);
-      context.getGameCamera().setZoom(1000, GameCamera.ZoomMode.TO_HEIGHT);
    }
 
    @Override
@@ -70,7 +69,9 @@ public class StoryScreen extends BrainGdxScreen2D<HamorigamiGame> {
       if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE) && !aborted) {
          aborted = true;
          // TODO play start game sound
-         context.getScreenTransitions().out(nextScreen, 1f);
+         ColorTransition colorTransition = new ColorTransition();
+         colorTransition.setColor(Color.WHITE.cpy());
+         context.getScreenTransitions().out(colorTransition, nextScreen, 1f);
       } else if (Gdx.input.isKeyJustPressed(Input.Keys.ANY_KEY) && !aborted) {
          if (teller.hasNextStoryPoint()) {
             Tween.to(label, ActorTween.ALPHA, 0.5f)
@@ -91,7 +92,9 @@ public class StoryScreen extends BrainGdxScreen2D<HamorigamiGame> {
          } else if (!aborted) {
             aborted = true;
             // TODO play start game sound
-            context.getScreenTransitions().out(nextScreen, 1f);
+            ColorTransition colorTransition = new ColorTransition();
+            colorTransition.setColor(Color.WHITE.cpy());
+            context.getScreenTransitions().out(colorTransition, nextScreen, 1f);
          }
       }
    }
