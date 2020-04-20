@@ -1,6 +1,8 @@
 package ldjam.hamorigami.gamemode;
 
+import aurelienribon.tweenengine.BaseTween;
 import aurelienribon.tweenengine.Tween;
+import aurelienribon.tweenengine.TweenCallback;
 import aurelienribon.tweenengine.TweenEquations;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -42,11 +44,30 @@ public class TitlePhase implements GamePhase {
    }
 
    @Override
-   public void disable(GameContext2D context, GameObject treeObject) {
-      context.getWorldStage().getActors().removeValue(layout, true);
-      context.getWorldStage().getActors().removeValue(icon, true);
-      context.getWorldStage().getActors().removeValue(logoA, true);
-      context.getWorldStage().getActors().removeValue(logoB, true);
+   public void disable(final GameContext2D context, GameObject treeObject) {
+      Tween.to(layout, ActorTween.ALPHA, 0.7f)
+            .target(0f)
+            .start(SharedTweenManager.getInstance());
+      Tween.to(icon, ActorTween.ALPHA, 0.7f)
+            .target(0f)
+            .start(SharedTweenManager.getInstance());
+      Tween.to(logoA, ActorTween.ALPHA, 0.7f)
+            .target(0f)
+            .start(SharedTweenManager.getInstance());
+      Tween.to(logoB, ActorTween.ALPHA, 0.7f)
+            .target(0f)
+            .setCallbackTriggers(TweenCallback.COMPLETE)
+            .setCallback(new TweenCallback() {
+               @Override
+               public void onEvent(int type, BaseTween<?> source) {
+                  context.getWorldStage().getActors().removeValue(layout, true);
+                  context.getWorldStage().getActors().removeValue(icon, true);
+                  context.getWorldStage().getActors().removeValue(logoA, true);
+                  context.getWorldStage().getActors().removeValue(logoB, true);
+               }
+            })
+            .start(SharedTweenManager.getInstance());
+
    }
 
    @Override

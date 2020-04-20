@@ -4,7 +4,7 @@ public interface Assets {
 
    interface Fonts {
       String VISITOR = "font/visitor.ttf";
-      String OPENSANS = "font/opensans.ttf";
+      String PINCHER = "font/pincher.ttf";
    }
 
    interface Textures {

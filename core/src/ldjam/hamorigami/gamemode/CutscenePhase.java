@@ -36,10 +36,19 @@ public class CutscenePhase implements GamePhase {
    }
 
    @Override
-   public void disable(GameContext2D context, GameObject treeObject) {
-      context.getWorldStage().getActors().removeValue(layout, true);
+   public void disable(final GameContext2D context, GameObject treeObject) {
       Tween.to(context.getGameCamera(), GameCameraTween.ZOOM_WIDTH, 1f)
             .target(800f)
+            .start(SharedTweenManager.getInstance());
+      Tween.to(layout, ActorTween.ALPHA, 1f)
+            .target(0f)
+            .setCallbackTriggers(TweenCallback.COMPLETE)
+            .setCallback(new TweenCallback() {
+               @Override
+               public void onEvent(int type, BaseTween<?> source) {
+                  context.getWorldStage().getActors().removeValue(layout, true);
+               }
+            })
             .start(SharedTweenManager.getInstance());
    }
 
@@ -54,6 +63,10 @@ public class CutscenePhase implements GamePhase {
 
       this.layout = new Table();
       layout.setFillParent(true);
+      layout.getColor().a = 0f;
+      Tween.to(layout, ActorTween.ALPHA, 2f)
+            .target(1f)
+            .start(SharedTweenManager.getInstance());
 
       label = new Label(teller.getNextStoryPoint(), Styles.STORY);
       label.setWrap(true);
