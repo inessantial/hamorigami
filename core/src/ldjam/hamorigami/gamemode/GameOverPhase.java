@@ -4,17 +4,22 @@ import aurelienribon.tweenengine.Tween;
 import aurelienribon.tweenengine.TweenEquations;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import de.bitbrain.braingdx.assets.SharedAssetManager;
 import de.bitbrain.braingdx.context.GameContext2D;
 import de.bitbrain.braingdx.graphics.GameCamera;
 import de.bitbrain.braingdx.tweens.ActorTween;
 import de.bitbrain.braingdx.world.GameObject;
+import ldjam.hamorigami.Assets;
 import ldjam.hamorigami.i18n.Bundle;
 import ldjam.hamorigami.i18n.Messages;
+import ldjam.hamorigami.input.Proceedable;
+import ldjam.hamorigami.input.ingame.ProceedableControllerAdapter;
 import ldjam.hamorigami.ui.Styles;
 
-public class GameOverPhase implements GamePhase {
+public class GameOverPhase implements GamePhase, Proceedable {
 
    private boolean exiting;
 
@@ -28,10 +33,13 @@ public class GameOverPhase implements GamePhase {
    @Override
    public void disable(GameContext2D context, GameObject treeObject) {
       context.getWorldStage().getActors().removeValue(layout, true);
+      SharedAssetManager.getInstance().get(Assets.Musics.FAIL, Music.class).stop();
    }
 
    @Override
    public void enable(GameContext2D context, GameObject treeObject) {
+      context.getInputManager().register(new ProceedableControllerAdapter(this));
+      SharedAssetManager.getInstance().get(Assets.Musics.FAIL, Music.class).play();
       exiting = false;
       this.layout = new Table();
       layout.setFillParent(true);
@@ -66,11 +74,21 @@ public class GameOverPhase implements GamePhase {
    @Override
    public void update(float delta) {
       if (!exiting && Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
-         Gdx.app.exit();
+         skip();
       }
       if (!exiting && (Gdx.input.isTouched() || Gdx.input.isKeyJustPressed(Input.Keys.ANY_KEY))) {
-         exiting = true;
-         phaseHandler.changePhase(Phases.GAMEPLAY);
+         proceed();
       }
+   }
+
+   @Override
+   public void proceed() {
+      exiting = true;
+      phaseHandler.changePhase(Phases.GAMEPLAY);
+   }
+
+   @Override
+   public void skip() {
+      Gdx.app.exit();
    }
 }

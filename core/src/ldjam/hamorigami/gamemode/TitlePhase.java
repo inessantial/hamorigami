@@ -6,6 +6,7 @@ import aurelienribon.tweenengine.TweenCallback;
 import aurelienribon.tweenengine.TweenEquations;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -23,9 +24,11 @@ import de.bitbrain.braingdx.world.GameObject;
 import ldjam.hamorigami.Assets;
 import ldjam.hamorigami.i18n.Bundle;
 import ldjam.hamorigami.i18n.Messages;
+import ldjam.hamorigami.input.Proceedable;
+import ldjam.hamorigami.input.ingame.ProceedableControllerAdapter;
 import ldjam.hamorigami.ui.Styles;
 
-public class TitlePhase implements GamePhase {
+public class TitlePhase implements GamePhase, Proceedable {
 
    private Table layout;
    private boolean exiting;
@@ -38,6 +41,7 @@ public class TitlePhase implements GamePhase {
    private Image icon;
    private Label logoA;
    private Label logoB;
+   private Music music;
 
    public TitlePhase(GamePhaseHandler phaseHandler) {
       this.phaseHandler = phaseHandler;
@@ -72,6 +76,11 @@ public class TitlePhase implements GamePhase {
 
    @Override
    public void enable(GameContext2D context, GameObject treeObject) {
+      context.getInputManager().register(new ProceedableControllerAdapter(this));
+      music = SharedAssetManager.getInstance().get(Assets.Musics.MENU, Music.class);
+      music.setLooping(true);
+      music.setVolume(0.8f);
+      music.play();
       this.exiting = false;
       this.layout = new Table();
       layout.setFillParent(true);
@@ -134,11 +143,21 @@ public class TitlePhase implements GamePhase {
    @Override
    public void update(float delta) {
       if (!exiting && Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
-         Gdx.app.exit();
+         skip();
       }
       if (!exiting && (Gdx.input.isTouched() || Gdx.input.isKeyJustPressed(Input.Keys.ANY_KEY))) {
-         exiting = true;
-         phaseHandler.changePhase(Phases.INTRO);
+         proceed();
       }
+   }
+
+   @Override
+   public void proceed() {
+      exiting = true;
+      phaseHandler.changePhase(Phases.INTRO);
+   }
+
+   @Override
+   public void skip() {
+      Gdx.app.exit();
    }
 }

@@ -16,10 +16,12 @@ import de.bitbrain.braingdx.tweens.SharedTweenManager;
 import de.bitbrain.braingdx.world.GameObject;
 import ldjam.hamorigami.i18n.Bundle;
 import ldjam.hamorigami.i18n.Messages;
+import ldjam.hamorigami.input.Proceedable;
+import ldjam.hamorigami.input.ingame.ProceedableControllerAdapter;
 import ldjam.hamorigami.story.StoryTeller;
 import ldjam.hamorigami.ui.Styles;
 
-public class CutscenePhase implements GamePhase {
+public class CutscenePhase implements GamePhase, Proceedable {
 
    private final GamePhaseHandler phaseHandler;
    private final Messages[] messages;
@@ -54,7 +56,7 @@ public class CutscenePhase implements GamePhase {
 
    @Override
    public void enable(GameContext2D context, GameObject treeObject) {
-
+      context.getInputManager().register(new ProceedableControllerAdapter(this));
       Tween.to(context.getGameCamera(), GameCameraTween.ZOOM_WIDTH, 4f)
             .target(680f)
             .start(SharedTweenManager.getInstance());
@@ -91,30 +93,38 @@ public class CutscenePhase implements GamePhase {
    @Override
    public void update(float delta) {
       if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE) && !aborted) {
-         aborted = true;
-         // TODO play start game sound
-         phaseHandler.changePhase(nextPhase);
+         skip();
       } else if (Gdx.input.isKeyJustPressed(Input.Keys.ANY_KEY) && !aborted) {
-         if (teller.hasNextStoryPoint()) {
-            Tween.to(label, ActorTween.ALPHA, 0.5f)
-                  .target(0f)
-                  .ease(TweenEquations.easeOutQuad)
-                  .setCallback(new TweenCallback() {
-                     @Override
-                     public void onEvent(int type, BaseTween<?> source) {
-                        label.setText(teller.getNextStoryPoint());
-                        Tween.to(label, ActorTween.ALPHA, 1f)
-                              .target(1f)
-                              .ease(TweenEquations.easeInOutQuad)
-                              .start(SharedTweenManager.getInstance());
-                     }
-                  })
-                  .setCallbackTriggers(TweenCallback.COMPLETE)
-                  .start(SharedTweenManager.getInstance());
-         } else if (!aborted) {
-            aborted = true;
-            phaseHandler.changePhase(nextPhase);
-         }
+         proceed();
       }
+   }
+
+   @Override
+   public void proceed() {
+      if (teller.hasNextStoryPoint()) {
+         Tween.to(label, ActorTween.ALPHA, 0.5f)
+               .target(0f)
+               .ease(TweenEquations.easeOutQuad)
+               .setCallback(new TweenCallback() {
+                  @Override
+                  public void onEvent(int type, BaseTween<?> source) {
+                     label.setText(teller.getNextStoryPoint());
+                     Tween.to(label, ActorTween.ALPHA, 1f)
+                           .target(1f)
+                           .ease(TweenEquations.easeInOutQuad)
+                           .start(SharedTweenManager.getInstance());
+                  }
+               })
+               .setCallbackTriggers(TweenCallback.COMPLETE)
+               .start(SharedTweenManager.getInstance());
+      } else if (!aborted) {
+         skip();
+      }
+   }
+
+   @Override
+   public void skip() {
+      aborted = true;
+      phaseHandler.changePhase(nextPhase);
    }
 }

@@ -33,6 +33,8 @@ public interface Assets {
       String BACKGROUND_01 = "music/bgm_01.ogg";
       String OUTRO = "music/outro.ogg";
       String CITYSCAPE = "music/city_01.ogg";
+      String FAIL = "music/fail.ogg";
+      String MENU = "music/menu.ogg";
    }
 
    interface Sounds {
