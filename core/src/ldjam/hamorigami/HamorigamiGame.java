@@ -2,9 +2,11 @@ package ldjam.hamorigami;
 
 import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Music;
 import de.bitbrain.braingdx.BrainGdxGame;
 import de.bitbrain.braingdx.GameSettings;
 import de.bitbrain.braingdx.assets.GameAssetLoader;
+import de.bitbrain.braingdx.assets.SharedAssetManager;
 import de.bitbrain.braingdx.assets.SmartAssetLoader;
 import de.bitbrain.braingdx.debug.BrainGdxDebug;
 import de.bitbrain.braingdx.event.GameEventManagerImpl;
@@ -12,7 +14,7 @@ import de.bitbrain.braingdx.graphics.GraphicsSettings;
 import de.bitbrain.braingdx.graphics.postprocessing.filters.RadialBlur;
 import de.bitbrain.braingdx.screens.AbstractScreen;
 import ldjam.hamorigami.i18n.Bundle;
-import ldjam.hamorigami.screens.IngameScreen;
+import ldjam.hamorigami.screens.TitleScreen;
 import ldjam.hamorigami.ui.Styles;
 import org.apache.commons.lang.SystemUtils;
 
@@ -28,24 +30,24 @@ public class HamorigamiGame extends BrainGdxGame {
 
    private boolean debug;
 
-	public HamorigamiGame(String[] args) {
-		screenMode = ScreenMode.FULLSCREEN;
-		for (String arg : args) {
-			if (arg.equals("screenshot")) {
-				screenMode = ScreenMode.SCREENSHOT;
-			}
-			if (arg.equals("gif")) {
-				screenMode = ScreenMode.GIF;
-			}
-			if (arg.equals("debug")) {
-				debug = true;
-			}
-		}
-	}
+   public HamorigamiGame(String[] args) {
+      screenMode = ScreenMode.FULLSCREEN;
+      for (String arg : args) {
+         if (arg.equals("screenshot")) {
+            screenMode = ScreenMode.SCREENSHOT;
+         }
+         if (arg.equals("gif")) {
+            screenMode = ScreenMode.GIF;
+         }
+         if (arg.equals("debug")) {
+            debug = true;
+         }
+      }
+   }
 
-	public boolean isDebug() {
-		return debug;
-	}
+   public boolean isDebug() {
+      return debug;
+   }
 
    @Override
    protected GameAssetLoader getAssetLoader() {
@@ -58,7 +60,11 @@ public class HamorigamiGame extends BrainGdxGame {
       Styles.init();
       BrainGdxDebug.setLabelStyle(Styles.LABEL_DEBUG);
       configureSettings();
-      return new IngameScreen(this);
+      Music cityscape = SharedAssetManager.getInstance().get(Assets.Musics.CITYSCAPE, Music.class);
+      cityscape.setLooping(true);
+      cityscape.setVolume(0.8f);
+      cityscape.play();
+      return new TitleScreen(this);
    }
 
    private void configureSettings() {

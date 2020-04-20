@@ -4,6 +4,7 @@ public interface Assets {
 
    interface Fonts {
       String VISITOR = "font/visitor.ttf";
+      String OPENSANS = "font/opensans.ttf";
    }
 
    interface Textures {
@@ -27,6 +28,7 @@ public interface Assets {
 
    interface Musics {
       String BACKGROUND_01 = "music/bgm_01.ogg";
+      String OUTRO = "music/outro.ogg";
       String CITYSCAPE = "music/city_01.ogg";
    }
 
@@ -42,7 +44,8 @@ public interface Assets {
       String BRUSH_02 = "sound/brush_02.ogg";
       String BRUSH_03 = "sound/brush_03.ogg";
 
-      String WOOSH = "sound/woosh_short.ogg";
+      String DEATH = "sound/woosh.ogg";
+      String DEATH_SHORT = "sound/woosh_short.ogg";
    }
 
    interface Particles {

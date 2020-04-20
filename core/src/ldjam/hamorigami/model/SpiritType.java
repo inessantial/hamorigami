@@ -24,10 +24,10 @@ public enum SpiritType {
          // noOp
       }
    },
-         Color.valueOf("a3ffdb"),
+         Color.valueOf("a3ffdb44"),
          Assets.Particles.EARTH),
-   SPIRIT_WATER(80, 5, new AddWaterEffect(), new SpawnWaterSpiritEffect(), Color.valueOf("306eff"), Assets.Particles.WATER),
-   SPIRIT_FIRE(45, 10, new AddSunlightEffect(), new SpawnFireEffect(), Color.valueOf("ff8367"), Assets.Particles.FIRE);
+   SPIRIT_WATER(80, 5, new AddWaterEffect(), new SpawnWaterSpiritEffect(), Color.valueOf("306eff33"), Assets.Particles.WATER),
+   SPIRIT_FIRE(45, 10, new AddSunlightEffect(), new SpawnFireEffect(), Color.valueOf("ffc2b488"), Assets.Particles.FIRE);
 
    private final int health;
    private final float maxSpeed;

@@ -10,6 +10,7 @@ import de.bitbrain.braingdx.tweens.ColorTween;
 import de.bitbrain.braingdx.tweens.GameObjectTween;
 import de.bitbrain.braingdx.tweens.SharedTweenManager;
 import de.bitbrain.braingdx.world.GameObject;
+import ldjam.hamorigami.Assets;
 import ldjam.hamorigami.model.HealthData;
 import ldjam.hamorigami.model.SpiritType;
 
@@ -28,6 +29,8 @@ public class SpiritedAway extends BehaviorAdapter {
       }
       if (source.hasAttribute(HealthData.class) && source.getType() instanceof SpiritType) {
          if (source.getAttribute(HealthData.class).isDead()) {
+            float pitch = (float) (0.9f + Math.random() * 0.2f);
+            context.getAudioManager().spawnSound(Assets.Sounds.DEATH_SHORT, source.getLeft(), source.getTop(), pitch, 0.2f, 200f);
             source.setActive(false);
             source.setAttribute("spiritedAway", true);
             context.getBehaviorManager().remove(source);

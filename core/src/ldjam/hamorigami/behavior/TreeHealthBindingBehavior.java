@@ -1,14 +1,16 @@
 package ldjam.hamorigami.behavior;
 
+import com.badlogic.gdx.graphics.Color;
 import de.bitbrain.braingdx.audio.AudioManager;
 import de.bitbrain.braingdx.behavior.BehaviorAdapter;
 import de.bitbrain.braingdx.context.GameContext2D;
+import de.bitbrain.braingdx.screens.ColorTransition;
 import de.bitbrain.braingdx.world.GameObject;
 import ldjam.hamorigami.Assets;
 import ldjam.hamorigami.HamorigamiGame;
 import ldjam.hamorigami.audio.JukeBox;
 import ldjam.hamorigami.model.HealthData;
-import ldjam.hamorigami.screens.IngameScreen;
+import ldjam.hamorigami.screens.GameOverScreen;
 
 public class TreeHealthBindingBehavior extends BehaviorAdapter {
 
@@ -31,7 +33,10 @@ public class TreeHealthBindingBehavior extends BehaviorAdapter {
          jukeBox.playSound(source.getLeft(), source.getTop());
          // game over! let's restart the day
          context.getBehaviorManager().clear();
-         context.getScreenTransitions().out(new IngameScreen((HamorigamiGame) context.getGame()), 1f);
+         ColorTransition colorTransition = new ColorTransition();
+         colorTransition.setColor(Color.WHITE.cpy());
+         context.getAudioManager().spawnSound(Assets.Sounds.DEATH, source.getLeft(), source.getTop(), 1f, 0.8f, 200f);
+         context.getScreenTransitions().out(colorTransition, new GameOverScreen((HamorigamiGame) context.getGame()), 1f);
       }
    }
 }
