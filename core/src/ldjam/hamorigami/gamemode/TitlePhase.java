@@ -75,12 +75,14 @@ public class TitlePhase implements GamePhase {
       this.exiting = false;
       this.layout = new Table();
       layout.setFillParent(true);
+      layout.getColor().a = 0f;
 
       Sprite sprite = new Sprite(SharedAssetManager.getInstance().get(Assets.Textures.LOGO, Texture.class));
       sprite.setSize(75, 75);
       this.icon = new Image(new SpriteDrawable(sprite));
       icon.setPosition(context.getGameCamera().getLeft() + context.getGameCamera().getScaledCameraWidth() / 2f - sprite.getWidth() / 2f - 40f, context.getGameCamera().getTop() + context.getGameCamera().getScaledCameraHeight() - 150f);
       context.getWorldStage().addActor(icon);
+      icon.getColor().a = 0f;
 
       logoA = new Label("HAM", Styles.LABEL_LOGO);
       logoB = new Label("RIGAMI", Styles.LABEL_LOGO);
@@ -88,6 +90,21 @@ public class TitlePhase implements GamePhase {
       logoB.setPosition(icon.getX() + icon.getWidth() + 10f, icon.getY() - 16f);
       context.getWorldStage().addActor(logoA);
       context.getWorldStage().addActor(logoB);
+      logoA.getColor().a = 0f;
+      logoB.getColor().a = 0f;
+
+      Tween.to(layout, ActorTween.ALPHA, 2.7f)
+            .target(1f)
+            .start(SharedTweenManager.getInstance());
+      Tween.to(icon, ActorTween.ALPHA, 2.7f)
+            .target(1f)
+            .start(SharedTweenManager.getInstance());
+      Tween.to(logoA, ActorTween.ALPHA, 2.7f)
+            .target(1f)
+            .start(SharedTweenManager.getInstance());
+      Tween.to(logoB, ActorTween.ALPHA, 2.7f)
+            .target(1f)
+            .start(SharedTweenManager.getInstance());
 
 
       Label pressAnyButton = new Label(Bundle.get(Messages.PLAY_GAME), Styles.DIALOG_TEXT);
