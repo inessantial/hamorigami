@@ -1,5 +1,6 @@
 package ldjam.hamorigami.screens;
 
+import aurelienribon.tweenengine.TweenEquations;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
@@ -41,6 +42,7 @@ public class IngameScreen extends BrainGdxScreen2D<HamorigamiGame> {
    private GameObject playerObject;
    private GameObject treeObject;
    private AttackHandler attackHandler;
+   private Music music;
 
    public IngameScreen(HamorigamiGame game) {
       super(game);
@@ -48,6 +50,7 @@ public class IngameScreen extends BrainGdxScreen2D<HamorigamiGame> {
 
    @Override
    protected void onCreate(final GameContext2D context) {
+      context.getScreenTransitions().in(2f);
       context.getRenderPipeline().putAfter(RenderPipeIds.BACKGROUND, "cityscape", new RenderLayer2D() {
 
 
@@ -59,7 +62,7 @@ public class IngameScreen extends BrainGdxScreen2D<HamorigamiGame> {
             batch.end();
          }
       });
-      Music music = SharedAssetManager.getInstance().get(BACKGROUND_01, Music.class);
+      this.music = SharedAssetManager.getInstance().get(BACKGROUND_01, Music.class);
       music.setLooping(true);
       music.setVolume(0.1f);
       music.play();
@@ -79,8 +82,14 @@ public class IngameScreen extends BrainGdxScreen2D<HamorigamiGame> {
       attackHandler.update(delta);
    }
 
+   @Override
+   public void dispose() {
+      super.dispose();
+      music.stop();
+   }
+
    private void setupLighting(GameContext2D context) {
-      //context.getLightingManager().setAmbientLight(Color.valueOf("ffffff"));
+      //context.getLightingManager().setAmbientLight(Color.valueOf("644595"), 30, TweenEquations.easeNone);
    }
 
    private void setupLevel(GameContext2D context) {
@@ -148,20 +157,20 @@ public class IngameScreen extends BrainGdxScreen2D<HamorigamiGame> {
       context.getRenderManager().register(SpiritType.SPIRIT_EARTH, new SpiritRenderer(context.getGameCamera(), kodamaSpritesheet, AnimationConfig.builder()
             .registerFrames(SpiritAnimationType.ATTACKING_EAST, AnimationFrames.builder()
                   .origin(0, 5)
-                  .frames(1)
-                  .duration(0.2f)
+                  .frames(4)
+                  .duration(0.1f)
                   .playMode(LOOP)
                   .build())
             .registerFrames(SpiritAnimationType.ATTACKING_WEST, AnimationFrames.builder()
                   .origin(0, 4)
-                  .frames(1)
-                  .duration(0.2f)
+                  .frames(4)
+                  .duration(0.1f)
                   .playMode(LOOP)
                   .build())
             .registerFrames(SpiritAnimationType.IDLE_EAST, AnimationFrames.builder()
                   .origin(0, 1)
                   .frames(5)
-                  .duration(0.2f)
+                  .duration(0.1f)
                   .playMode(LOOP)
                   .build())
             .registerFrames(SpiritAnimationType.IDLE_WEST, AnimationFrames.builder()
