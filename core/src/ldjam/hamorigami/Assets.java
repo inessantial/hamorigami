@@ -12,9 +12,11 @@ public interface Assets {
       String SPIRIT_WATER_AME_SPRITESHEET = "texture/ame-sprite-sheet.png";
       String SPIRIT_FIRE_HI_SPRITESHEET = "texture/hi-sprite-sheet.png";
 
-      String TREE = "texture/tree.png";
+      String TREE = "texture/midday-tree.png";
+      String TREE_EVENING = "texture/sunset-tree.png";
 
       String BACKGROUND_FLOOR = "texture/background-floor.png";
+      String BACKGROUND_FLOOR_EVENING = "texture/background-floor-twilight.png";
 
       String DROPSHADOW = "texture/dropshadow.png";
 
@@ -25,7 +27,8 @@ public interface Assets {
       String GAUGE_OVERLAY = "texture/gauge-overlay.png";
       String GAUGE_GRASS = "texture/gauge-grass.png";
 
-      String SUNSET_BACKGROUND = "texture/sunset-background.png";
+      String CITY_DAY = "texture/city-scape-midday.png";
+      String CITY_EVENING = "texture/city-scape-twilight.png";
       String SUNSET_TREE = "texture/sunset-tree.png";
    }
 
