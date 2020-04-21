@@ -5,17 +5,22 @@ import aurelienribon.tweenengine.Tween;
 import aurelienribon.tweenengine.TweenCallback;
 import aurelienribon.tweenengine.TweenEquations;
 import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.utils.Array;
 import de.bitbrain.braingdx.assets.SharedAssetManager;
 import de.bitbrain.braingdx.context.GameContext2D;
+import de.bitbrain.braingdx.screens.ColorTransition;
 import de.bitbrain.braingdx.tweens.ColorTween;
 import de.bitbrain.braingdx.tweens.GameObjectTween;
 import de.bitbrain.braingdx.tweens.SharedTweenManager;
+import de.bitbrain.braingdx.util.DeltaTimer;
 import de.bitbrain.braingdx.world.GameObject;
 import ldjam.hamorigami.Assets;
 import ldjam.hamorigami.behavior.TreeBehavior;
 import ldjam.hamorigami.behavior.TreeHealthBindingBehavior;
+import ldjam.hamorigami.effects.DayProgress;
 import ldjam.hamorigami.entity.*;
+import ldjam.hamorigami.graphics.Cityscape;
 import ldjam.hamorigami.input.Proceedable;
 import ldjam.hamorigami.input.ingame.IngameControllerAdapter;
 import ldjam.hamorigami.input.ingame.IngameKeyboardAdapter;
@@ -30,7 +35,7 @@ import java.util.List;
 import static ldjam.hamorigami.Assets.Musics.BACKGROUND_01;
 import static ldjam.hamorigami.model.SpiritType.*;
 
-public class GameplayPhase implements GamePhase, Proceedable {
+public class GameplayPhase implements GamePhase, Proceedable, DayProgress {
 
    private static final List<SpiritType> CANDIDATES = new ArrayList<SpiritType>();
 
@@ -42,8 +47,10 @@ public class GameplayPhase implements GamePhase, Proceedable {
       }
    }
 
+   private DeltaTimer dayTimer = new DeltaTimer();
+
    private Music music;
-   private Music cityscape;
+   private Music cityscapeMusic;
 
    private GameObject playerObject;
    private GameObject treeObject;
@@ -55,6 +62,7 @@ public class GameplayPhase implements GamePhase, Proceedable {
    private GameContext2D context;
 
    private final GamePhaseHandler gamePhaseHandler;
+   private SpiritSpawnPool spiritSpawnPool;
 
    public GameplayPhase(GamePhaseHandler gamePhaseHandler) {
       this.gamePhaseHandler = gamePhaseHandler;
@@ -63,18 +71,19 @@ public class GameplayPhase implements GamePhase, Proceedable {
    @Override
    public void disable(GameContext2D context, GameObject treeObject) {
       music.stop();
-      cityscape.setVolume(0.4f);
+      cityscapeMusic.setVolume(0.4f);
    }
 
    @Override
    public void enable(final GameContext2D context, final GameObject treeObject) {
+      dayTimer.reset();
       SharedAssetManager.getInstance().get(Assets.Musics.MENU, Music.class).stop();
       gameOver = false;
       this.context = context;
       this.treeObject = treeObject;
       this.music = SharedAssetManager.getInstance().get(BACKGROUND_01, Music.class);
-      cityscape = SharedAssetManager.getInstance().get(Assets.Musics.CITYSCAPE, Music.class);
-      cityscape.setVolume(0.2f);
+      cityscapeMusic = SharedAssetManager.getInstance().get(Assets.Musics.CITYSCAPE, Music.class);
+      cityscapeMusic.setVolume(0.2f);
       music.setLooping(true);
       music.setVolume(0.1f);
       music.play();
@@ -111,10 +120,13 @@ public class GameplayPhase implements GamePhase, Proceedable {
                })
                .start(SharedTweenManager.getInstance());
          playerObject.setDimensions(64f, 64f);
+         ColorTransition colorTransition = new ColorTransition();
+         colorTransition.setColor(Color.valueOf("9cd2ff"));
+         context.getScreenTransitions().in(colorTransition, 0.5f);
       }
 
       // Spirit spawning
-      SpiritSpawnPool spiritSpawnPool = new SpiritSpawnPool();
+      this.spiritSpawnPool = new SpiritSpawnPool();
 
       spiritSpawnPool.addSpawnWave(5f, SPIRIT_WATER);
 
@@ -152,8 +164,10 @@ public class GameplayPhase implements GamePhase, Proceedable {
 
    @Override
    public void update(float delta) {
+      dayTimer.update(delta);
       spawner.update(delta);
       attackHandler.update(delta);
+      // update timer
       if (!spawner.canSpawn() && !gameOver) {
          // check that the only spirit left is the player
          Array<GameObject> objects = context.getGameWorld().getObjects();
@@ -213,5 +227,19 @@ public class GameplayPhase implements GamePhase, Proceedable {
       kilAllSpirits();
       gameOver = true;
       gamePhaseHandler.changePhase(Phases.CREDITS);
+   }
+
+   @Override
+   public float getCurrentProgress() {
+      if (spiritSpawnPool == null) {
+         return 0f;
+      } else {
+         return Math.min(1f, dayTimer.getTicks() / spiritSpawnPool.getTotalDuration());
+      }
+   }
+
+   @Override
+   public void reset() {
+      dayTimer.reset();
    }
 }

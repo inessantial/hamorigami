@@ -16,6 +16,7 @@ import de.bitbrain.braingdx.tweens.ActorTween;
 import de.bitbrain.braingdx.tweens.SharedTweenManager;
 import de.bitbrain.braingdx.world.GameObject;
 import ldjam.hamorigami.Assets;
+import ldjam.hamorigami.effects.DayProgress;
 import ldjam.hamorigami.i18n.Bundle;
 import ldjam.hamorigami.i18n.Messages;
 import ldjam.hamorigami.input.Proceedable;

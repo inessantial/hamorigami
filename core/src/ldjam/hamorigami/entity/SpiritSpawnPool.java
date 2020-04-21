@@ -7,6 +7,8 @@ import java.util.List;
 
 public class SpiritSpawnPool {
 
+   private float totalDuration = 0f;
+
    public class SpiritSpawn {
       public final SpiritType[] spawns;
       public final float durationUntil;
@@ -22,7 +24,12 @@ public class SpiritSpawnPool {
    private int currentIndex = 0;
 
    public void addSpawnWave(float durationUntilNext, SpiritType... spawns) {
+      totalDuration += durationUntilNext;
       spawnList.add(new SpiritSpawn(durationUntilNext, spawns));
+   }
+
+   public float getTotalDuration() {
+      return totalDuration;
    }
 
    public SpiritSpawn getNext() {

@@ -7,6 +7,7 @@ import aurelienribon.tweenengine.TweenEquations;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -17,11 +18,13 @@ import de.bitbrain.braingdx.assets.SharedAssetManager;
 import de.bitbrain.braingdx.context.GameContext2D;
 import de.bitbrain.braingdx.graphics.GameCamera;
 import de.bitbrain.braingdx.graphics.VectorGameCamera;
+import de.bitbrain.braingdx.screens.ColorTransition;
 import de.bitbrain.braingdx.tweens.ActorTween;
 import de.bitbrain.braingdx.tweens.GameCameraTween;
 import de.bitbrain.braingdx.tweens.SharedTweenManager;
 import de.bitbrain.braingdx.world.GameObject;
 import ldjam.hamorigami.Assets;
+import ldjam.hamorigami.effects.DayProgress;
 import ldjam.hamorigami.i18n.Bundle;
 import ldjam.hamorigami.i18n.Messages;
 import ldjam.hamorigami.input.Proceedable;
@@ -33,6 +36,8 @@ public class TitlePhase implements GamePhase, Proceedable {
    private Table layout;
    private boolean exiting;
 
+   private final DayProgress dayProgress;
+
    static {
       Tween.registerAccessor(VectorGameCamera.class, new GameCameraTween());
    }
@@ -43,7 +48,8 @@ public class TitlePhase implements GamePhase, Proceedable {
    private Label logoB;
    private Music music;
 
-   public TitlePhase(GamePhaseHandler phaseHandler) {
+   public TitlePhase(DayProgress dayProgress, GamePhaseHandler phaseHandler) {
+      this.dayProgress = dayProgress;
       this.phaseHandler = phaseHandler;
    }
 
@@ -76,6 +82,10 @@ public class TitlePhase implements GamePhase, Proceedable {
 
    @Override
    public void enable(GameContext2D context, GameObject treeObject) {
+      dayProgress.reset();
+      ColorTransition colorTransition = new ColorTransition();
+      colorTransition.setColor(Color.valueOf("9cd2ff"));
+      context.getScreenTransitions().in(colorTransition, 0.2f);
       context.getInputManager().register(new ProceedableControllerAdapter(this));
       music = SharedAssetManager.getInstance().get(Assets.Musics.MENU, Music.class);
       music.setLooping(true);
