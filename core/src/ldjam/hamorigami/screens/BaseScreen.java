@@ -1,39 +1,35 @@
 package ldjam.hamorigami.screens;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
-import de.bitbrain.braingdx.assets.SharedAssetManager;
 import de.bitbrain.braingdx.context.GameContext2D;
 import de.bitbrain.braingdx.graphics.GameCamera;
 import de.bitbrain.braingdx.graphics.animation.AnimationConfig;
 import de.bitbrain.braingdx.graphics.animation.AnimationFrames;
 import de.bitbrain.braingdx.graphics.animation.AnimationSpriteSheet;
-import de.bitbrain.braingdx.graphics.pipeline.RenderLayer2D;
 import de.bitbrain.braingdx.graphics.pipeline.layers.RenderPipeIds;
-import de.bitbrain.braingdx.graphics.renderer.SpriteRenderer;
 import de.bitbrain.braingdx.screen.BrainGdxScreen2D;
 import de.bitbrain.braingdx.screens.ColorTransition;
 import de.bitbrain.braingdx.world.GameObject;
-import ldjam.hamorigami.Assets;
 import ldjam.hamorigami.HamorigamiGame;
-import ldjam.hamorigami.entity.*;
-import ldjam.hamorigami.graphics.EntityOrderComparator;
-import ldjam.hamorigami.graphics.GaugeRenderer;
-import ldjam.hamorigami.graphics.SpiritRenderer;
-import ldjam.hamorigami.graphics.TreeRenderer;
-import ldjam.hamorigami.model.*;
+import ldjam.hamorigami.effects.DayProgress;
+import ldjam.hamorigami.entity.EntityFactory;
+import ldjam.hamorigami.entity.SpiritSpawnPool;
+import ldjam.hamorigami.graphics.*;
+import ldjam.hamorigami.model.ObjectType;
+import ldjam.hamorigami.model.SpiritAnimationType;
+import ldjam.hamorigami.model.SpiritType;
+import ldjam.hamorigami.model.TreeStatus;
 
 import static com.badlogic.gdx.graphics.g2d.Animation.PlayMode.LOOP;
 import static ldjam.hamorigami.Assets.Textures.*;
-import static ldjam.hamorigami.Assets.Textures.SPIRIT_WATER_AME_SPRITESHEET;
 import static ldjam.hamorigami.model.SpiritType.SPIRIT_FIRE;
 import static ldjam.hamorigami.model.SpiritType.SPIRIT_WATER;
 
 public abstract class BaseScreen extends BrainGdxScreen2D<HamorigamiGame> {
 
    protected GameObject treeObject;
+   protected Cityscape cityscape;
 
    public BaseScreen(HamorigamiGame game) {
       super(game);
@@ -43,21 +39,12 @@ public abstract class BaseScreen extends BrainGdxScreen2D<HamorigamiGame> {
    protected void onCreate(final GameContext2D context) {
       ColorTransition colorTransition = new ColorTransition();
       colorTransition.setColor(Color.WHITE.cpy());
-      context.getRenderPipeline().putAfter(RenderPipeIds.BACKGROUND, "cityscape", new RenderLayer2D() {
-
-
-         @Override
-         public void render(Batch batch, float delta) {
-            Texture background = SharedAssetManager.getInstance().get(CITY_DAY, Texture.class);
-            batch.begin();
-            batch.draw(background, Gdx.graphics.getWidth() / 2f - 400, Gdx.graphics.getHeight() / 2f - 300);
-            batch.end();
-         }
-      });
       context.setBackgroundColor(Color.valueOf("7766ff"));
       context.setDebug(getGame().isDebug());
       setupLevel(context);
       setupGraphics(context);
+      cityscape = new Cityscape(getDayProgress(context));
+      context.getRenderPipeline().putAfter(RenderPipeIds.BACKGROUND, "cityscape", cityscape);
    }
 
    @Override
@@ -237,8 +224,10 @@ public abstract class BaseScreen extends BrainGdxScreen2D<HamorigamiGame> {
                   .build())
             .build()));
 
-      context.getRenderManager().register(ObjectType.TREE, new TreeRenderer());
-      context.getRenderManager().register(ObjectType.FLOOR, new SpriteRenderer(Assets.Textures.BACKGROUND_FLOOR));
+      context.getRenderManager().register(ObjectType.TREE, new DayProgressRenderer(getDayProgress(context), TREE, TREE_EVENING));
+      context.getRenderManager().register(ObjectType.FLOOR, new DayProgressRenderer(getDayProgress(context), BACKGROUND_FLOOR, BACKGROUND_FLOOR_EVENING));
       context.getRenderManager().register(ObjectType.GAUGE, new GaugeRenderer(treeObject));
    }
+
+   protected abstract DayProgress getDayProgress(GameContext2D context);
 }

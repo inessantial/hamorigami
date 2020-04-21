@@ -27,7 +27,7 @@ public class IngameControllerAdapter extends ControllerAdapter implements Update
    @Override
    public void update(float delta) {
       moveDirection.set(horizontalValue, verticalValue);
-      if (moveDirection.len() > 0.2f) {
+      if (moveDirection.len() > 0.2f && playerObject.hasAttribute(Movement.class)) {
          playerObject.getAttribute(Movement.class).move(moveDirection);
       }
    }

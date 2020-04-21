@@ -14,6 +14,7 @@ import de.bitbrain.braingdx.tweens.ActorTween;
 import de.bitbrain.braingdx.tweens.GameCameraTween;
 import de.bitbrain.braingdx.tweens.SharedTweenManager;
 import de.bitbrain.braingdx.world.GameObject;
+import ldjam.hamorigami.cutscene.CutsceneSetup;
 import ldjam.hamorigami.i18n.Bundle;
 import ldjam.hamorigami.i18n.Messages;
 import ldjam.hamorigami.input.Proceedable;
@@ -26,22 +27,22 @@ public class CutscenePhase implements GamePhase, Proceedable {
    private final GamePhaseHandler phaseHandler;
    private final Messages[] messages;
    private final String nextPhase;
+   private final CutsceneSetup cutsceneSetup;
    private StoryTeller teller;
    private Label label;
    private boolean aborted;
    private Table layout;
 
-   public CutscenePhase(GamePhaseHandler phaseHandler, String nextPhase, Messages... messages) {
+   public CutscenePhase(CutsceneSetup cutsceneSetup, GamePhaseHandler phaseHandler, String nextPhase, Messages... messages) {
       this.phaseHandler = phaseHandler;
       this.messages = messages;
       this.nextPhase = nextPhase;
+      this.cutsceneSetup = cutsceneSetup;
    }
 
    @Override
    public void disable(final GameContext2D context, GameObject treeObject) {
-      Tween.to(context.getGameCamera(), GameCameraTween.ZOOM_WIDTH, 1f)
-            .target(800f)
-            .start(SharedTweenManager.getInstance());
+      cutsceneSetup.cleanup(context);
       Tween.to(layout, ActorTween.ALPHA, 1f)
             .target(0f)
             .setCallbackTriggers(TweenCallback.COMPLETE)
@@ -56,10 +57,8 @@ public class CutscenePhase implements GamePhase, Proceedable {
 
    @Override
    public void enable(GameContext2D context, GameObject treeObject) {
+      cutsceneSetup.setup(context);
       context.getInputManager().register(new ProceedableControllerAdapter(this));
-      Tween.to(context.getGameCamera(), GameCameraTween.ZOOM_WIDTH, 4f)
-            .target(680f)
-            .start(SharedTweenManager.getInstance());
       aborted = false;
       teller = new StoryTeller(messages);
 

@@ -27,6 +27,7 @@ public class TreeHealthBindingBehavior extends BehaviorAdapter {
    public TreeHealthBindingBehavior(GameObject treeObject, AudioManager audioManager, GamePhaseHandler phaseHandler, GameContext2D context) {
       this.treeObject = treeObject;
       this.jukeBox = new JukeBox(audioManager, 400, Assets.Sounds.DEATH_01, Assets.Sounds.DEATH_02);
+      jukeBox.setVolume(1f);
       this.phaseHandler = phaseHandler;
       this.context = context;
    }

@@ -1,6 +1,8 @@
 package ldjam.hamorigami.gamemode;
 
+import aurelienribon.tweenengine.BaseTween;
 import aurelienribon.tweenengine.Tween;
+import aurelienribon.tweenengine.TweenCallback;
 import aurelienribon.tweenengine.TweenEquations;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -11,8 +13,10 @@ import de.bitbrain.braingdx.assets.SharedAssetManager;
 import de.bitbrain.braingdx.context.GameContext2D;
 import de.bitbrain.braingdx.graphics.GameCamera;
 import de.bitbrain.braingdx.tweens.ActorTween;
+import de.bitbrain.braingdx.tweens.SharedTweenManager;
 import de.bitbrain.braingdx.world.GameObject;
 import ldjam.hamorigami.Assets;
+import ldjam.hamorigami.effects.DayProgress;
 import ldjam.hamorigami.i18n.Bundle;
 import ldjam.hamorigami.i18n.Messages;
 import ldjam.hamorigami.input.Proceedable;
@@ -34,10 +38,19 @@ public class CreditsPhase implements GamePhase, Proceedable {
    }
 
    @Override
-   public void disable(GameContext2D context, GameObject treeObject) {
+   public void disable(final GameContext2D context, GameObject treeObject) {
       music.stop();
       SharedAssetManager.getInstance().get(Assets.Musics.CITYSCAPE, Music.class).setVolume(0.9f);
-      context.getWorldStage().getActors().removeValue(layout, true);
+      Tween.to(layout, ActorTween.ALPHA, 1f)
+            .target(0f)
+            .setCallbackTriggers(TweenCallback.COMPLETE)
+            .setCallback(new TweenCallback() {
+               @Override
+               public void onEvent(int type, BaseTween<?> source) {
+                  context.getWorldStage().getActors().removeValue(layout, true);
+               }
+            })
+            .start(SharedTweenManager.getInstance());
    }
 
    @Override
@@ -51,6 +64,10 @@ public class CreditsPhase implements GamePhase, Proceedable {
       music.play();
 
       this.layout = new Table();
+      layout.getColor().a = 0f;
+      Tween.to(layout, ActorTween.ALPHA, 3f).delay(1f)
+            .target(1f)
+            .start(SharedTweenManager.getInstance());
       layout.setFillParent(true);
 
       Label credits1 = new Label(Bundle.get(Messages.CREDITS_1), Styles.STORY);
@@ -74,11 +91,11 @@ public class CreditsPhase implements GamePhase, Proceedable {
       context.getGameCamera().setZoom(800, GameCamera.ZoomMode.TO_WIDTH);
 
       pressAnyButton.getColor().a = 0f;
-      Tween.to(pressAnyButton, ActorTween.ALPHA, 3f).target(1f).delay(2f)
+      Tween.to(pressAnyButton, ActorTween.ALPHA, 3f).target(1f).delay(3f)
             .ease(TweenEquations.easeInCubic)
             .start(context.getTweenManager());
 
-      Tween.to(pressAnyButton, ActorTween.ALPHA, 1f).target(1f).delay(3f)
+      Tween.to(pressAnyButton, ActorTween.ALPHA, 1f).target(1f).delay(4f)
             .target(1f)
             .ease(TweenEquations.easeInCubic)
             .repeatYoyo(Tween.INFINITY, 0f)
