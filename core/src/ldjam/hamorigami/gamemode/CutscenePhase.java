@@ -72,14 +72,14 @@ public class CutscenePhase implements GamePhase, Proceedable {
       label = new Label(teller.getNextStoryPoint(), Styles.STORY);
       label.setWrap(true);
       label.setAlignment(Align.center);
-      layout.center().add(label).width(600f).padBottom(200f).row();
+      layout.center().add(label).width(600f).padTop(75f).padBottom(200f).row();
       Label action = new Label(Bundle.get(Messages.ANY_KEY), Styles.DIALOG_TEXT);
       action.getColor().a = 1f;
       Tween.to(action, ActorTween.ALPHA, 1f).target(0.2f)
             .ease(TweenEquations.easeInOutCubic)
             .repeatYoyo(Tween.INFINITY, 0f)
             .start(SharedTweenManager.getInstance());
-      layout.center().add(action).row();
+      layout.center().add(action).padTop(60f).row();
 
       context.getWorldStage().addActor(layout);
    }

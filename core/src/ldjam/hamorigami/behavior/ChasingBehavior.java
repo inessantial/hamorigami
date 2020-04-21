@@ -5,6 +5,7 @@ import aurelienribon.tweenengine.Tween;
 import aurelienribon.tweenengine.TweenCallback;
 import com.badlogic.gdx.math.Vector2;
 import de.bitbrain.braingdx.behavior.BehaviorAdapter;
+import de.bitbrain.braingdx.context.GameContext2D;
 import de.bitbrain.braingdx.tweens.SharedTweenManager;
 import de.bitbrain.braingdx.util.DeltaTimer;
 import de.bitbrain.braingdx.world.GameObject;
@@ -23,10 +24,12 @@ public class ChasingBehavior extends BehaviorAdapter {
    private final Vector2 direction = new Vector2();
    private final Vector2 offset = new Vector2();
    private final DeltaTimer attackTimer = new DeltaTimer();
+   private final GameContext2D context;
 
    private boolean deathInitiated;
 
-   public ChasingBehavior(GameObject target, float offsetX, float offsetY) {
+   public ChasingBehavior(GameContext2D context, GameObject target, float offsetX, float offsetY) {
+      this.context = context;
       this.target = target;
       offset.set(offsetX, offsetY);
 
@@ -48,17 +51,19 @@ public class ChasingBehavior extends BehaviorAdapter {
                type.getAbsorbEffect().applyEffect(target);
             }
 
-            /*if (!deathInitiated) {
+            final String entityId = source.getId();
+            if (!deathInitiated) {
                deathInitiated = true;
                Tween.call(new TweenCallback() {
                   @Override
                   public void onEvent(int type, BaseTween<?> tween) {
-                     if (source.hasAttribute(HealthData.class)) {
-                        source.getAttribute(HealthData.class).kill();
+                     GameObject obj = context.getGameWorld().getObjectById(entityId);
+                     if (obj != null && obj.hasAttribute(HealthData.class)) {
+                        obj.getAttribute(HealthData.class).kill();
                      }
                   }
                }).delay(ARRIVAL_HEALTH).start(SharedTweenManager.getInstance());
-            }*/
+            }
          } else {
             mover.move(direction);
          }
