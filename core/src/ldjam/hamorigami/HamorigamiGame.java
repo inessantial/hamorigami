@@ -56,6 +56,7 @@ public class HamorigamiGame extends BrainGdxGame {
 
    @Override
    protected AbstractScreen<?, ?> getInitialScreen() {
+      Gdx.input.setCursorCatched(true);
       Bundle.load();
       Styles.init();
       BrainGdxDebug.setLabelStyle(Styles.LABEL_DEBUG);

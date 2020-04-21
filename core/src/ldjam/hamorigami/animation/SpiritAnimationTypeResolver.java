@@ -7,6 +7,8 @@ import ldjam.hamorigami.model.SpiritAnimationType;
 
 public class SpiritAnimationTypeResolver implements AnimationTypeResolver<GameObject> {
 
+   private float lastValue = 0f;
+
    @Override
    public Object getAnimationType(GameObject object) {
       Movement movement = object.getAttribute(Movement.class);
@@ -22,6 +24,14 @@ public class SpiritAnimationTypeResolver implements AnimationTypeResolver<GameOb
          type = "FALLING";
       } else if (object.hasAttribute("attacking")) {
          type = "ATTACKING";
+      } else if (object.hasAttribute("swiping")) {
+         if (object.getLeft() < lastValue) {
+            direction = "WEST";
+         }else {
+            direction = "EAST";
+         }
+         lastValue = object.getLeft();
+         type = "SWIPING";
       } else if (movement.getMovement().len() < 25f) {
          type = "IDLE";
       } else if (movement.getMovement().len() < 20f && object.hasAttribute(SpiritAnimationType.class)) {

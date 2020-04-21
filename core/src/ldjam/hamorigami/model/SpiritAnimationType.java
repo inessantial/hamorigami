@@ -8,6 +8,8 @@ public enum SpiritAnimationType {
 
    ATTACKING_WEST,
    ATTACKING_EAST,
+   SWIPING_WEST,
+   SWIPING_EAST,
 
    IDLE_WEST,
    IDLE_EAST,

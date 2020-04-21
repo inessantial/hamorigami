@@ -33,7 +33,7 @@ public class SpawnFireEffect implements SpiritSpawnEffect {
       float padding = 35f;
       float targetX = padding + (float) Math.random() * (tree.getWidth() - padding * 2f);
       float targetY = padding + (float) Math.random() * (tree.getHeight() - padding * 2f);
-      context.getBehaviorManager().apply(new ChasingBehavior(tree, targetX, targetY), spirit);
-      context.getBehaviorManager().apply(new ChasingBehavior(tree, targetX, targetY), spirit);
+      context.getBehaviorManager().apply(new ChasingBehavior(context, tree, targetX, targetY), spirit);
+      context.getBehaviorManager().apply(new ChasingBehavior(context, tree, targetX, targetY), spirit);
    }
 }
