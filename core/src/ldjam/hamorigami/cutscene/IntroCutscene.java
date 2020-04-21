@@ -18,19 +18,21 @@ public class IntroCutscene implements CutsceneSetup {
    @Override
    public void cleanup(GameContext2D context) {
       SharedTweenManager.getInstance().killTarget(kodama);
+      kodama.removeAttribute("swiping");
    }
 
    @Override
    public void setup(GameContext2D context) {
       EntityFactory entityFactory = new EntityFactory(context);
-      kodama = entityFactory.spawnSpirit(SpiritType.SPIRIT_EARTH, context.getGameCamera().getScaledCameraWidth() / 3f, 0f);
+      kodama = entityFactory.spawnSpirit(SpiritType.SPIRIT_EARTH, context.getGameCamera().getScaledCameraWidth() / 3.5f, 0f);
       kodama.setDimensions(64f, 64f);
       kodama.getColor().a = 0f;
+      kodama.setAttribute("swiping", true);
       float currentX = kodama.getLeft();
-      Tween.to(kodama, GameObjectTween.ALPHA, 4f).delay(6f)
+      Tween.to(kodama, GameObjectTween.ALPHA, 3f).delay(4f)
             .target(1f)
             .start(SharedTweenManager.getInstance());
-      Tween.to(kodama, GameObjectTween.POS_X, 4f).delay(9f)
+      Tween.to(kodama, GameObjectTween.POS_X, 4f).delay(7f)
             .target(currentX - 200f)
             .repeatYoyo(Tween.INFINITY, 0f)
             .ease(TweenEquations.easeInOutCubic)

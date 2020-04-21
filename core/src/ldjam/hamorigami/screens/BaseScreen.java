@@ -82,6 +82,18 @@ public abstract class BaseScreen extends BrainGdxScreen2D<HamorigamiGame> {
       );
 
       context.getRenderManager().register(SpiritType.SPIRIT_EARTH, new SpiritRenderer(context.getGameCamera(), kodamaSpritesheet, AnimationConfig.builder()
+            .registerFrames(SpiritAnimationType.SWIPING_EAST, AnimationFrames.builder()
+                  .origin(0, 6)
+                  .frames(6)
+                  .duration(0.1f)
+                  .playMode(LOOP)
+                  .build())
+            .registerFrames(SpiritAnimationType.SWIPING_WEST, AnimationFrames.builder()
+                  .origin(0, 7)
+                  .frames(6)
+                  .duration(0.1f)
+                  .playMode(LOOP)
+                  .build())
             .registerFrames(SpiritAnimationType.ATTACKING_EAST, AnimationFrames.builder()
                   .origin(0, 5)
                   .frames(4)
