@@ -20,7 +20,6 @@ import ldjam.hamorigami.behavior.TreeBehavior;
 import ldjam.hamorigami.behavior.TreeHealthBindingBehavior;
 import ldjam.hamorigami.effects.DayProgress;
 import ldjam.hamorigami.entity.*;
-import ldjam.hamorigami.graphics.Cityscape;
 import ldjam.hamorigami.input.Proceedable;
 import ldjam.hamorigami.input.ingame.IngameControllerAdapter;
 import ldjam.hamorigami.input.ingame.IngameKeyboardAdapter;
@@ -243,7 +242,7 @@ public class GameplayPhase implements GamePhase, Proceedable, DayProgress {
    }
 
    private void setupInput(GameContext2D context) {
-      context.getInputManager().register(new IngameKeyboardAdapter(playerObject, attackHandler));
+      context.getInputManager().register(new IngameKeyboardAdapter(playerObject, attackHandler, this));
       context.getInputManager().register(new IngameControllerAdapter(playerObject, attackHandler));
       context.getInputManager().register(new ProceedableControllerAdapter(this));
    }

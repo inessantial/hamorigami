@@ -20,6 +20,8 @@ public class GamePhaseHandler implements Updateable {
    private final GameContext2D context;
    private final GameObject treeObject;
 
+   private boolean disabling = false;
+
    public GamePhaseHandler(GameContext2D context, GameObject treeObject) {
       this.context = context;
       this.treeObject = treeObject;
@@ -50,8 +52,12 @@ public class GamePhaseHandler implements Updateable {
       }
       if (!currentPhase.equals(nextPhase)) {
          GamePhase phase = phases.get(currentPhase);
-         phase.disable(context, treeObject);
+         if (!disabling) {
+            phase.disable(context, treeObject);
+            disabling = true;
+         }
          if (phase.isFinished()) {
+            disabling = false;
             context.getBehaviorManager().clear();
             context.getInputManager().clear();
             currentPhase = nextPhase;
