@@ -18,12 +18,13 @@ public class DayProgressRenderer extends SpriteRenderer {
 
    @Override
    public void render(GameObject object, Batch batch, float delta) {
-      if (dayProgress.getCurrentProgress() < 1f) {
+      float curentProgress = dayProgress.getCurrentProgress();
+      if (curentProgress > 0f && curentProgress < 1f) {
          super.render(object, batch, delta);
       }
-      if (dayProgress.getCurrentProgress() > 0f) {
+      if (curentProgress != 0.5f) {
          float currentAlpha = object.getColor().a;
-         object.getColor().a = dayProgress.getCurrentProgress();
+         object.getColor().a = 1f - (float) Math.sin(Math.PI * curentProgress);
          overlay.render(object, batch, delta);
          object.getColor().a = currentAlpha;
       }
