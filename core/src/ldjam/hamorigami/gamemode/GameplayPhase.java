@@ -93,8 +93,6 @@ public class GameplayPhase implements GamePhase, Proceedable, DayProgress {
       for (GameObject existingSpirit : context.getGameWorld().getGroup("spirits")) {
          if (existingSpirit.getType() == SPIRIT_EARTH) {
             this.playerObject = existingSpirit;
-            context.getBehaviorManager().apply(new TreeHealthBindingBehavior(this.treeObject, context.getAudioManager(), gamePhaseHandler, context), this.playerObject);
-            context.getBehaviorManager().apply(playerObject.getAttribute(Movement.class), playerObject);
             break;
          }
       }
@@ -108,15 +106,6 @@ public class GameplayPhase implements GamePhase, Proceedable, DayProgress {
          final String playerId = playerObject.getId();
          Tween.to(this.playerObject.getColor(), ColorTween.A, 3f)
                .target(1f)
-               .setCallbackTriggers(TweenCallback.COMPLETE)
-               .setCallback(new TweenCallback() {
-                  @Override
-                  public void onEvent(int type, BaseTween<?> source) {
-                     if (context.getGameWorld().getObjectById(playerId) != null) {
-                        context.getBehaviorManager().apply(new TreeHealthBindingBehavior(playerObject, context.getAudioManager(), gamePhaseHandler, context), playerObject);
-                     }
-                  }
-               })
                .start(SharedTweenManager.getInstance());
          playerObject.setDimensions(64f, 64f);
          ColorTransition colorTransition = new ColorTransition();
@@ -185,6 +174,8 @@ public class GameplayPhase implements GamePhase, Proceedable, DayProgress {
       setupInput(context);
 
       context.getBehaviorManager().apply(new TreeBehavior(), treeObject);
+      context.getBehaviorManager().apply(new TreeHealthBindingBehavior(this.treeObject, context.getAudioManager(), gamePhaseHandler, context), this.playerObject);
+      context.getBehaviorManager().apply(playerObject.getAttribute(Movement.class), playerObject);
    }
 
    @Override
@@ -239,6 +230,7 @@ public class GameplayPhase implements GamePhase, Proceedable, DayProgress {
                .ease(TweenEquations.easeOutCubic)
                .start(SharedTweenManager.getInstance());
       }
+      playerObject = null;
    }
 
    private void setupInput(GameContext2D context) {

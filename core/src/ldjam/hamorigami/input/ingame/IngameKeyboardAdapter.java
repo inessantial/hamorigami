@@ -44,12 +44,16 @@ public class IngameKeyboardAdapter extends InputAdapter implements Updateable {
          moveDirection.x = 1;
       }
       if (input.isKeyPressed(SPACE)) {
-         playerObject.getAttribute(Movement.class).jump();
+         if (playerObject.hasAttribute(Movement.class)) {
+            playerObject.getAttribute(Movement.class).jump();
+         }
       }
       if (input.isTouched() || input.isKeyPressed(ENTER)) {
          attackHandler.attack();
       }
-      playerObject.getAttribute(Movement.class).move(moveDirection);
+      if (playerObject.hasAttribute(Movement.class)) {
+         playerObject.getAttribute(Movement.class).move(moveDirection);
+      }
       moveDirection.x = 0;
       moveDirection.y = 0;
       speed.x = 0;
