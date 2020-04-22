@@ -1,23 +1,25 @@
 package ldjam.hamorigami.cutscene;
 
-import aurelienribon.tweenengine.BaseTween;
 import aurelienribon.tweenengine.Tween;
-import aurelienribon.tweenengine.TweenCallback;
 import aurelienribon.tweenengine.TweenEquations;
 import de.bitbrain.braingdx.context.GameContext2D;
 import de.bitbrain.braingdx.tweens.GameObjectTween;
 import de.bitbrain.braingdx.tweens.SharedTweenManager;
 import de.bitbrain.braingdx.world.GameObject;
+import ldjam.hamorigami.cutscene.emotes.Emote;
+import ldjam.hamorigami.cutscene.emotes.EmoteManager;
 import ldjam.hamorigami.entity.EntityFactory;
 import ldjam.hamorigami.model.SpiritType;
 
 public class IntroCutscene implements CutsceneSetup {
 
    private GameObject kodama;
+   private EmoteManager emoteManager;
 
    @Override
    public void cleanup(GameContext2D context) {
       SharedTweenManager.getInstance().killTarget(kodama);
+      emoteManager.clear();
       kodama.removeAttribute("swiping");
    }
 
@@ -37,5 +39,11 @@ public class IntroCutscene implements CutsceneSetup {
             .repeatYoyo(Tween.INFINITY, 0f)
             .ease(TweenEquations.easeInOutCubic)
             .start(SharedTweenManager.getInstance());
+
+      this.emoteManager = new EmoteManager(context);
+      emoteManager.emote(Emote.SMILE, kodama);
+      emoteManager.say("OOPS!", kodama);
+      emoteManager.say("This is not what I actually wanted!", kodama);
+      emoteManager.emote(Emote.SMILE, kodama);
    }
 }

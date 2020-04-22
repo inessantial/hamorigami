@@ -18,8 +18,6 @@ public interface Assets {
       String BACKGROUND_FLOOR = "texture/background-floor.png";
       String BACKGROUND_FLOOR_EVENING = "texture/background-floor-twilight.png";
 
-      String DROPSHADOW = "texture/dropshadow.png";
-
       String LOGO = "texture/logo.png";
 
       String GAUGE_WATER = "texture/gauge-water.png";
@@ -29,7 +27,10 @@ public interface Assets {
 
       String CITY_DAY = "texture/city-scape-midday.png";
       String CITY_EVENING = "texture/city-scape-twilight.png";
-      String SUNSET_TREE = "texture/sunset-tree.png";
+
+      String BUBBLE = "texture/bubble.9.png";
+      String BUBBLE_BOTTOM = "texture/bubble-bottom.png";
+      String EMOTE_SPRITESHEET = "texture/emote-spritesheet.png";
    }
 
    interface Musics {
