@@ -17,7 +17,7 @@ public class SpeechBubble extends Actor {
 
    private static final float PADDING = 8f;
    private static final float OFFSET_Y = 5f;
-   private static final float EMOTE_SIZE = 16f;
+   private static final float EMOTE_SIZE = 24f;
 
    private final GameContext2D context;
    private final String targetId;
@@ -89,7 +89,7 @@ public class SpeechBubble extends Actor {
       if (emote != null) {
          Animation<TextureRegion> animation = emote.getAnimation();
          TextureRegion region = animation.getKeyFrame(deltaTimer.getTicks());
-         batch.draw(region, getX() + PADDING, getY());
+         batch.draw(region, getX() + PADDING, getY() + PADDING);
       } else {
          label.draw(batch, parentAlpha * getColor().a);
       }
