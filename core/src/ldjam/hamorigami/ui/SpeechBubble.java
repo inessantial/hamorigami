@@ -15,9 +15,9 @@ import ldjam.hamorigami.cutscene.emotes.Emote;
 
 public class SpeechBubble extends Actor {
 
-   private static final float PADDING = 8f;
+   private static final float PADDING = 6f;
    private static final float OFFSET_Y = 5f;
-   private static final float EMOTE_SIZE = 24f;
+   private static final float EMOTE_SIZE = 16f;
 
    private final GameContext2D context;
    private final String targetId;
@@ -40,11 +40,13 @@ public class SpeechBubble extends Actor {
    public void setEmote(Emote emote) {
       this.emote = emote;
       deltaTimer.reset();
+      setSize(EMOTE_SIZE + PADDING * 2f, EMOTE_SIZE + PADDING * 2f);
    }
 
    public void setText(String text) {
       this.label.setText(text);
       label.setAlignment(Align.left);
+      setSize(label.getPrefWidth() + PADDING * 4f, label.getPrefHeight() + PADDING * 2f);
       this.emote = null;
    }
 
@@ -53,11 +55,8 @@ public class SpeechBubble extends Actor {
       deltaTimer.update(delta);
       GameObject target = context.getGameWorld().getObjectById(targetId);
       if (emote != null) {
-         setSize(EMOTE_SIZE + PADDING * 2f, EMOTE_SIZE + PADDING * 2f);
          setPosition(target.getLeft() + target.getWidth() / 2f - (getWidth() / 2f), target.getTop() + target.getHeight() + OFFSET_Y);
-
       } else {
-         setSize(label.getPrefWidth() + PADDING * 4f, label.getPrefHeight() + PADDING * 2f);
          setPosition(target.getLeft() + target.getWidth() / 2f - getWidth() / 2f, target.getTop() + target.getHeight() + OFFSET_Y);
       }
 

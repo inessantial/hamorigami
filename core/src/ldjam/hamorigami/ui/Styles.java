@@ -27,7 +27,7 @@ public class Styles {
       LABEL_LOGO.font = bake(Assets.Fonts.PINCHER, 85, true);
       LABEL_LOGO.fontColor = Color.WHITE.cpy();
       SPEECH.font = bake(Assets.Fonts.PINCHER, 12, true);
-      SPEECH.fontColor = Color.BLACK.cpy();
+      SPEECH.fontColor = Color.valueOf("719dbd");
    }
 
    public static BitmapFont bake(String fontPath, int size) {

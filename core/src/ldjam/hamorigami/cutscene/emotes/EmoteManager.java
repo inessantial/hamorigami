@@ -110,7 +110,7 @@ public class EmoteManager {
       Tween.to(bubble, ActorTween.ALPHA, 0.5f)
             .target(1f)
             .start(SharedTweenManager.getInstance());
-      Tween.to(bubble, ActorTween.ALPHA, 1f).delay(5f)
+      Tween.to(bubble, ActorTween.ALPHA, container.emote != null ? 0.3f : 1f).delay(container.emote != null ? 2f : 5f)
             .target(0f)
             .setCallbackTriggers(TweenCallback.COMPLETE)
             .setCallback(new TweenCallback() {

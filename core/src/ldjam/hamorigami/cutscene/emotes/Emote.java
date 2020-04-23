@@ -23,7 +23,7 @@ public enum Emote {
    public Animation<TextureRegion> getAnimation() {
       if (this.animation == null) {
          final int frames = 8;
-         final int size = 24;
+         final int size = 16;
          final float duration = 0.05f;
          final Texture texture = SharedAssetManager.getInstance().get(Assets.Textures.EMOTE_SPRITESHEET);
          Array<TextureRegion> regions = new Array<TextureRegion>();
