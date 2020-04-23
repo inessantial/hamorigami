@@ -55,6 +55,18 @@ public interface Assets {
 
       String DEATH = "sound/woosh.ogg";
       String DEATH_SHORT = "sound/woosh_short.ogg";
+
+      String SPEECH_SPIRIT_EARTH_01 = "sound/speech_main_01.ogg";
+      String SPEECH_SPIRIT_EARTH_02 = "sound/speech_main_02.ogg";
+      String SPEECH_SPIRIT_EARTH_03 = "sound/speech_main_03.ogg";
+      String SPEECH_SPIRIT_EARTH_04 = "sound/speech_main_04.ogg";
+      String SPEECH_SPIRIT_EARTH_05 = "sound/speech_main_05.ogg";
+      String SPEECH_SPIRIT_EARTH_06 = "sound/speech_main_06.ogg";
+      String SPEECH_SPIRIT_EARTH_07 = "sound/speech_main_07.ogg";
+      String SPEECH_SPIRIT_EARTH_08 = "sound/speech_main_08.ogg";
+      String SPEECH_SPIRIT_EARTH_09 = "sound/speech_main_09.ogg";
+      String SPEECH_SPIRIT_EARTH_10 = "sound/speech_main_10.ogg";
+      String SPEECH_SPIRIT_EARTH_11 = "sound/speech_main_11.ogg";
    }
 
    interface Particles {

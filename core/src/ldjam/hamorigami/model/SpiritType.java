@@ -6,6 +6,8 @@ import de.bitbrain.braingdx.world.GameObject;
 import ldjam.hamorigami.Assets;
 import ldjam.hamorigami.effects.*;
 
+import static ldjam.hamorigami.Assets.Sounds.*;
+
 public enum SpiritType {
 
    SPIRIT_EARTH(
@@ -25,7 +27,18 @@ public enum SpiritType {
       }
    },
          Color.valueOf("a3ffdb44"),
-         Assets.Particles.EARTH),
+         Assets.Particles.EARTH,
+         SPEECH_SPIRIT_EARTH_01,
+         SPEECH_SPIRIT_EARTH_02,
+         SPEECH_SPIRIT_EARTH_03,
+         SPEECH_SPIRIT_EARTH_04,
+         SPEECH_SPIRIT_EARTH_05,
+         SPEECH_SPIRIT_EARTH_06,
+         SPEECH_SPIRIT_EARTH_07,
+         SPEECH_SPIRIT_EARTH_08,
+         SPEECH_SPIRIT_EARTH_09,
+         SPEECH_SPIRIT_EARTH_10,
+         SPEECH_SPIRIT_EARTH_11),
    SPIRIT_WATER(80, 5, new AddWaterEffect(), new SpawnWaterSpiritEffect(), Color.valueOf("306eff33"), Assets.Particles.WATER),
    SPIRIT_FIRE(45, 10, new AddSunlightEffect(), new SpawnFireEffect(), Color.valueOf("ffc2b488"), Assets.Particles.FIRE);
 
@@ -35,15 +48,26 @@ public enum SpiritType {
    private final SpiritSpawnEffect spawnEffect;
    private final Color lightingColor;
    private final String particleId;
+   private final String[] speechAssetIds;
 
-
-   SpiritType(int health, float maxSpeed, SpiritAbsorbEffect absorbEffect, SpiritSpawnEffect spawnEffect, Color lightingColor, String particleId) {
+   SpiritType(int health,
+              float maxSpeed,
+              SpiritAbsorbEffect absorbEffect,
+              SpiritSpawnEffect spawnEffect,
+              Color lightingColor,
+              String particleId,
+              String ... speechAssetIds) {
       this.health = health;
       this.maxSpeed = maxSpeed;
       this.absorbEffect = absorbEffect;
       this.spawnEffect = spawnEffect;
       this.lightingColor = lightingColor;
       this.particleId = particleId;
+      this.speechAssetIds = speechAssetIds;
+   }
+
+   public String[] getSpeechAssetIds() {
+      return speechAssetIds;
    }
 
    public String getParticleId() {

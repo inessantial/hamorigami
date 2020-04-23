@@ -16,9 +16,9 @@ public class EmoteManager {
    public static float EMOTE_FADE_IN_DURATION = 0.3f;
    public static float EMOTE_FADE_OUT_DURATION = 0.5f;
    public static float SPEECH_FADE_IN_DURATION = 0.5f;
-   public static float SPEECH_FADE_OUT_DURATION = 1f;
+   public static float SPEECH_FADE_OUT_DURATION = 0.5f;
    public static float EMOTE_DELAY_DURATION = 2f;
-   public static float SPEECH_DELAY_DURATION = 1f;
+   public static float SPEECH_DELAY_DURATION = 2.5f;
 
    private class EmoteContainer {
       final String text;
@@ -108,7 +108,7 @@ public class EmoteManager {
       EmoteContainer container = queue.get(0);
       SpeechBubble bubble = ensureBubble(target);
       if (container.text != null) {
-         bubble.setText(container.text);
+         bubble.setText(container.text, SPEECH_FADE_IN_DURATION, SPEECH_DELAY_DURATION / 3f);
       }
       if (container.emote != null) {
          bubble.setEmote(container.emote);

@@ -13,11 +13,17 @@ public class JukeBox {
    private final float range;
    private long interval = -1;
    private float volume = 0.3f;
+   private float basePitch = 1f;
+   private float minimumIntervalMillis = MINIMUM_INTERVAL_MILLIS;
 
    public JukeBox(AudioManager audioManager, float range, String... audioFiles) {
       this.audioManager = audioManager;
       this.range = range;
       this.audioFiles = audioFiles;
+   }
+
+   public void setBasePitch(float basePitch) {
+      this.basePitch = basePitch;
    }
 
    public void setVolume(float volume) {
@@ -28,17 +34,24 @@ public class JukeBox {
       this.pitchVariation = pitchVariation;
    }
 
+   public void setMinimumIntervalMillis(float minimumIntervalMillis) {
+      this.minimumIntervalMillis = minimumIntervalMillis;
+   }
+
+
+
    public void playSound(float x, float y) {
-      if (audioFiles.length == 0) {
+      if (audioFiles == null || audioFiles.length == 0) {
          Gdx.app.error("SOUND", "Missing audio files in JukeBox!");
          return;
       }
-      if (interval >= 0 && System.currentTimeMillis() - interval < MINIMUM_INTERVAL_MILLIS) {
+      if (interval >= 0 && System.currentTimeMillis() - interval < minimumIntervalMillis) {
          return;
       }
       String audioFile = audioFiles[(int) (audioFiles.length * Math.random())];
-      float pitch = (float) ((1f - pitchVariation / 2f) + (pitchVariation * Math.random()));
+      float pitch = (float) ((basePitch - pitchVariation / 2f) + (pitchVariation * Math.random()));
       audioManager.spawnSound(audioFile, x, y, pitch, volume, range);
+      System.out.println("spawned sound ");
       interval = System.currentTimeMillis();
    }
 }
