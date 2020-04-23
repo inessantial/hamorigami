@@ -15,10 +15,10 @@ public class EmoteManager {
 
    public static float EMOTE_FADE_IN_DURATION = 0.3f;
    public static float EMOTE_FADE_OUT_DURATION = 0.5f;
-   public static float SPEECH_FADE_IN_DURATION = 0.5f;
-   public static float SPEECH_FADE_OUT_DURATION = 0.5f;
+   public static float SPEECH_FADE_IN_DURATION = 0.3f;
+   public static float SPEECH_FADE_OUT_DURATION = 0.3f;
    public static float EMOTE_DELAY_DURATION = 2f;
-   public static float SPEECH_DELAY_DURATION = 2.5f;
+   public static float SPEECH_DELAY_DURATION_PER_CHARACTER = 0.05f;
 
    private class EmoteContainer {
       final String text;
@@ -108,7 +108,7 @@ public class EmoteManager {
       EmoteContainer container = queue.get(0);
       SpeechBubble bubble = ensureBubble(target);
       if (container.text != null) {
-         bubble.setText(container.text, SPEECH_FADE_IN_DURATION, SPEECH_DELAY_DURATION / 3f);
+         bubble.setText(container.text, SPEECH_FADE_IN_DURATION, (container.text.length() * SPEECH_DELAY_DURATION_PER_CHARACTER) / 2f);
       }
       if (container.emote != null) {
          bubble.setEmote(container.emote);
@@ -118,7 +118,7 @@ public class EmoteManager {
             .target(1f)
             .start(SharedTweenManager.getInstance());
       Tween.to(bubble, ActorTween.ALPHA, container.emote != null ? EMOTE_FADE_OUT_DURATION : SPEECH_FADE_OUT_DURATION)
-            .delay(container.emote != null ? EMOTE_DELAY_DURATION : SPEECH_DELAY_DURATION)
+            .delay(container.emote != null ? EMOTE_FADE_IN_DURATION + EMOTE_DELAY_DURATION : SPEECH_FADE_IN_DURATION + container.text.length() * SPEECH_DELAY_DURATION_PER_CHARACTER)
             .target(0f)
             .setCallbackTriggers(TweenCallback.COMPLETE)
             .setCallback(new TweenCallback() {

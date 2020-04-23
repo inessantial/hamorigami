@@ -60,7 +60,7 @@ public class CutsceneBuilder {
             emoteManager.say(text, target);
          }
       });
-      emoteTime += SPEECH_FADE_IN_DURATION + SPEECH_DELAY_DURATION + SPEECH_FADE_OUT_DURATION;
+      emoteTime += SPEECH_FADE_IN_DURATION + SPEECH_DELAY_DURATION_PER_CHARACTER * text.length() + SPEECH_FADE_OUT_DURATION;
       return this;
    }
 

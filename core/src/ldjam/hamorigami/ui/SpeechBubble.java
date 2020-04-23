@@ -49,7 +49,8 @@ public class SpeechBubble extends Actor {
       this.jukeBox = new JukeBox(context.getAudioManager(), 450f, spiritType != null ? spiritType.getSpeechAssetIds() : null);
       this.jukeBox.setMinimumIntervalMillis(50f);
       this.jukeBox.setPitchVariation(0.1f);
-      this.jukeBox.setBasePitch(1.1f);
+      this.jukeBox.setBasePitch(1.4f);
+      this.jukeBox.setSeed(spiritType != null ? spiritType.toString() : null);
       this.context = context;
       this.targetId = targetId;
       this.background = GraphicsFactory.createNinePatch(SharedAssetManager.getInstance().get(Assets.Textures.BUBBLE, Texture.class), 8);

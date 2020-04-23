@@ -3,6 +3,8 @@ package ldjam.hamorigami.audio;
 import com.badlogic.gdx.Gdx;
 import de.bitbrain.braingdx.audio.AudioManager;
 
+import java.util.Random;
+
 public class JukeBox {
 
    public static float MINIMUM_INTERVAL_MILLIS = 400f;
@@ -15,11 +17,20 @@ public class JukeBox {
    private float volume = 0.3f;
    private float basePitch = 1f;
    private float minimumIntervalMillis = MINIMUM_INTERVAL_MILLIS;
+   private Random random = new Random();
 
    public JukeBox(AudioManager audioManager, float range, String... audioFiles) {
       this.audioManager = audioManager;
       this.range = range;
       this.audioFiles = audioFiles;
+   }
+
+   public void setSeed(String seed) {
+      if (seed != null) {
+         this.random = new Random(seed.hashCode());
+      } else {
+         this.random = new Random();
+      }
    }
 
    public void setBasePitch(float basePitch) {
@@ -48,7 +59,7 @@ public class JukeBox {
       if (interval >= 0 && System.currentTimeMillis() - interval < minimumIntervalMillis) {
          return;
       }
-      String audioFile = audioFiles[(int) (audioFiles.length * Math.random())];
+      String audioFile = audioFiles[(int) (audioFiles.length * random.nextFloat())];
       float pitch = (float) ((basePitch - pitchVariation / 2f) + (pitchVariation * Math.random()));
       audioManager.spawnSound(audioFile, x, y, pitch, volume, range);
       System.out.println("spawned sound ");
