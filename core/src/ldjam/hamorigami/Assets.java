@@ -67,6 +67,22 @@ public interface Assets {
       String SPEECH_SPIRIT_EARTH_09 = "sound/speech_main_09.ogg";
       String SPEECH_SPIRIT_EARTH_10 = "sound/speech_main_10.ogg";
       String SPEECH_SPIRIT_EARTH_11 = "sound/speech_main_11.ogg";
+
+      String SPEECH_SPIRIT_WATER_01 = "sound/speech_water_01.ogg";
+      String SPEECH_SPIRIT_WATER_02 = "sound/speech_water_02.ogg";
+      String SPEECH_SPIRIT_WATER_03 = "sound/speech_water_03.ogg";
+      String SPEECH_SPIRIT_WATER_04 = "sound/speech_water_04.ogg";
+      String SPEECH_SPIRIT_WATER_05 = "sound/speech_water_05.ogg";
+      String SPEECH_SPIRIT_WATER_06 = "sound/speech_water_06.ogg";
+
+      String SPEECH_SPIRIT_SUN_01 = "sound/speech_light_01.ogg";
+      String SPEECH_SPIRIT_SUN_02 = "sound/speech_light_02.ogg";
+      String SPEECH_SPIRIT_SUN_03 = "sound/speech_light_03.ogg";
+      String SPEECH_SPIRIT_SUN_04 = "sound/speech_light_04.ogg";
+      String SPEECH_SPIRIT_SUN_05 = "sound/speech_light_05.ogg";
+      String SPEECH_SPIRIT_SUN_06 = "sound/speech_light_06.ogg";
+      String SPEECH_SPIRIT_SUN_07 = "sound/speech_light_07.ogg";
+      String SPEECH_SPIRIT_SUN_08 = "sound/speech_light_08.ogg";
    }
 
    interface Particles {

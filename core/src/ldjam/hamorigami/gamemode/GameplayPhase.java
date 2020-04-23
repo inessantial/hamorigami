@@ -125,8 +125,8 @@ public class GameplayPhase implements GamePhase, Proceedable, DayProgress {
       spiritSpawnPool.addSpawnWave(2f, SPIRIT_WATER, SPIRIT_WATER);
       spiritSpawnPool.addSpawnWave(2f, SPIRIT_WATER, SPIRIT_WATER);
 
-      spiritSpawnPool.addSpawnWave(5f, SPIRIT_FIRE);
-      spiritSpawnPool.addSpawnWave(3f, SPIRIT_FIRE);
+      spiritSpawnPool.addSpawnWave(5f, SPIRIT_SUN);
+      spiritSpawnPool.addSpawnWave(3f, SPIRIT_SUN);
 
 
       spiritSpawnPool.addSpawnWave(5f, SPIRIT_WATER);
@@ -138,19 +138,19 @@ public class GameplayPhase implements GamePhase, Proceedable, DayProgress {
       spiritSpawnPool.addSpawnWave(1f, SPIRIT_WATER);
       spiritSpawnPool.addSpawnWave(2f, SPIRIT_WATER);
 
-      spiritSpawnPool.addSpawnWave(5f, SPIRIT_WATER, SPIRIT_WATER, SPIRIT_FIRE);
-      spiritSpawnPool.addSpawnWave(2f, SPIRIT_WATER, SPIRIT_FIRE);
-      spiritSpawnPool.addSpawnWave(2f, SPIRIT_FIRE, SPIRIT_FIRE);
+      spiritSpawnPool.addSpawnWave(5f, SPIRIT_WATER, SPIRIT_WATER, SPIRIT_SUN);
+      spiritSpawnPool.addSpawnWave(2f, SPIRIT_WATER, SPIRIT_SUN);
+      spiritSpawnPool.addSpawnWave(2f, SPIRIT_SUN, SPIRIT_SUN);
 
-      spiritSpawnPool.addSpawnWave(8f, SPIRIT_WATER, SPIRIT_WATER, SPIRIT_FIRE);
+      spiritSpawnPool.addSpawnWave(8f, SPIRIT_WATER, SPIRIT_WATER, SPIRIT_SUN);
       spiritSpawnPool.addSpawnWave(1f, SPIRIT_WATER, SPIRIT_WATER, SPIRIT_WATER, SPIRIT_WATER);
-      spiritSpawnPool.addSpawnWave(1f, SPIRIT_FIRE, SPIRIT_FIRE, SPIRIT_FIRE);
+      spiritSpawnPool.addSpawnWave(1f, SPIRIT_SUN, SPIRIT_SUN, SPIRIT_SUN);
 
 
-      spiritSpawnPool.addSpawnWave(2f, SPIRIT_FIRE, SPIRIT_FIRE, SPIRIT_FIRE, SPIRIT_FIRE);
-      spiritSpawnPool.addSpawnWave(1f, SPIRIT_FIRE, SPIRIT_FIRE, SPIRIT_FIRE, SPIRIT_FIRE);
-      spiritSpawnPool.addSpawnWave(0.5f, SPIRIT_FIRE, SPIRIT_FIRE);
-      spiritSpawnPool.addSpawnWave(0.2f, SPIRIT_FIRE);
+      spiritSpawnPool.addSpawnWave(2f, SPIRIT_SUN, SPIRIT_SUN, SPIRIT_SUN, SPIRIT_SUN);
+      spiritSpawnPool.addSpawnWave(1f, SPIRIT_SUN, SPIRIT_SUN, SPIRIT_SUN, SPIRIT_SUN);
+      spiritSpawnPool.addSpawnWave(0.5f, SPIRIT_SUN, SPIRIT_SUN);
+      spiritSpawnPool.addSpawnWave(0.2f, SPIRIT_SUN);
 
       spiritSpawnPool.addSpawnWave(5f, SPIRIT_WATER);
       spiritSpawnPool.addSpawnWave(2f, SPIRIT_WATER);
@@ -164,8 +164,8 @@ public class GameplayPhase implements GamePhase, Proceedable, DayProgress {
 
       spiritSpawnPool.addSpawnWave(6f, SPIRIT_WATER, SPIRIT_WATER, SPIRIT_WATER, SPIRIT_WATER);
       spiritSpawnPool.addSpawnWave(4f, SPIRIT_WATER, SPIRIT_WATER, SPIRIT_WATER, SPIRIT_WATER);
-      spiritSpawnPool.addSpawnWave(6f, SPIRIT_FIRE, SPIRIT_FIRE, SPIRIT_FIRE, SPIRIT_FIRE);
-      spiritSpawnPool.addSpawnWave(4f, SPIRIT_FIRE, SPIRIT_FIRE, SPIRIT_FIRE, SPIRIT_FIRE);
+      spiritSpawnPool.addSpawnWave(6f, SPIRIT_SUN, SPIRIT_SUN, SPIRIT_SUN, SPIRIT_SUN);
+      spiritSpawnPool.addSpawnWave(4f, SPIRIT_SUN, SPIRIT_SUN, SPIRIT_SUN, SPIRIT_SUN);
 
       spawner = new SpiritSpawner(spiritSpawnPool, entityFactory, context, treeObject);
       attackHandler = new AttackHandler(playerObject, entityFactory, context.getAudioManager());

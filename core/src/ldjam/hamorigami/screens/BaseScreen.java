@@ -23,7 +23,7 @@ import ldjam.hamorigami.model.TreeStatus;
 
 import static com.badlogic.gdx.graphics.g2d.Animation.PlayMode.LOOP;
 import static ldjam.hamorigami.Assets.Textures.*;
-import static ldjam.hamorigami.model.SpiritType.SPIRIT_FIRE;
+import static ldjam.hamorigami.model.SpiritType.SPIRIT_SUN;
 import static ldjam.hamorigami.model.SpiritType.SPIRIT_WATER;
 
 public abstract class BaseScreen extends BrainGdxScreen2D<HamorigamiGame> {
@@ -197,7 +197,7 @@ public abstract class BaseScreen extends BrainGdxScreen2D<HamorigamiGame> {
                   .playMode(LOOP)
                   .build())
             .build()));
-      context.getRenderManager().register(SPIRIT_FIRE, new SpiritRenderer(context.getGameCamera(), hiSpritesheet, AnimationConfig.builder()
+      context.getRenderManager().register(SPIRIT_SUN, new SpiritRenderer(context.getGameCamera(), hiSpritesheet, AnimationConfig.builder()
             .registerFrames(SpiritAnimationType.IDLE_EAST, AnimationFrames.builder()
                   .origin(0, 0)
                   .frames(8)

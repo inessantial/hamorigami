@@ -39,8 +39,36 @@ public enum SpiritType {
          SPEECH_SPIRIT_EARTH_09,
          SPEECH_SPIRIT_EARTH_10,
          SPEECH_SPIRIT_EARTH_11),
-   SPIRIT_WATER(80, 5, new AddWaterEffect(), new SpawnWaterSpiritEffect(), Color.valueOf("306eff33"), Assets.Particles.WATER),
-   SPIRIT_FIRE(45, 10, new AddSunlightEffect(), new SpawnFireEffect(), Color.valueOf("ffc2b488"), Assets.Particles.FIRE);
+   SPIRIT_WATER(
+         80,
+         5,
+         new AddWaterEffect(),
+         new SpawnWaterSpiritEffect(),
+         Color.valueOf("306eff33"),
+         Assets.Particles.WATER,
+         SPEECH_SPIRIT_WATER_01,
+         SPEECH_SPIRIT_WATER_02,
+         SPEECH_SPIRIT_WATER_03,
+         SPEECH_SPIRIT_WATER_04,
+         SPEECH_SPIRIT_WATER_05,
+         SPEECH_SPIRIT_WATER_06
+   ),
+   SPIRIT_SUN(
+         45,
+         10,
+         new AddSunlightEffect(),
+         new SpawnFireEffect(),
+         Color.valueOf("ffc2b488"),
+         Assets.Particles.FIRE,
+         SPEECH_SPIRIT_SUN_01,
+         SPEECH_SPIRIT_SUN_02,
+         SPEECH_SPIRIT_SUN_03,
+         SPEECH_SPIRIT_SUN_04,
+         SPEECH_SPIRIT_SUN_05,
+         SPEECH_SPIRIT_SUN_06,
+         SPEECH_SPIRIT_SUN_07,
+         SPEECH_SPIRIT_SUN_08
+   );
 
    private final int health;
    private final float maxSpeed;

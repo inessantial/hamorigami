@@ -47,7 +47,7 @@ public class SpeechBubble extends Actor {
       GameObject target = context.getGameWorld().getObjectById(targetId);
       SpiritType spiritType = target != null && target.getType() instanceof SpiritType ? (SpiritType)target.getType() : null;
       this.jukeBox = new JukeBox(context.getAudioManager(), 450f, spiritType != null ? spiritType.getSpeechAssetIds() : null);
-      this.jukeBox.setMinimumIntervalMillis(50f);
+      this.jukeBox.setMinimumIntervalMillis(80f);
       this.jukeBox.setPitchVariation(0.1f);
       this.jukeBox.setBasePitch(1.4f);
       this.jukeBox.setSeed(spiritType != null ? spiritType.toString() : null);
