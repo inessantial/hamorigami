@@ -13,6 +13,13 @@ import java.util.*;
 
 public class EmoteManager {
 
+   public static float EMOTE_FADE_IN_DURATION = 0.3f;
+   public static float EMOTE_FADE_OUT_DURATION = 0.5f;
+   public static float SPEECH_FADE_IN_DURATION = 0.5f;
+   public static float SPEECH_FADE_OUT_DURATION = 1f;
+   public static float EMOTE_DELAY_DURATION = 2f;
+   public static float SPEECH_DELAY_DURATION = 1f;
+
    private class EmoteContainer {
       final String text;
       final Emote emote;
@@ -107,10 +114,11 @@ public class EmoteManager {
          bubble.setEmote(container.emote);
       }
       SharedTweenManager.getInstance().killTarget(bubble);
-      Tween.to(bubble, ActorTween.ALPHA, 0.5f)
+      Tween.to(bubble, ActorTween.ALPHA, container.emote != null ? EMOTE_FADE_IN_DURATION : SPEECH_FADE_IN_DURATION)
             .target(1f)
             .start(SharedTweenManager.getInstance());
-      Tween.to(bubble, ActorTween.ALPHA, container.emote != null ? 0.3f : 1f).delay(container.emote != null ? 2f : 5f)
+      Tween.to(bubble, ActorTween.ALPHA, container.emote != null ? EMOTE_FADE_OUT_DURATION : SPEECH_FADE_OUT_DURATION)
+            .delay(container.emote != null ? EMOTE_DELAY_DURATION : SPEECH_DELAY_DURATION)
             .target(0f)
             .setCallbackTriggers(TweenCallback.COMPLETE)
             .setCallback(new TweenCallback() {

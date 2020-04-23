@@ -3,6 +3,7 @@ package ldjam.hamorigami.cutscene;
 import aurelienribon.tweenengine.Tween;
 import aurelienribon.tweenengine.TweenEquations;
 import de.bitbrain.braingdx.context.GameContext2D;
+import de.bitbrain.braingdx.graphics.GameCamera;
 import de.bitbrain.braingdx.tweens.GameObjectTween;
 import de.bitbrain.braingdx.tweens.SharedTweenManager;
 import de.bitbrain.braingdx.world.GameObject;
@@ -41,9 +42,18 @@ public class IntroCutscene implements CutsceneSetup {
             .start(SharedTweenManager.getInstance());
 
       this.emoteManager = new EmoteManager(context);
-      emoteManager.emote(Emote.SMILE, kodama);
-      emoteManager.say("OOPS!", kodama);
-      emoteManager.say("This is not what I actually wanted!", kodama);
-      emoteManager.emote(Emote.SMILE, kodama);
+      Cutscene cutscene = new CutsceneBuilder(null, emoteManager, context)
+            .wait(4f)
+            .say("Oh!", kodama)
+            .wait(2f)
+            .emote(Emote.SMILE, kodama)
+            .say("What is this?", kodama)
+            .wait(2f)
+            .shakeScreen(10, 2f)
+            .say("AAAAHHH!!! HELP!!!!", kodama)
+            .wait(1f)
+            .say("That must have been the neighbours.", kodama)
+            .build();
+      cutscene.play();
    }
 }
