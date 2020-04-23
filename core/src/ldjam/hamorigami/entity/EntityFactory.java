@@ -3,7 +3,6 @@ package ldjam.hamorigami.entity;
 import aurelienribon.tweenengine.BaseTween;
 import aurelienribon.tweenengine.Tween;
 import aurelienribon.tweenengine.TweenCallback;
-import box2dLight.Light;
 import com.badlogic.gdx.graphics.Color;
 import de.bitbrain.braingdx.behavior.BehaviorAdapter;
 import de.bitbrain.braingdx.context.GameContext2D;
@@ -11,7 +10,6 @@ import de.bitbrain.braingdx.tweens.SharedTweenManager;
 import de.bitbrain.braingdx.tweens.TweenUtils;
 import de.bitbrain.braingdx.util.Mutator;
 import de.bitbrain.braingdx.world.GameObject;
-import ldjam.hamorigami.behavior.TreeBehavior;
 import ldjam.hamorigami.model.*;
 
 import static ldjam.hamorigami.model.ObjectType.GAUGE;
@@ -33,12 +31,14 @@ public class EntityFactory {
       return object;
    }
 
-   public GameObject spawnSpirit(SpiritType spiritType, float x, float y) {
-      GameObject object = context.getGameWorld().addObject("spirits");
+   public GameObject spawnSpirit(SpiritType spiritType, float x, float y, Mutator<GameObject> mutator) {
+      GameObject object = mutator != null
+            ? context.getGameWorld().addObject("spirits", mutator)
+            : context.getGameWorld().addObject("spirits");
       object.setZIndex(3);
       object.setType(spiritType);
       object.setPosition(context.getGameCamera().getLeft() + x, context.getGameCamera().getTop() + y);
-      object.setDimensions(32f, 64f);
+      object.setDimensions(spiritType == SpiritType.SPIRIT_EARTH ? 64f : 32f, 64f);
       object.setAttribute(HealthData.class, new HealthData(spiritType.getHealth()));
       object.setAttribute(Movement.class, new Movement(spiritType.getMaxSpeed(), context.getGameCamera()));
       context.getBehaviorManager().apply(object.getAttribute(Movement.class), object);
@@ -56,6 +56,11 @@ public class EntityFactory {
          context.getLightingManager().attach(light, object, 16f, 32f);
       }*/
       return object;
+   }
+
+
+   public GameObject spawnSpirit(SpiritType spiritType, float x, float y) {
+      return spawnSpirit(spiritType, x, y, null);
    }
 
    public GameObject spawnTree() {

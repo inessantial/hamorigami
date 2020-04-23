@@ -14,45 +14,52 @@ import ldjam.hamorigami.model.SpiritType;
 
 public class IntroCutscene implements CutsceneSetup {
 
-   private GameObject kodama;
    private EmoteManager emoteManager;
 
    @Override
    public void cleanup(GameContext2D context) {
-      SharedTweenManager.getInstance().killTarget(kodama);
+      GameObject player  = context.getGameWorld().getObjectById("player");
+      SharedTweenManager.getInstance().killTarget(player);
       emoteManager.clear();
-      kodama.removeAttribute("swiping");
+      context.getGameWorld().getObjectById("player").removeAttribute("swiping");
    }
 
    @Override
    public void setup(GameContext2D context) {
       EntityFactory entityFactory = new EntityFactory(context);
-      kodama = entityFactory.spawnSpirit(SpiritType.SPIRIT_EARTH, context.getGameCamera().getScaledCameraWidth() / 3.5f, 0f);
-      kodama.setDimensions(64f, 64f);
-      kodama.getColor().a = 0f;
-      kodama.setAttribute("swiping", true);
-      float currentX = kodama.getLeft();
-      Tween.to(kodama, GameObjectTween.ALPHA, 3f).delay(4f)
-            .target(1f)
-            .start(SharedTweenManager.getInstance());
-      Tween.to(kodama, GameObjectTween.POS_X, 4f).delay(7f)
-            .target(currentX - 200f)
-            .repeatYoyo(Tween.INFINITY, 0f)
-            .ease(TweenEquations.easeInOutCubic)
-            .start(SharedTweenManager.getInstance());
 
       this.emoteManager = new EmoteManager(context);
-      Cutscene cutscene = new CutsceneBuilder(null, emoteManager, context)
+      Cutscene cutscene = new CutsceneBuilder(entityFactory, null, emoteManager, context)
+            .wait(3f)
+            .spawn("player", SpiritType.SPIRIT_EARTH, context.getGameCamera().getScaledCameraWidth() / 3.5f, 0f)
+            .fadeIn("player", 2)
             .wait(4f)
-            .say("Oh!", kodama)
+            .say("Oh! So much dirt...", "player")
+            .setAttribute("player", "swiping")
+            .moveByYoyo("player", -200f, 0f, 3f)
             .wait(2f)
-            .emote(Emote.SMILE, kodama)
-            .say("What is this?", kodama)
+            .emote(Emote.SMILE, "player")
+            .removeAttribute("player", "swiping")
+            .clearTweens("player")
+            .say("What is this?", "player")
             .wait(2f)
             .shakeScreen(10, 2f)
-            .say("AAAAHHH!!! HELP!!!!", kodama)
+            .setAttribute("player", "swiping")
+            .say("AAAAHHH!!! HELP!!!!", "player")
+            .moveBy("player", 250f, 0f, 2f)
+            .wait(2f)
+            .removeAttribute("player", "swiping")
             .wait(1f)
-            .say("That must have been the neighbours.", kodama)
+            .spawn("ame", SpiritType.SPIRIT_WATER, 200f, 100f)
+            .fadeIn("ame", 2)
+            .wait(2f)
+            .say("I must give water!", "ame")
+            .wait(0.5f)
+            .setAttribute("player", "swiping")
+            .moveBy("player", -10f, 0f, 0.5f)
+            .wait(0.5f)
+            .say("WHO ARE YOU?!", "player")
+            .emote(Emote.SMILE, "player")
             .build();
       cutscene.play();
    }
