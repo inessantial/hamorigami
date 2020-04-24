@@ -24,15 +24,15 @@ public class Cityscape extends RenderLayer2D {
       batch.begin();
       float x = Gdx.graphics.getWidth() / 2f - 400;
       float y = Gdx.graphics.getHeight() / 2f - 300;
+
       Texture background = SharedAssetManager.getInstance().get(CITY_DAY, Texture.class);
       batch.draw(background, x, y);
-      if (dayProgress.getCurrentProgress() > 0f) {
-         Texture background_noon = SharedAssetManager.getInstance().get(CITY_EVENING, Texture.class);
-         Color color = batch.getColor();
-         batch.setColor(1f, 1f, 1f, dayProgress.getCurrentProgress());
-         batch.draw(background_noon, x, y);
-         batch.setColor(color);
-      }
+      Texture background_noon = SharedAssetManager.getInstance().get(CITY_EVENING, Texture.class);
+      Color color = batch.getColor();
+      float alpha = (float) (1f - Math.sin(Math.PI * dayProgress.getCurrentProgress()));
+      batch.setColor(1f, 1f, 1f, alpha);
+      batch.draw(background_noon, x, y);
+      batch.setColor(color);
       batch.end();
    }
 }

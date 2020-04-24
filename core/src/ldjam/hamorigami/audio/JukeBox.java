@@ -62,7 +62,6 @@ public class JukeBox {
       String audioFile = audioFiles[(int) (audioFiles.length * random.nextFloat())];
       float pitch = (float) ((basePitch - pitchVariation / 2f) + (pitchVariation * Math.random()));
       audioManager.spawnSound(audioFile, x, y, pitch, volume, range);
-      System.out.println("spawned sound ");
       interval = System.currentTimeMillis();
    }
 }

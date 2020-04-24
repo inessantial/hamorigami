@@ -94,7 +94,7 @@ public class EmoteManager {
    }
 
    private List<EmoteContainer> ensureSpeechQueue(GameObject object) {
-      if (!emoteMap.containsKey(object.getId())) {
+      if (object != null && !emoteMap.containsKey(object.getId())) {
          emoteMap.put(object.getId(), new ArrayList<EmoteContainer>());
       }
       return emoteMap.get(object.getId());

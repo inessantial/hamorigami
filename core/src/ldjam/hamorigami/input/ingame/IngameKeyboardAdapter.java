@@ -1,6 +1,5 @@
 package ldjam.hamorigami.input.ingame;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.math.Vector2;
 import de.bitbrain.braingdx.util.Updateable;
@@ -20,6 +19,8 @@ public class IngameKeyboardAdapter extends InputAdapter implements Updateable {
    private final AttackHandler attackHandler;
    private final Proceedable proceedable;
 
+   private boolean buttonUp = false;
+
    public IngameKeyboardAdapter(GameObject playerObject, AttackHandler attackHandler, Proceedable proceedable) {
       this.playerObject = playerObject;
       this.attackHandler = attackHandler;
@@ -28,7 +29,11 @@ public class IngameKeyboardAdapter extends InputAdapter implements Updateable {
 
    @Override
    public void update(float delta) {
-      if (input.isKeyPressed(ESCAPE)) {
+      if (!buttonUp && !input.isKeyPressed(ESCAPE)) {
+         buttonUp = true;
+         return;
+      }
+      if (buttonUp && input.isKeyPressed(ESCAPE)) {
          proceedable.skip();
       }
       if (input.isKeyPressed(W)) {
