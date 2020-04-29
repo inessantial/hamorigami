@@ -3,22 +3,22 @@ package ldjam.hamorigami.graphics;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import de.bitbrain.braingdx.graphics.renderer.SpriteRenderer;
 import de.bitbrain.braingdx.world.GameObject;
-import ldjam.hamorigami.effects.DayProgress;
+import ldjam.hamorigami.setup.GameplaySetup;
 
 public class DayProgressRenderer extends SpriteRenderer {
 
-   private final DayProgress dayProgress;
    private final SpriteRenderer overlay;
+   private final GameplaySetup setup;
 
-   public DayProgressRenderer(DayProgress dayProgress, String dayTextureId, String eveningTextureId) {
+   public DayProgressRenderer(GameplaySetup setup, String dayTextureId, String eveningTextureId) {
       super(dayTextureId);
-      this.dayProgress = dayProgress;
       overlay = new SpriteRenderer(eveningTextureId);
+      this.setup = setup;
    }
 
    @Override
    public void render(GameObject object, Batch batch, float delta) {
-      float curentProgress = dayProgress.getCurrentProgress();
+      float curentProgress = setup.getDayProgress();
       if (curentProgress > 0f && curentProgress < 1f) {
          super.render(object, batch, delta);
       }

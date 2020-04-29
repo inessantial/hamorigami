@@ -4,6 +4,7 @@ import com.badlogic.gdx.utils.GdxRuntimeException;
 import de.bitbrain.braingdx.context.GameContext2D;
 import de.bitbrain.braingdx.util.Updateable;
 import de.bitbrain.braingdx.world.GameObject;
+import ldjam.hamorigami.context.HamorigamiContext;
 import ldjam.hamorigami.model.HealthData;
 import ldjam.hamorigami.model.TreeStatus;
 
@@ -16,13 +17,13 @@ public class GamePhaseHandler implements Updateable {
    private String nextPhase;
 
    private final Map<String, GamePhase> phases = new HashMap<>();
-   private final GameContext2D context;
+   private final HamorigamiContext context;
    private final GameObject treeObject;
 
    private boolean disabling = false;
    private boolean nextPhaseTriggered = false;
 
-   public GamePhaseHandler(GameContext2D context, GameObject treeObject) {
+   public GamePhaseHandler(HamorigamiContext context, GameObject treeObject) {
       this.context = context;
       this.treeObject = treeObject;
    }
@@ -44,7 +45,7 @@ public class GamePhaseHandler implements Updateable {
 
    @Override
    public void update(float delta) {
-      if (nextPhaseTriggered) {
+      if (nextPhaseTriggered && phases.containsKey(currentPhase)) {
          phases.get(currentPhase).enable(context, treeObject);
          nextPhaseTriggered = false;
          return;

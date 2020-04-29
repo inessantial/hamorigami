@@ -2,16 +2,14 @@ package ldjam.hamorigami.cutscene;
 
 import aurelienribon.tweenengine.Tween;
 import aurelienribon.tweenengine.TweenEquations;
-import de.bitbrain.braingdx.context.GameContext2D;
 import de.bitbrain.braingdx.graphics.GameCamera;
 import de.bitbrain.braingdx.tweens.GameCameraTween;
 import de.bitbrain.braingdx.tweens.GameObjectTween;
 import de.bitbrain.braingdx.tweens.SharedTweenManager;
 import de.bitbrain.braingdx.util.Mutator;
 import de.bitbrain.braingdx.world.GameObject;
+import ldjam.hamorigami.context.HamorigamiContext;
 import ldjam.hamorigami.cutscene.emotes.Emote;
-import ldjam.hamorigami.cutscene.emotes.EmoteManager;
-import ldjam.hamorigami.entity.EntityFactory;
 import ldjam.hamorigami.model.SpiritType;
 
 import java.util.ArrayList;
@@ -23,19 +21,13 @@ import static ldjam.hamorigami.cutscene.emotes.EmoteManager.*;
 
 public class CutsceneBuilder {
 
-   private final CutsceneListener cutsceneListener;
-   private final EntityFactory entityFactory;
-   private final GameContext2D context;
+   private final HamorigamiContext context;
    private final Map<Float, List<CutsceneStep>> steps = new HashMap<>();
-   private final EmoteManager emoteManager;
    private float currentTime = 0f;
    private float emoteTime = 0f;
 
 
-   public CutsceneBuilder(EntityFactory entityFactory, final CutsceneListener cutsceneListener, final EmoteManager emoteManager, final GameContext2D context) {
-      this.entityFactory = entityFactory;
-      this.cutsceneListener = cutsceneListener;
-      this.emoteManager = emoteManager;
+   public CutsceneBuilder(HamorigamiContext context) {
       this.context = context;
    }
 
@@ -131,7 +123,7 @@ public class CutsceneBuilder {
       getCurrentSteps().add(new CutsceneStep() {
          @Override
          public void execute() {
-            entityFactory.spawnSpirit(spirit, x, y, new Mutator<GameObject>() {
+            context.getEntityFactory().spawnSpirit(spirit, x, y, new Mutator<GameObject>() {
                @Override
                public void mutate(GameObject target) {
                   target.setId(id);
@@ -168,7 +160,7 @@ public class CutsceneBuilder {
          @Override
          public void execute() {
             GameObject obj = context.getGameWorld().getObjectById(id);
-            emoteManager.say(text, obj);
+            context.getEmoteManager().say(text, obj);
          }
       });
       emoteTime += SPEECH_FADE_IN_DURATION + SPEECH_DELAY_DURATION_PER_CHARACTER * text.length() + SPEECH_FADE_OUT_DURATION;
@@ -180,7 +172,7 @@ public class CutsceneBuilder {
          @Override
          public void execute() {
             GameObject obj = context.getGameWorld().getObjectById(id);
-            emoteManager.emote(emote, obj);
+            context.getEmoteManager().emote(emote, obj);
          }
       });
       emoteTime += EMOTE_FADE_IN_DURATION + EMOTE_DELAY_DURATION + EMOTE_FADE_OUT_DURATION;

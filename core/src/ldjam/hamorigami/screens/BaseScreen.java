@@ -2,48 +2,56 @@ package ldjam.hamorigami.screens;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
-import de.bitbrain.braingdx.context.GameContext2D;
 import de.bitbrain.braingdx.graphics.GameCamera;
 import de.bitbrain.braingdx.graphics.animation.AnimationConfig;
 import de.bitbrain.braingdx.graphics.animation.AnimationFrames;
 import de.bitbrain.braingdx.graphics.animation.AnimationSpriteSheet;
 import de.bitbrain.braingdx.graphics.pipeline.layers.RenderPipeIds;
+import de.bitbrain.braingdx.graphics.shader.ShaderConfig;
 import de.bitbrain.braingdx.screen.BrainGdxScreen2D;
+import de.bitbrain.braingdx.screens.AbstractScreen;
 import de.bitbrain.braingdx.screens.ColorTransition;
+import de.bitbrain.braingdx.util.ArgumentFactory;
 import de.bitbrain.braingdx.world.GameObject;
 import ldjam.hamorigami.HamorigamiGame;
-import ldjam.hamorigami.effects.DayProgress;
-import ldjam.hamorigami.entity.EntityFactory;
-import ldjam.hamorigami.entity.SpiritSpawnPool;
+import ldjam.hamorigami.context.HamorigamiContext;
 import ldjam.hamorigami.graphics.*;
 import ldjam.hamorigami.model.ObjectType;
 import ldjam.hamorigami.model.SpiritAnimationType;
 import ldjam.hamorigami.model.SpiritType;
 import ldjam.hamorigami.model.TreeStatus;
+import ldjam.hamorigami.setup.GameplaySetup;
 
 import static com.badlogic.gdx.graphics.g2d.Animation.PlayMode.LOOP;
 import static ldjam.hamorigami.Assets.Textures.*;
 import static ldjam.hamorigami.model.SpiritType.SPIRIT_SUN;
 import static ldjam.hamorigami.model.SpiritType.SPIRIT_WATER;
 
-public abstract class BaseScreen extends BrainGdxScreen2D<HamorigamiGame> {
+public abstract class BaseScreen extends BrainGdxScreen2D<HamorigamiGame, HamorigamiContext> {
 
    protected GameObject treeObject;
    protected Cityscape cityscape;
+   protected GameplaySetup setup;
 
-   public BaseScreen(HamorigamiGame game) {
-      super(game);
+   public BaseScreen(final HamorigamiGame game) {
+      super(game, new ArgumentFactory<AbstractScreen<HamorigamiGame, HamorigamiContext>, HamorigamiContext>() {
+         @Override
+         public HamorigamiContext create(AbstractScreen<HamorigamiGame, HamorigamiContext> supplier) {
+            return new HamorigamiContext(supplier.getViewportFactory(), new ShaderConfig(), game, supplier);
+         }
+      });
    }
 
    @Override
-   protected void onCreate(final GameContext2D context) {
+   protected void onCreate(final HamorigamiContext context) {
+      this.setup = buildGameplaySetup(context);
       ColorTransition colorTransition = new ColorTransition();
       colorTransition.setColor(Color.WHITE.cpy());
       context.setBackgroundColor(Color.valueOf("7766ff"));
       context.setDebug(getGame().isDebug());
       setupLevel(context);
       setupGraphics(context);
-      cityscape = new Cityscape(getDayProgress(context));
+      cityscape = new Cityscape(setup);
       context.getRenderPipeline().putAfter(RenderPipeIds.BACKGROUND, "cityscape", cityscape);
    }
 
@@ -52,24 +60,20 @@ public abstract class BaseScreen extends BrainGdxScreen2D<HamorigamiGame> {
       super.onUpdate(delta);
    }
 
-   private void setupLevel(GameContext2D context) {
-      EntityFactory entityFactory = new EntityFactory(context);
+   private void setupLevel(HamorigamiContext context) {
       context.getGameCamera().setZoom(800, GameCamera.ZoomMode.TO_WIDTH);
 
       // add tree
-      this.treeObject = entityFactory.spawnTree();
+      this.treeObject = context.getEntityFactory().spawnTree();
 
       // add floor
-      GameObject floorObject = entityFactory.spawnFloor();
+      GameObject floorObject = context.getEntityFactory().spawnFloor();
 
       // add gauge
-      GameObject gaugeObject = entityFactory.spawnGauge(360, 65);
-
-      // Spirit spawning
-      SpiritSpawnPool spiritSpawnPool = new SpiritSpawnPool();
+      GameObject gaugeObject = context.getEntityFactory().spawnGauge(360, 65);
    }
 
-   private void setupGraphics(GameContext2D context) {
+   private void setupGraphics(HamorigamiContext context) {
       context.getRenderManager().setRenderOrderComparator(new EntityOrderComparator());
       AnimationSpriteSheet kodamaSpritesheet = new AnimationSpriteSheet(
             SPIRIT_EARTH_KODAMA_SRITESHEET, 64, 64
@@ -236,10 +240,10 @@ public abstract class BaseScreen extends BrainGdxScreen2D<HamorigamiGame> {
                   .build())
             .build()));
 
-      context.getRenderManager().register(ObjectType.TREE, new DayProgressRenderer(getDayProgress(context), TREE, TREE_EVENING));
-      context.getRenderManager().register(ObjectType.FLOOR, new DayProgressRenderer(getDayProgress(context), BACKGROUND_FLOOR, BACKGROUND_FLOOR_EVENING));
+      context.getRenderManager().register(ObjectType.TREE, new DayProgressRenderer(setup, TREE, TREE_EVENING));
+      context.getRenderManager().register(ObjectType.FLOOR, new DayProgressRenderer(setup, BACKGROUND_FLOOR, BACKGROUND_FLOOR_EVENING));
       context.getRenderManager().register(ObjectType.GAUGE, new GaugeRenderer(treeObject));
    }
 
-   protected abstract DayProgress getDayProgress(GameContext2D context);
+   protected abstract GameplaySetup buildGameplaySetup(HamorigamiContext context);
 }

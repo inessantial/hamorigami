@@ -5,6 +5,5 @@ public interface Phases {
    String TITLE = "title";
    String GAMEOVER = "gameover";
    String CREDITS = "credits";
-   String INTRO = "intro";
-   String OUTRO = "outro";
+   String CUTSCENE = "cutscene";
 }

@@ -13,12 +13,11 @@ import de.bitbrain.braingdx.screens.ColorTransition;
 import de.bitbrain.braingdx.tweens.ColorTween;
 import de.bitbrain.braingdx.tweens.GameObjectTween;
 import de.bitbrain.braingdx.tweens.SharedTweenManager;
-import de.bitbrain.braingdx.util.DeltaTimer;
 import de.bitbrain.braingdx.world.GameObject;
 import ldjam.hamorigami.Assets;
 import ldjam.hamorigami.behavior.TreeBehavior;
 import ldjam.hamorigami.behavior.TreeHealthBindingBehavior;
-import ldjam.hamorigami.effects.DayProgress;
+import ldjam.hamorigami.context.HamorigamiContext;
 import ldjam.hamorigami.entity.*;
 import ldjam.hamorigami.input.Proceedable;
 import ldjam.hamorigami.input.ingame.IngameControllerAdapter;
@@ -27,14 +26,16 @@ import ldjam.hamorigami.input.ingame.ProceedableControllerAdapter;
 import ldjam.hamorigami.model.HealthData;
 import ldjam.hamorigami.model.Movement;
 import ldjam.hamorigami.model.SpiritType;
+import ldjam.hamorigami.setup.GameplaySetup;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import static ldjam.hamorigami.Assets.Musics.BACKGROUND_01;
 import static ldjam.hamorigami.model.SpiritType.*;
 
-public class GameplayPhase implements GamePhase, Proceedable, DayProgress {
+public class GameplayPhase implements GamePhase, Proceedable {
 
    private static final List<SpiritType> CANDIDATES = new ArrayList<SpiritType>();
 
@@ -46,8 +47,6 @@ public class GameplayPhase implements GamePhase, Proceedable, DayProgress {
       }
    }
 
-   private DeltaTimer dayTimer = new DeltaTimer();
-
    private Music music;
    private Music cityscapeMusic;
 
@@ -58,24 +57,26 @@ public class GameplayPhase implements GamePhase, Proceedable, DayProgress {
 
    private boolean gameOver;
 
-   private GameContext2D context;
+   private HamorigamiContext context;
 
    private final GamePhaseHandler gamePhaseHandler;
    private SpiritSpawnPool spiritSpawnPool;
+   private final GameplaySetup setup;
 
-   public GameplayPhase(GamePhaseHandler gamePhaseHandler) {
+   public GameplayPhase(GamePhaseHandler gamePhaseHandler, GameplaySetup setup) {
       this.gamePhaseHandler = gamePhaseHandler;
+      this.setup = setup;
    }
 
    @Override
-   public void disable(GameContext2D context, GameObject treeObject) {
+   public void disable(HamorigamiContext context, GameObject treeObject) {
       music.stop();
       cityscapeMusic.setVolume(0.4f);
    }
 
    @Override
-   public void enable(final GameContext2D context, final GameObject treeObject) {
-      dayTimer.reset();
+   public void enable(final HamorigamiContext context, final GameObject treeObject) {
+      setup.resetDay();
       SharedAssetManager.getInstance().get(Assets.Musics.MENU, Music.class).stop();
       gameOver = false;
       this.context = context;
@@ -116,58 +117,12 @@ public class GameplayPhase implements GamePhase, Proceedable, DayProgress {
       // Spirit spawning
       this.spiritSpawnPool = new SpiritSpawnPool();
 
-      spiritSpawnPool.addSpawnWave(5f, SPIRIT_WATER);
-
-      spiritSpawnPool.addSpawnWave(5f, SPIRIT_WATER);
-      spiritSpawnPool.addSpawnWave(1f, SPIRIT_WATER);
-
-      spiritSpawnPool.addSpawnWave(8f, SPIRIT_WATER, SPIRIT_WATER, SPIRIT_WATER);
-      spiritSpawnPool.addSpawnWave(2f, SPIRIT_WATER, SPIRIT_WATER);
-      spiritSpawnPool.addSpawnWave(2f, SPIRIT_WATER, SPIRIT_WATER);
-
-      spiritSpawnPool.addSpawnWave(5f, SPIRIT_SUN);
-      spiritSpawnPool.addSpawnWave(3f, SPIRIT_SUN);
-
-
-      spiritSpawnPool.addSpawnWave(5f, SPIRIT_WATER);
-      spiritSpawnPool.addSpawnWave(0.5f, SPIRIT_WATER);
-      spiritSpawnPool.addSpawnWave(0.2f, SPIRIT_WATER);
-      spiritSpawnPool.addSpawnWave(0.1f, SPIRIT_WATER);
-      spiritSpawnPool.addSpawnWave(0.4f, SPIRIT_WATER);
-      spiritSpawnPool.addSpawnWave(0.7f, SPIRIT_WATER);
-      spiritSpawnPool.addSpawnWave(1f, SPIRIT_WATER);
-      spiritSpawnPool.addSpawnWave(2f, SPIRIT_WATER);
-
-      spiritSpawnPool.addSpawnWave(5f, SPIRIT_WATER, SPIRIT_WATER, SPIRIT_SUN);
-      spiritSpawnPool.addSpawnWave(2f, SPIRIT_WATER, SPIRIT_SUN);
-      spiritSpawnPool.addSpawnWave(2f, SPIRIT_SUN, SPIRIT_SUN);
-
-      spiritSpawnPool.addSpawnWave(8f, SPIRIT_WATER, SPIRIT_WATER, SPIRIT_SUN);
-      spiritSpawnPool.addSpawnWave(1f, SPIRIT_WATER, SPIRIT_WATER, SPIRIT_WATER, SPIRIT_WATER);
-      spiritSpawnPool.addSpawnWave(1f, SPIRIT_SUN, SPIRIT_SUN, SPIRIT_SUN);
-
-
-      spiritSpawnPool.addSpawnWave(2f, SPIRIT_SUN, SPIRIT_SUN, SPIRIT_SUN, SPIRIT_SUN);
-      spiritSpawnPool.addSpawnWave(1f, SPIRIT_SUN, SPIRIT_SUN, SPIRIT_SUN, SPIRIT_SUN);
-      spiritSpawnPool.addSpawnWave(0.5f, SPIRIT_SUN, SPIRIT_SUN);
-      spiritSpawnPool.addSpawnWave(0.2f, SPIRIT_SUN);
-
-      spiritSpawnPool.addSpawnWave(5f, SPIRIT_WATER);
-      spiritSpawnPool.addSpawnWave(2f, SPIRIT_WATER);
-      spiritSpawnPool.addSpawnWave(0.5f, SPIRIT_WATER);
-      spiritSpawnPool.addSpawnWave(0.2f, SPIRIT_WATER, SPIRIT_WATER);
-      spiritSpawnPool.addSpawnWave(0.1f, SPIRIT_WATER, SPIRIT_WATER, SPIRIT_WATER);
-      spiritSpawnPool.addSpawnWave(0.4f, SPIRIT_WATER, SPIRIT_WATER);
-      spiritSpawnPool.addSpawnWave(0.7f, SPIRIT_WATER, SPIRIT_WATER);
-      spiritSpawnPool.addSpawnWave(1f, SPIRIT_WATER);
-      spiritSpawnPool.addSpawnWave(2f, SPIRIT_WATER);
-
-      spiritSpawnPool.addSpawnWave(6f, SPIRIT_WATER, SPIRIT_WATER, SPIRIT_WATER, SPIRIT_WATER);
-      spiritSpawnPool.addSpawnWave(4f, SPIRIT_WATER, SPIRIT_WATER, SPIRIT_WATER, SPIRIT_WATER);
-      spiritSpawnPool.addSpawnWave(6f, SPIRIT_SUN, SPIRIT_SUN, SPIRIT_SUN, SPIRIT_SUN);
-      spiritSpawnPool.addSpawnWave(4f, SPIRIT_SUN, SPIRIT_SUN, SPIRIT_SUN, SPIRIT_SUN);
+      for (Map.Entry<Float, SpiritType[]> entry : setup.getCurrentDaySetup().getSpawns().entrySet()) {
+         spiritSpawnPool.addSpawnWave(entry.getKey(), entry.getValue());
+      }
 
       spawner = new SpiritSpawner(spiritSpawnPool, entityFactory, context, treeObject);
+
       attackHandler = new AttackHandler(playerObject, entityFactory, context.getAudioManager());
       context.getBehaviorManager().apply(new SpiritedAway(context));
 
@@ -185,11 +140,14 @@ public class GameplayPhase implements GamePhase, Proceedable, DayProgress {
 
    @Override
    public void update(float delta) {
-      dayTimer.update(delta);
+      if (gameOver) {
+         return;
+      }
+      setup.update(delta);
       spawner.update(delta);
       attackHandler.update(delta);
-      // update timer
-      if (!spawner.canSpawn() && !gameOver) {
+
+      if (setup.isEndOfDay() && !spawner.canSpawn() && !gameOver) {
          // check that the only spirit left is the player
          Array<GameObject> objects = context.getGameWorld().getObjects();
          boolean spiritStillAlive = false;
@@ -204,7 +162,7 @@ public class GameplayPhase implements GamePhase, Proceedable, DayProgress {
          if (!spiritStillAlive) {
             kilAllSpirits();
             gameOver = true;
-            gamePhaseHandler.changePhase(Phases.OUTRO);
+            gamePhaseHandler.changePhase(Phases.CUTSCENE);
          }
       }
    }
@@ -249,19 +207,5 @@ public class GameplayPhase implements GamePhase, Proceedable, DayProgress {
       kilAllSpirits();
       gameOver = true;
       gamePhaseHandler.changePhase(Phases.CREDITS);
-   }
-
-   @Override
-   public float getCurrentProgress() {
-      if (spiritSpawnPool == null) {
-         return 0f;
-      } else {
-         return Math.min(1f, dayTimer.getTicks() / spiritSpawnPool.getTotalDuration());
-      }
-   }
-
-   @Override
-   public void reset() {
-      dayTimer.reset();
    }
 }

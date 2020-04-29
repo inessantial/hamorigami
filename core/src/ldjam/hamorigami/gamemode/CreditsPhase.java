@@ -10,13 +10,12 @@ import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import de.bitbrain.braingdx.assets.SharedAssetManager;
-import de.bitbrain.braingdx.context.GameContext2D;
 import de.bitbrain.braingdx.graphics.GameCamera;
 import de.bitbrain.braingdx.tweens.ActorTween;
 import de.bitbrain.braingdx.tweens.SharedTweenManager;
 import de.bitbrain.braingdx.world.GameObject;
 import ldjam.hamorigami.Assets;
-import ldjam.hamorigami.effects.DayProgress;
+import ldjam.hamorigami.context.HamorigamiContext;
 import ldjam.hamorigami.i18n.Bundle;
 import ldjam.hamorigami.i18n.Messages;
 import ldjam.hamorigami.input.Proceedable;
@@ -38,7 +37,7 @@ public class CreditsPhase implements GamePhase, Proceedable {
    }
 
    @Override
-   public void disable(final GameContext2D context, GameObject treeObject) {
+   public void disable(final HamorigamiContext context, GameObject treeObject) {
       music.stop();
       SharedAssetManager.getInstance().get(Assets.Musics.CITYSCAPE, Music.class).setVolume(0.9f);
       Tween.to(layout, ActorTween.ALPHA, 1f)
@@ -54,7 +53,7 @@ public class CreditsPhase implements GamePhase, Proceedable {
    }
 
    @Override
-   public void enable(GameContext2D context, GameObject treeObject) {
+   public void enable(HamorigamiContext context, GameObject treeObject) {
       context.getInputManager().register(new ProceedableControllerAdapter(this));
       exiting = false;
       SharedAssetManager.getInstance().get(Assets.Musics.CITYSCAPE, Music.class).setVolume(0.05f);

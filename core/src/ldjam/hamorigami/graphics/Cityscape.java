@@ -6,17 +6,18 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import de.bitbrain.braingdx.assets.SharedAssetManager;
 import de.bitbrain.braingdx.graphics.pipeline.RenderLayer2D;
-import ldjam.hamorigami.effects.DayProgress;
+import ldjam.hamorigami.context.HamorigamiContext;
+import ldjam.hamorigami.setup.GameplaySetup;
 
 import static ldjam.hamorigami.Assets.Textures.CITY_DAY;
 import static ldjam.hamorigami.Assets.Textures.CITY_EVENING;
 
 public class Cityscape extends RenderLayer2D {
 
-   private final DayProgress dayProgress;
+   private final GameplaySetup setup;
 
-   public Cityscape(DayProgress dayProgress) {
-      this.dayProgress = dayProgress;
+   public Cityscape(GameplaySetup setup) {
+      this.setup = setup;
    }
 
    @Override
@@ -29,7 +30,7 @@ public class Cityscape extends RenderLayer2D {
       batch.draw(background, x, y);
       Texture background_noon = SharedAssetManager.getInstance().get(CITY_EVENING, Texture.class);
       Color color = batch.getColor();
-      float alpha = (float) (1f - Math.sin(Math.PI * dayProgress.getCurrentProgress()));
+      float alpha = (float) (1f - Math.sin(Math.PI * setup.getDayProgress()));
       batch.setColor(1f, 1f, 1f, alpha);
       batch.draw(background_noon, x, y);
       batch.setColor(color);

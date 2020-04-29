@@ -24,19 +24,18 @@ import de.bitbrain.braingdx.tweens.GameCameraTween;
 import de.bitbrain.braingdx.tweens.SharedTweenManager;
 import de.bitbrain.braingdx.world.GameObject;
 import ldjam.hamorigami.Assets;
-import ldjam.hamorigami.effects.DayProgress;
+import ldjam.hamorigami.context.HamorigamiContext;
 import ldjam.hamorigami.i18n.Bundle;
 import ldjam.hamorigami.i18n.Messages;
 import ldjam.hamorigami.input.Proceedable;
 import ldjam.hamorigami.input.ingame.ProceedableControllerAdapter;
+import ldjam.hamorigami.setup.GameplaySetup;
 import ldjam.hamorigami.ui.Styles;
 
 public class TitlePhase implements GamePhase, Proceedable {
 
    private Table layout;
    private boolean exiting;
-
-   private final DayProgress dayProgress;
 
    static {
       Tween.registerAccessor(VectorGameCamera.class, new GameCameraTween());
@@ -47,14 +46,15 @@ public class TitlePhase implements GamePhase, Proceedable {
    private Label logoA;
    private Label logoB;
    private Music music;
+   private final GameplaySetup setup;
 
-   public TitlePhase(DayProgress dayProgress, GamePhaseHandler phaseHandler) {
-      this.dayProgress = dayProgress;
+   public TitlePhase(GamePhaseHandler phaseHandler, GameplaySetup setup) {
       this.phaseHandler = phaseHandler;
+      this.setup = setup;
    }
 
    @Override
-   public void disable(final GameContext2D context, GameObject treeObject) {
+   public void disable(final HamorigamiContext context, GameObject treeObject) {
       Tween.to(layout, ActorTween.ALPHA, 0.7f)
             .target(0f)
             .start(SharedTweenManager.getInstance());
@@ -81,8 +81,8 @@ public class TitlePhase implements GamePhase, Proceedable {
    }
 
    @Override
-   public void enable(GameContext2D context, GameObject treeObject) {
-      dayProgress.reset();
+   public void enable(HamorigamiContext context, GameObject treeObject) {
+      setup.resetAll();
       ColorTransition colorTransition = new ColorTransition();
       colorTransition.setColor(Color.valueOf("9cd2ff"));
       context.getScreenTransitions().in(colorTransition, 0.2f);
@@ -163,7 +163,7 @@ public class TitlePhase implements GamePhase, Proceedable {
    @Override
    public void proceed() {
       exiting = true;
-      phaseHandler.changePhase(Phases.INTRO);
+      phaseHandler.changePhase(Phases.CUTSCENE);
    }
 
    @Override

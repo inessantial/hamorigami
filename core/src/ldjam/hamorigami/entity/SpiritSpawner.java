@@ -35,10 +35,12 @@ public class SpiritSpawner implements Updateable {
          return;
       }
       deltaTimer.update(delta);
-      if (deltaTimer.reached(currentSpawn.durationUntil)) {
+      if (currentSpawn == null || deltaTimer.reached(currentSpawn.durationUntil)) {
          deltaTimer.reset();
-         for (SpiritType type : currentSpawn.spawns) {
-            spawnSpirit(type);
+         if (currentSpawn != null) {
+            for (SpiritType type : currentSpawn.spawns) {
+               spawnSpirit(type);
+            }
          }
          currentSpawn = spawnPool.getNext();
          if (currentSpawn == null) {

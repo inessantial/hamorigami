@@ -33,6 +33,9 @@ public class SpiritSpawnPool {
    }
 
    public SpiritSpawn getNext() {
+      if (spawnList.isEmpty() || currentIndex >= spawnList.size()) {
+         return null;
+      }
       SpiritSpawn current = spawnList.get(currentIndex);
       currentIndex++;
       if (currentIndex == spawnList.size()) {

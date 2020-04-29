@@ -1,99 +1,47 @@
 package ldjam.hamorigami.gamemode;
 
-import aurelienribon.tweenengine.BaseTween;
-import aurelienribon.tweenengine.Tween;
-import aurelienribon.tweenengine.TweenCallback;
-import aurelienribon.tweenengine.TweenEquations;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import de.bitbrain.braingdx.context.GameContext2D;
-import de.bitbrain.braingdx.tweens.ActorTween;
-import de.bitbrain.braingdx.tweens.SharedTweenManager;
 import de.bitbrain.braingdx.world.GameObject;
+import ldjam.hamorigami.context.HamorigamiContext;
 import ldjam.hamorigami.cutscene.Cutscene;
-import ldjam.hamorigami.cutscene.CutsceneBuilder;
-import ldjam.hamorigami.cutscene.emotes.Emote;
-import ldjam.hamorigami.cutscene.emotes.EmoteManager;
-import ldjam.hamorigami.entity.EntityFactory;
 import ldjam.hamorigami.input.Proceedable;
 import ldjam.hamorigami.input.ingame.ProceedableControllerAdapter;
-import ldjam.hamorigami.model.SpiritType;
+import ldjam.hamorigami.setup.GameplaySetup;
 
 public class CutscenePhase implements GamePhase, Proceedable {
 
    private final GamePhaseHandler phaseHandler;
-   private final String nextPhase;
    private boolean aborted;
-   private EmoteManager emoteManager;
    private Cutscene cutscene;
+   private final GameplaySetup setup;
 
-   public CutscenePhase(GamePhaseHandler phaseHandler, String nextPhase) {
+   public CutscenePhase(GamePhaseHandler phaseHandler, GameplaySetup setup) {
       this.phaseHandler = phaseHandler;
-      this.nextPhase = nextPhase;
+      this.setup = setup;
    }
 
    @Override
-   public void disable(final GameContext2D context, GameObject treeObject) {
-      emoteManager.clear();
-      cutscene.stop();
+   public void disable(final HamorigamiContext context, GameObject treeObject) {
+      if (cutscene != null) {
+         context.getEmoteManager().clear();
+         cutscene.stop();
+      }
+      if (setup.isEndOfDay()) {
+         setup.triggerNextDay();
+      }
    }
 
    @Override
-   public void enable(GameContext2D context, GameObject treeObject) {
-      context.getInputManager().register(new ProceedableControllerAdapter(this));
+   public void enable(HamorigamiContext context, GameObject treeObject) {
       aborted = false;
-
-      EntityFactory entityFactory = new EntityFactory(context);
-      this.emoteManager = new EmoteManager(context);
-      this.cutscene = new CutsceneBuilder(entityFactory, null, emoteManager, context)
-            .wait(3f)
-            .spawn("player", SpiritType.SPIRIT_EARTH, context.getGameCamera().getScaledCameraWidth() / 3.5f, 0f)
-            .fadeIn("player", 2)
-            .wait(4f)
-            .say("Oh! So much dirt...", "player")
-            .setAttribute("player", "swiping")
-            .moveByYoyo("player", -200f, 0f, 3f)
-            .wait(2f)
-            .emote(Emote.SMILE, "player")
-            .removeAttribute("player", "swiping")
-            .clearTweens("player")
-            .say("What is this?", "player")
-            .wait(2f)
-            .shakeScreen(10, 2f)
-            .setAttribute("player", "swiping")
-            .say("AAAAHHH!!! HELP!!!!", "player")
-            .moveBy("player", 250f, 0f, 2f)
-            .wait(2f)
-            .removeAttribute("player", "swiping")
-            .wait(1f)
-            .spawn("ame", SpiritType.SPIRIT_WATER, 200f, 100f)
-            .fadeIn("ame", 2)
-            .wait(2f)
-            .say("I must give water!", "ame")
-            .wait(0.5f)
-            .setAttribute("player", "swiping")
-            .moveByYoyo("player", -30f, 0f, 2f)
-            .wait(0.5f)
-            .say("WHO ARE YOU?!", "player")
-            .emote(Emote.SMILE, "player")
-            .wait(0.3f)
-            .say("I come from far above. To give you the elixir of life.", "ame")
-            .wait(1f)
-            .shakeScreen(5, 1f)
-            .wait(0.5f)
-            .say("???", "player")
-            .say("???", "ame")
-            .wait(2f)
-            .spawn("hi", SpiritType.SPIRIT_SUN, 400f, 100f)
-            .fadeIn("hi", 3)
-            .wait(3f)
-            .say("What are you doing here, Ame?", "hi")
-            .say("You are not supposed to be here.", "hi")
-            .wait(0.5f)
-            .emote(Emote.SMILE, "ame")
-            .say("I... I need to fulfill my destiny.", "ame")
-            .build();
-      cutscene.play();
+      this.cutscene = resolveCutscene(setup);
+      if (cutscene == null) {
+         skip();
+      } else {
+         context.getInputManager().register(new ProceedableControllerAdapter(this));
+         cutscene.play();
+      }
    }
 
    @Override
@@ -116,6 +64,24 @@ public class CutscenePhase implements GamePhase, Proceedable {
    @Override
    public void skip() {
       aborted = true;
-      phaseHandler.changePhase(nextPhase);
+      if (setup.isEndOfDay()) {
+         phaseHandler.changePhase(Phases.CUTSCENE);
+      } else {
+         phaseHandler.changePhase(Phases.GAMEPLAY);
+      }
+
+   }
+
+   private Cutscene resolveCutscene(GameplaySetup setup) {
+      if (setup.getCurrentDaySetup() == null) {
+         return null;
+      }
+      if (setup.isStartOfDay()) {
+         return setup.getCurrentDaySetup().getStartCutscene();
+      } else if (setup.isEndOfDay()) {
+         return setup.getCurrentDaySetup().getEndCutscene();
+      } else {
+         return null;
+      }
    }
 }

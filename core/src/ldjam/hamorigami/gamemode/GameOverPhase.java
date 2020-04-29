@@ -17,6 +17,7 @@ import de.bitbrain.braingdx.tweens.ActorTween;
 import de.bitbrain.braingdx.tweens.SharedTweenManager;
 import de.bitbrain.braingdx.world.GameObject;
 import ldjam.hamorigami.Assets;
+import ldjam.hamorigami.context.HamorigamiContext;
 import ldjam.hamorigami.i18n.Bundle;
 import ldjam.hamorigami.i18n.Messages;
 import ldjam.hamorigami.input.Proceedable;
@@ -37,7 +38,7 @@ public class GameOverPhase implements GamePhase, Proceedable {
    }
 
    @Override
-   public void disable(final GameContext2D context, GameObject treeObject) {
+   public void disable(final HamorigamiContext context, GameObject treeObject) {
       SharedAssetManager.getInstance().get(Assets.Musics.FAIL, Music.class).stop();
       Tween.to(layout, ActorTween.ALPHA, 1f)
             .target(0f)
@@ -52,7 +53,7 @@ public class GameOverPhase implements GamePhase, Proceedable {
    }
 
    @Override
-   public void enable(GameContext2D context, GameObject treeObject) {
+   public void enable(HamorigamiContext context, GameObject treeObject) {
       this.context = context;
       context.getInputManager().register(new ProceedableControllerAdapter(this));
       SharedAssetManager.getInstance().get(Assets.Musics.FAIL, Music.class).play();
