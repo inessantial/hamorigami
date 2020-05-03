@@ -1,6 +1,8 @@
 package ldjam.hamorigami.cutscene;
 
+import aurelienribon.tweenengine.BaseTween;
 import aurelienribon.tweenengine.Tween;
+import aurelienribon.tweenengine.TweenCallback;
 import aurelienribon.tweenengine.TweenEquations;
 import de.bitbrain.braingdx.graphics.GameCamera;
 import de.bitbrain.braingdx.tweens.GameCameraTween;
@@ -120,15 +122,24 @@ public class CutsceneBuilder {
    }
 
    public CutsceneBuilder spawn(final String id, final SpiritType spirit, final float x, final float y) {
+      return spawn(id, spirit, x, y, false);
+   }
+
+   public CutsceneBuilder spawn(final String id, final SpiritType spirit, final float x, final float y, final boolean persistent) {
       getCurrentSteps().add(new CutsceneStep() {
          @Override
          public void execute() {
-            context.getEntityFactory().spawnSpirit(spirit, x, y, new Mutator<GameObject>() {
+            Mutator<GameObject> mutator = new Mutator<GameObject>() {
                @Override
                public void mutate(GameObject target) {
                   target.setId(id);
                }
-            });
+            };
+            if (persistent) {
+               context.getEntityFactory().spawnSpirit(spirit, x, y, mutator);
+            } else {
+               context.getEntityFactory().spawnSpirit(spirit, x, y, mutator, "cutscene");
+            }
          }
       });
       return this;
@@ -263,6 +274,29 @@ public class CutsceneBuilder {
             context.getAudioManager().stopMusic(musicPath);
          }
       });
+      return this;
+   }
+
+
+
+   public CutsceneBuilder remove(final String id, final float delay) {
+      getCurrentSteps().add(new CutsceneStep() {
+         @Override
+         public void execute() {
+            GameObject obj = context.getGameWorld().getObjectById(id);
+            Tween.to(obj, GameObjectTween.ALPHA, delay)
+                  .target(0f)
+                  .setCallbackTriggers(TweenCallback.COMPLETE)
+                  .setCallback(new TweenCallback() {
+                     @Override
+                     public void onEvent(int type, BaseTween<?> source) {
+                        context.getGameWorld().remove(id);
+                     }
+                  })
+                  .start(SharedTweenManager.getInstance());
+         }
+      });
+      currentTime += delay;
       return this;
    }
 

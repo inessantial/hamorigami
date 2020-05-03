@@ -3,7 +3,9 @@ package ldjam.hamorigami.cutscene;
 import aurelienribon.tweenengine.BaseTween;
 import aurelienribon.tweenengine.Tween;
 import aurelienribon.tweenengine.TweenCallback;
+import de.bitbrain.braingdx.context.GameContext2D;
 import de.bitbrain.braingdx.tweens.SharedTweenManager;
+import de.bitbrain.braingdx.world.GameObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,12 +41,15 @@ public class Cutscene {
       }
    }
 
-   public void stop() {
+   public void stop(GameContext2D context) {
+      SharedTweenManager.getInstance().killAll();
       for (Tween tween : tweens) {
-         SharedTweenManager.getInstance().killTarget(tween.getTarget());
          tween.free();
       }
       tweens.clear();
+      for (GameObject obj : context.getGameWorld().getGroup("cutscene")) {
+         context.getGameWorld().remove(obj.getId());
+      }
    }
 
    public boolean isOver() {

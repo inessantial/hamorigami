@@ -60,17 +60,7 @@ public class EmoteManager {
    public void clear() {
       emoteMap.clear();
       for (final SpeechBubble bubble : bubbleMap.values()) {
-         SharedTweenManager.getInstance().killTarget(bubble);
-         Tween.to(bubble, ActorTween.ALPHA, 0.5f)
-               .target(0f)
-               .setCallback(new TweenCallback() {
-                  @Override
-                  public void onEvent(int type, BaseTween<?> source) {
-                     context.getWorldStage().getActors().removeValue(bubble, true);
-                  }
-               })
-               .setCallbackTriggers(TweenCallback.COMPLETE)
-               .start(SharedTweenManager.getInstance());
+         context.getWorldStage().getActors().removeValue(bubble, true);
       }
       bubbleMap.clear();
    }

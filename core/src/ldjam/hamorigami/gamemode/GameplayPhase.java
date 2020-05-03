@@ -118,7 +118,7 @@ public class GameplayPhase implements GamePhase, Proceedable {
       this.spiritSpawnPool = new SpiritSpawnPool();
 
       for (Map.Entry<Float, SpiritType[]> entry : setup.getCurrentDaySetup().getSpawns().entrySet()) {
-         spiritSpawnPool.addSpawnWave(entry.getKey(), entry.getValue());
+         spiritSpawnPool.addSpawnWave(entry.getKey() * GameplaySetup.SECONDS_PER_DAY, entry.getValue());
       }
 
       spawner = new SpiritSpawner(spiritSpawnPool, entityFactory, context, treeObject);

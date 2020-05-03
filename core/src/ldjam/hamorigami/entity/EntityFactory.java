@@ -32,9 +32,13 @@ public class EntityFactory {
    }
 
    public GameObject spawnSpirit(SpiritType spiritType, float x, float y, Mutator<GameObject> mutator) {
+      return spawnSpirit(spiritType, x, y, mutator, "spirits");
+   }
+
+   public GameObject spawnSpirit(SpiritType spiritType, float x, float y, Mutator<GameObject> mutator, String group) {
       GameObject object = mutator != null
-            ? context.getGameWorld().addObject("spirits", mutator)
-            : context.getGameWorld().addObject("spirits");
+            ? context.getGameWorld().addObject(group, mutator)
+            : context.getGameWorld().addObject(group);
       object.setZIndex(3);
       object.setType(spiritType);
       object.setPosition(context.getGameCamera().getLeft() + x, context.getGameCamera().getTop() + y);
@@ -49,12 +53,6 @@ public class EntityFactory {
             context.getParticleManager().attachEffect(spiritType.getParticleId(), object, 16f, 32f);
          }
       }
-      /*Light light = context.getLightingManager().createPointLight(128f, spiritType.getLightingColor());
-      if (spiritType == SpiritType.SPIRIT_EARTH) {
-         context.getLightingManager().attach(light, object, 32f, 32f);
-      } else {
-         context.getLightingManager().attach(light, object, 16f, 32f);
-      }*/
       return object;
    }
 

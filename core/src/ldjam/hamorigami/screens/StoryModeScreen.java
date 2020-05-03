@@ -29,7 +29,6 @@ public class StoryModeScreen extends BaseScreen {
       this.phaseHandler.addPhase(Phases.CUTSCENE, new CutscenePhase(phaseHandler, setup));
       this.phaseHandler.addPhase(Phases.GAMEPLAY, new GameplayPhase(phaseHandler, setup));
       this.phaseHandler.addPhase(Phases.GAMEOVER, new GameOverPhase(phaseHandler));
-      // TODO ensure logic work
       this.phaseHandler.addPhase(Phases.CREDITS, new CreditsPhase(phaseHandler));
 
       setupDebugUi(context);
@@ -44,12 +43,15 @@ public class StoryModeScreen extends BaseScreen {
 
    @Override
    protected GameplaySetup buildGameplaySetup(HamorigamiContext context) {
+      // TODO make gameplay setup filebased
       return new GameplaySetupBuilder()
             .addDay(new DaySetupBuilder()
                   .addSpawns(0f, SpiritType.SPIRIT_WATER)
+                  .addSpawns(0.1f, SpiritType.SPIRIT_WATER)
+                  .addSpawns(0.5f, SpiritType.SPIRIT_WATER, SpiritType.SPIRIT_WATER, SpiritType.SPIRIT_WATER)
                   .startOfDayCutscene(new CutsceneBuilder(context)
                         .wait(3f)
-                        .spawn("player", SpiritType.SPIRIT_EARTH, context.getGameCamera().getScaledCameraWidth() / 3.5f, 0f)
+                        .spawn("player", SpiritType.SPIRIT_EARTH, context.getGameCamera().getScaledCameraWidth() / 3.5f, 0f, true)
                         .fadeIn("player", 2)
                         .wait(4f)
                         .say("Oh! So much dirt...", "player")
@@ -94,6 +96,7 @@ public class StoryModeScreen extends BaseScreen {
                         .wait(0.5f)
                         .emote(Emote.SMILE, "ame")
                         .say("I... I need to fulfill my destiny.", "ame")
+                        .removeAttribute("player", "swiping")
                         .build())
                   .build())
             .build();

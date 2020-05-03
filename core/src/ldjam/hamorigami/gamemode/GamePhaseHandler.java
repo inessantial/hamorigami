@@ -1,7 +1,5 @@
 package ldjam.hamorigami.gamemode;
 
-import com.badlogic.gdx.utils.GdxRuntimeException;
-import de.bitbrain.braingdx.context.GameContext2D;
 import de.bitbrain.braingdx.util.Updateable;
 import de.bitbrain.braingdx.world.GameObject;
 import ldjam.hamorigami.context.HamorigamiContext;

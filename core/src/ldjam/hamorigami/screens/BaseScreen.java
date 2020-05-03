@@ -44,6 +44,7 @@ public abstract class BaseScreen extends BrainGdxScreen2D<HamorigamiGame, Hamori
 
    @Override
    protected void onCreate(final HamorigamiContext context) {
+      context.getGameCamera().setZoom(800, GameCamera.ZoomMode.TO_WIDTH);
       this.setup = buildGameplaySetup(context);
       ColorTransition colorTransition = new ColorTransition();
       colorTransition.setColor(Color.WHITE.cpy());
@@ -61,7 +62,6 @@ public abstract class BaseScreen extends BrainGdxScreen2D<HamorigamiGame, Hamori
    }
 
    private void setupLevel(HamorigamiContext context) {
-      context.getGameCamera().setZoom(800, GameCamera.ZoomMode.TO_WIDTH);
 
       // add tree
       this.treeObject = context.getEntityFactory().spawnTree();

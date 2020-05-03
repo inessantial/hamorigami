@@ -25,7 +25,7 @@ public class CutscenePhase implements GamePhase, Proceedable {
    public void disable(final HamorigamiContext context, GameObject treeObject) {
       if (cutscene != null) {
          context.getEmoteManager().clear();
-         cutscene.stop();
+         cutscene.stop(context);
       }
       if (setup.isEndOfDay()) {
          setup.triggerNextDay();
@@ -46,12 +46,12 @@ public class CutscenePhase implements GamePhase, Proceedable {
 
    @Override
    public boolean isFinished() {
-      return aborted || cutscene.isOver();
+      return aborted;
    }
 
    @Override
    public void update(float delta) {
-      if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE) && !aborted) {
+      if ((cutscene.isOver() || Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) && !aborted) {
          skip();
       }
    }
