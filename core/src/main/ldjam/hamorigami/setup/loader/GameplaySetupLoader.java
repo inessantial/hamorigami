@@ -6,6 +6,7 @@ import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import ldjam.hamorigami.context.HamorigamiContext;
 import ldjam.hamorigami.cutscene.CutsceneBuilder;
+import ldjam.hamorigami.cutscene.emotes.Emote;
 import ldjam.hamorigami.model.SpiritType;
 import ldjam.hamorigami.setup.DaySetup;
 import ldjam.hamorigami.setup.DaySetupBuilder;
@@ -187,6 +188,133 @@ public class GameplaySetupLoader {
    }
 
    private void processCutscene(String line, CutsceneBuilder cutsceneBuilder) {
+      String[] args = line.split(" ");
+      if (line.contains(" spawns at ")) {
+         processSpawn(line, args, cutsceneBuilder);
+      } else if (line.startsWith("wait ")) {
+         processWait(line, args, cutsceneBuilder);
+      } else if (line.contains(" fades in for ")) {
+         processFadeIn(line, args, cutsceneBuilder);
+      } else if (line.contains(" says ")) {
+         processSays(line, args, cutsceneBuilder);
+      } else if (line.contains(" emotes with ")) {
+         processEmotes(line, args, cutsceneBuilder);
+      } else if (line.contains(" starts ") || line.contains(" stops ")) {
+         processModifyAttribute(line, args, cutsceneBuilder);
+      } else if (line.contains(" moves by ")) {
+         processMovesBy(line, args, cutsceneBuilder);
+      } else if (line.startsWith("reset ")) {
+         processReset(line, args, cutsceneBuilder);
+      } else if (line.startsWith("shake with intensity ")) {
+         processShake(line, args, cutsceneBuilder);
+      } else {
+         throw new GdxRuntimeException("Invalid syntax: " + line);
+      }
+   }
+
+   private void processShake(String line, String[] args, CutsceneBuilder cutsceneBuilder) {
+      if (args.length != 7) {
+         throw new GdxRuntimeException("Invalid syntax: " + line + ", expected: shake with intensity <value> for <time> seconds");
+      }
+      float intensity = Float.parseFloat(args[3]);
+      float duration = Float.parseFloat(args[5]);
+      cutsceneBuilder.shakeScreen(intensity, duration);
+   }
+
+   private void processSpawn(String line, String[] args, CutsceneBuilder cutsceneBuilder) {
+      if (args.length != 4) {
+         throw new GdxRuntimeException("Invalid syntax: " + line + ", must be <entity> spawns at <x>,<y>");
+      }
+      String[] positionString = args[3].split(",");
+      if (positionString.length != 2) {
+         throw new GdxRuntimeException("Invalid position specified: " + line);
+      }
+      float x = Float.parseFloat(positionString[0]);
+      float y = Float.parseFloat(positionString[1]);
+      String entityName = args[0];
+      if (entityName.equals("player")) {
+         cutsceneBuilder.spawn("player", SpiritType.SPIRIT_EARTH, x, y);
+      } else {
+         SpiritType type = SpiritType.resolveByName(entityName);
+         if (type == null) {
+            throw new GdxRuntimeException("Unsupported spirit type: " + entityName + " @ " + line);
+         }
+         cutsceneBuilder.spawn(entityName, type, x, y);
+      }
+   }
+
+   private void processReset(String line, String[] args, CutsceneBuilder cutsceneBuilder) {
+      if (args.length != 2) {
+         throw new GdxRuntimeException("Invalid syntax: " + line + ", expected: reset <entity>");
+      }
+      cutsceneBuilder.clearTweens(args[1]);
+   }
+
+   private void processWait(String line, String[] args, CutsceneBuilder cutsceneBuilder) {
+      if (args.length != 3) {
+         throw new GdxRuntimeException("Invalid syntax: " + line + ", expected: wait <number> seconds");
+      }
+      float seconds = Float.parseFloat(args[1]);
+      cutsceneBuilder.wait(seconds);
+   }
+
+   private void processFadeIn(String line, String[] args, CutsceneBuilder cutsceneBuilder) {
+      if (args.length != 6) {
+         throw new GdxRuntimeException("Invalid syntax: " + line + ", expected: <entity> fades in for <time> seconds");
+      }
+      String entity = args[0];
+      float seconds = Float.parseFloat(args[4]);
+      cutsceneBuilder.fadeIn(entity, seconds);
+   }
+
+   private void processSays(String line, String[] args, CutsceneBuilder cutsceneBuilder) {
+      int startIndex = 0;
+      int endIndex = line.indexOf(" ");
+      String entity = line.substring(startIndex, endIndex);
+      String sentence = line.substring(endIndex + 6);
+      cutsceneBuilder.say(sentence, entity);
+   }
+
+   private void processEmotes(String line, String[] args, CutsceneBuilder cutsceneBuilder) {
+      if (args.length != 4) {
+         throw new GdxRuntimeException("Invalid syntax: " + line + ", expected: <entityy> emotes with <emote>");
+      }
+      Emote emote = Emote.valueOf(args[3].toUpperCase().replace(" ", "_"));
+      String entity = args[0];
+      cutsceneBuilder.emote(emote, entity);
+   }
+
+   private void processModifyAttribute(String line, String[] args, CutsceneBuilder cutsceneBuilder) {
+      if (args.length != 3) {
+         throw new GdxRuntimeException("Invalid syntax: " + line + ", expected <entity> <starts|stops> <attribute>");
+      }
+      String entity = args[0];
+      String mode = args[1];
+      String attribute = args[2];
+
+      if (mode.equals("starts")) {
+         cutsceneBuilder.setAttribute(entity, attribute);
+      } else if (mode.equals("stops")) {
+         cutsceneBuilder.removeAttribute(entity, attribute);
+      } else {
+         throw new GdxRuntimeException("Invalid syntax: " + line + ", expected <entity> <starts|stops> <attribute>");
+      }
+   }
+
+   private void processMovesBy(String line, String[] args, CutsceneBuilder cutsceneBuilder) {
+      if (args.length < 7) {
+         throw new GdxRuntimeException("Invalid syntax: " + line + ", expected: <entity> moves by <x>,<y> for <unit> seconds [looped]");
+      }
+      String entity = args[0];
+      String[] positionString = args[3].split(",");
+      float duration = Float.parseFloat(args[5]);
+      float x = Float.parseFloat(positionString[0]);
+      float y = positionString.length > 1 ? Float.parseFloat(positionString[1]) : 0f;
+      if (args.length == 8 && args[7].equals("looped")) {
+         cutsceneBuilder.moveByYoyo(entity, x, y, duration);
+      } else {
+         cutsceneBuilder.moveBy(entity, x, y, duration);
+      }
 
    }
 }

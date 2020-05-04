@@ -2,6 +2,7 @@ package ldjam.hamorigami.screens;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.utils.GdxRuntimeException;
 import de.bitbrain.braingdx.graphics.GameCamera;
 import de.bitbrain.braingdx.graphics.animation.AnimationConfig;
 import de.bitbrain.braingdx.graphics.animation.AnimationFrames;
@@ -21,6 +22,8 @@ import ldjam.hamorigami.model.SpiritAnimationType;
 import ldjam.hamorigami.model.SpiritType;
 import ldjam.hamorigami.model.TreeStatus;
 import ldjam.hamorigami.setup.GameplaySetup;
+
+import java.io.IOException;
 
 import static com.badlogic.gdx.graphics.g2d.Animation.PlayMode.LOOP;
 import static ldjam.hamorigami.Assets.Textures.*;

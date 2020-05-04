@@ -8,7 +8,7 @@ day 1
 begin cutscene
 
 wait 2 seconds
-player spawns
+player spawns at 200,0
 player fades in for 2 seconds
 wait 4 seconds
 player says player.dialog.01
@@ -30,7 +30,7 @@ wait 1 second
 
 ame spawns at 200,100
 ame fades in for 2 seconds
-wait for 2 seconds
+wait 2 seconds
 ame says I must give water
 wait 0.5 seconds
 player starts swiping
@@ -77,7 +77,7 @@ spawn hi at 10%
 begin cutscene
 
 wait 2 seconds
-player spawns
+player spawns at 200,0
 player fades in for 2 seconds
 wait 4 seconds
 player says player.dialog.01
@@ -99,7 +99,7 @@ wait 1 second
 
 ame spawns at 200,100
 ame fades in for 2 seconds
-wait for 2 seconds
+wait 2 seconds
 ame says I must give water
 wait 0.5 seconds
 player starts swiping

@@ -9,7 +9,8 @@ import ldjam.hamorigami.Assets;
 
 public enum Emote {
    SMILE(0),
-   CRY(0),
+   CONFUSION(0),
+   SADNESS(0),
    SHAKE_HEAD(0),
    AGREE(0);
 
