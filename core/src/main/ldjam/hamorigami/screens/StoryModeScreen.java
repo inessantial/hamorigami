@@ -12,6 +12,9 @@ import ldjam.hamorigami.model.TreeStatus;
 import ldjam.hamorigami.setup.DaySetupBuilder;
 import ldjam.hamorigami.setup.GameplaySetup;
 import ldjam.hamorigami.setup.GameplaySetupBuilder;
+import ldjam.hamorigami.setup.loader.GameplaySetupLoader;
+
+import java.io.IOException;
 
 public class StoryModeScreen extends BaseScreen {
 
@@ -43,6 +46,12 @@ public class StoryModeScreen extends BaseScreen {
 
    @Override
    protected GameplaySetup buildGameplaySetup(HamorigamiContext context) {
+      GameplaySetupLoader loader = new GameplaySetupLoader(context);
+      try {
+         loader.load("game.play");
+      } catch (IOException ex) {
+         ex.printStackTrace();
+      }
       // TODO make gameplay setup filebased
       return new GameplaySetupBuilder()
             .addDay(new DaySetupBuilder()

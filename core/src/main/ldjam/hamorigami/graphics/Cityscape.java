@@ -6,7 +6,6 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import de.bitbrain.braingdx.assets.SharedAssetManager;
 import de.bitbrain.braingdx.graphics.pipeline.RenderLayer2D;
-import ldjam.hamorigami.context.HamorigamiContext;
 import ldjam.hamorigami.setup.GameplaySetup;
 
 import static ldjam.hamorigami.Assets.Textures.CITY_DAY;

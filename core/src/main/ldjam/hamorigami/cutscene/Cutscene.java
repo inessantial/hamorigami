@@ -41,6 +41,10 @@ public class Cutscene {
       }
    }
 
+   public int size() {
+      return steps.size();
+   }
+
    public void stop(GameContext2D context) {
       SharedTweenManager.getInstance().killAll();
       for (Tween tween : tweens) {
@@ -54,5 +58,12 @@ public class Cutscene {
 
    public boolean isOver() {
       return executedTweens.size() == tweens.size();
+   }
+
+   @Override
+   public String toString() {
+      return "Cutscene{" +
+            "steps=" + steps +
+            '}';
    }
 }

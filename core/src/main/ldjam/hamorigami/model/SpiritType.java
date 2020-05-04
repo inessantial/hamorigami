@@ -11,6 +11,7 @@ import static ldjam.hamorigami.Assets.Sounds.*;
 public enum SpiritType {
 
    SPIRIT_EARTH(
+         "kodama",
          80,
          30,
          new SpiritAbsorbEffect() {
@@ -40,6 +41,7 @@ public enum SpiritType {
          SPEECH_SPIRIT_EARTH_10,
          SPEECH_SPIRIT_EARTH_11),
    SPIRIT_WATER(
+         "ame",
          80,
          5,
          new AddWaterEffect(),
@@ -54,6 +56,7 @@ public enum SpiritType {
          SPEECH_SPIRIT_WATER_06
    ),
    SPIRIT_SUN(
+         "hi",
          45,
          10,
          new AddSunlightEffect(),
@@ -70,6 +73,7 @@ public enum SpiritType {
          SPEECH_SPIRIT_SUN_08
    );
 
+   private final String name;
    private final int health;
    private final float maxSpeed;
    private final SpiritAbsorbEffect absorbEffect;
@@ -78,13 +82,15 @@ public enum SpiritType {
    private final String particleId;
    private final String[] speechAssetIds;
 
-   SpiritType(int health,
+   SpiritType(String name,
+              int health,
               float maxSpeed,
               SpiritAbsorbEffect absorbEffect,
               SpiritSpawnEffect spawnEffect,
               Color lightingColor,
               String particleId,
               String ... speechAssetIds) {
+      this.name = name;
       this.health = health;
       this.maxSpeed = maxSpeed;
       this.absorbEffect = absorbEffect;
@@ -92,6 +98,19 @@ public enum SpiritType {
       this.lightingColor = lightingColor;
       this.particleId = particleId;
       this.speechAssetIds = speechAssetIds;
+   }
+
+   public static SpiritType resolveByName(String spiritName) {
+      for (SpiritType type : values()) {
+         if (type.getName().toLowerCase().equals(spiritName.toLowerCase())) {
+            return type;
+         }
+      }
+      return null;
+   }
+
+   public String getName() {
+      return name;
    }
 
    public String[] getSpeechAssetIds() {

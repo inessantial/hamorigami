@@ -12,6 +12,7 @@ import de.bitbrain.braingdx.util.Mutator;
 import de.bitbrain.braingdx.world.GameObject;
 import ldjam.hamorigami.context.HamorigamiContext;
 import ldjam.hamorigami.cutscene.emotes.Emote;
+import ldjam.hamorigami.i18n.Bundle;
 import ldjam.hamorigami.model.SpiritType;
 
 import java.util.ArrayList;
@@ -171,7 +172,7 @@ public class CutsceneBuilder {
          @Override
          public void execute() {
             GameObject obj = context.getGameWorld().getObjectById(id);
-            context.getEmoteManager().say(text, obj);
+            context.getEmoteManager().say(Bundle.get(text), obj);
          }
       });
       emoteTime += SPEECH_FADE_IN_DURATION + SPEECH_DELAY_DURATION_PER_CHARACTER * text.length() + SPEECH_FADE_OUT_DURATION;

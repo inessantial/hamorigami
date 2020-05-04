@@ -30,7 +30,6 @@ public final class Bundle {
       try {
          return translations.get(key);
       } catch (MissingResourceException ex) {
-         Gdx.app.error("Translations", "Unable to resolve translation for key=" + key + " and locale=" + translations.getLocale());
          return key;
       }
    }
