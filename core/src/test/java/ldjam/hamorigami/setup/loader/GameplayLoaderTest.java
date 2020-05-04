@@ -47,7 +47,7 @@ public class GameplayLoaderTest {
       assertThat(setup.getCurrentDaySetup().getEndCutscene()).isNull();
       final Cutscene cutscene = setup.getCurrentDaySetup().getStartCutscene();
       assertThat(cutscene.size()).isEqualTo(14);
-      assertThat(setup.getCurrentDaySetup().getSpawns()).hasSize(17);
+      assertThat(setup.getCurrentDaySetup().getSpawns()).hasSize(9);
    }
 
    @Test
@@ -55,7 +55,7 @@ public class GameplayLoaderTest {
       setup.triggerNextDay();
       assertThat(setup.getCurrentDaySetup().getStartCutscene()).isNull();
       assertThat(setup.getCurrentDaySetup().getEndCutscene()).isNotNull();
-      assertThat(setup.getCurrentDaySetup().getSpawns()).hasSize(18);
+      assertThat(setup.getCurrentDaySetup().getSpawns()).hasSize(10);
       final Cutscene cutscene = setup.getCurrentDaySetup().getEndCutscene();
       assertThat(cutscene.size()).isEqualTo(14);
    }
@@ -72,6 +72,6 @@ public class GameplayLoaderTest {
    public void testThirdDayHasSpawns() {
       setup.triggerNextDay();
       setup.triggerNextDay();
-      assertThat(setup.getCurrentDaySetup().getSpawns()).hasSize(16);
+      assertThat(setup.getCurrentDaySetup().getSpawns()).hasSize(8);
    }
 }

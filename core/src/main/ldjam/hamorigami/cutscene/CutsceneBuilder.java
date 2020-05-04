@@ -82,7 +82,9 @@ public class CutsceneBuilder {
          @Override
          public void stop() {
             GameObject obj = context.getGameWorld().getObjectById(id);
-            obj.removeAttribute(attribute);
+            if (obj != null) {
+               obj.removeAttribute(attribute);
+            }
          }
       });
       return this;
