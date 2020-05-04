@@ -27,9 +27,6 @@ public class CutscenePhase implements GamePhase, Proceedable {
          context.getEmoteManager().clear();
          cutscene.stop(context);
       }
-      if (setup.isEndOfDay()) {
-         setup.triggerNextDay();
-      }
    }
 
    @Override
@@ -64,7 +61,10 @@ public class CutscenePhase implements GamePhase, Proceedable {
    @Override
    public void skip() {
       aborted = true;
-      if (setup.isEndOfDay()) {
+      if (setup.isLastDay() && setup.isEndOfDay()) {
+         phaseHandler.changePhase(Phases.CREDITS);
+      } else if (setup.isEndOfDay()) {
+         setup.triggerNextDay();
          phaseHandler.changePhase(Phases.CUTSCENE);
       } else {
          phaseHandler.changePhase(Phases.GAMEPLAY);

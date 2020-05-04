@@ -1,6 +1,5 @@
 package ldjam.hamorigami.setup.loader;
 
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.GdxRuntimeException;
@@ -8,7 +7,6 @@ import ldjam.hamorigami.context.HamorigamiContext;
 import ldjam.hamorigami.cutscene.CutsceneBuilder;
 import ldjam.hamorigami.cutscene.emotes.Emote;
 import ldjam.hamorigami.model.SpiritType;
-import ldjam.hamorigami.setup.DaySetup;
 import ldjam.hamorigami.setup.DaySetupBuilder;
 import ldjam.hamorigami.setup.GameplaySetup;
 import ldjam.hamorigami.setup.GameplaySetupBuilder;
@@ -233,7 +231,7 @@ public class GameplaySetupLoader {
       float y = Float.parseFloat(positionString[1]);
       String entityName = args[0];
       if (entityName.equals("player")) {
-         cutsceneBuilder.spawn("player", SpiritType.SPIRIT_EARTH, x, y);
+         cutsceneBuilder.spawn("player", SpiritType.SPIRIT_EARTH, x, y, true);
       } else {
          SpiritType type = SpiritType.resolveByName(entityName);
          if (type == null) {

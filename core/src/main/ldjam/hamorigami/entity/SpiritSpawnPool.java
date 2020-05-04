@@ -6,6 +6,13 @@ import java.util.*;
 
 public class SpiritSpawnPool {
 
+   private final Comparator<SpiritSpawn> spawnComparator = new Comparator<SpiritSpawn>() {
+      @Override
+      public int compare(SpiritSpawn o1, SpiritSpawn o2) {
+         return (int) (o1.durationUntil - o2.durationUntil);
+      }
+   };
+
    public class SpiritSpawn {
       public SpiritType[] spawns;
       public final float durationUntil;
@@ -23,6 +30,14 @@ public class SpiritSpawnPool {
          System.arraycopy(spawns, 0, result, aLen, bLen);
          this.spawns = result;
       }
+
+      @Override
+      public String toString() {
+         return "SpiritSpawn{" +
+               "spawns=" + Arrays.toString(spawns) +
+               ", durationUntil=" + durationUntil +
+               '}';
+      }
    }
 
    private final Map<Float, SpiritSpawn> spawnMap = new HashMap<Float, SpiritSpawn>();
@@ -38,6 +53,7 @@ public class SpiritSpawnPool {
       } else {
          spawnMap.get(durationUntilNext).addSpawns(spawns);
       }
+      Collections.sort(spawnList, spawnComparator);
    }
 
    public SpiritSpawn getNext() {

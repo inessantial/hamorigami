@@ -111,7 +111,6 @@ public class GameplayPhase implements GamePhase, Proceedable {
          playerObject.setDimensions(64f, 64f);
          ColorTransition colorTransition = new ColorTransition();
          colorTransition.setColor(Color.valueOf("9cd2ff"));
-         context.getScreenTransitions().in(colorTransition, 0.5f);
       }
 
       // Spirit spawning
@@ -160,23 +159,29 @@ public class GameplayPhase implements GamePhase, Proceedable {
 
          // game successful!
          if (!spiritStillAlive) {
-            kilAllSpirits();
+            kilAllSpirits(true);
             gameOver = true;
+            if (setup.getCurrentDaySetup().getEndCutscene() == null) {
+               setup.triggerNextDay();
+            }
             gamePhaseHandler.changePhase(Phases.CUTSCENE);
          }
       }
    }
 
-   private void kilAllSpirits() {
+   private void kilAllSpirits(boolean excludePlayer) {
       // let all spirits fade away
       for (GameObject spirit : context.getGameWorld().getGroup("spirits")) {
+         if (excludePlayer && spirit.getType() == SPIRIT_EARTH) {
+            continue;
+         }
          final String spiritId = spirit.getId();
          SharedTweenManager.getInstance().killTarget(spirit);
          SharedTweenManager.getInstance().killTarget(spirit.getColor());
-         Tween.to(spirit, GameObjectTween.OFFSET_Y, 1.5f)
+         Tween.to(spirit, GameObjectTween.OFFSET_Y, 0.5f)
                .target(180)
                .start(SharedTweenManager.getInstance());
-         Tween.to(spirit.getColor(), ColorTween.A, 1.5f)
+         Tween.to(spirit.getColor(), ColorTween.A, 0.5f)
                .target(0f)
                .setCallback(new TweenCallback() {
                   @Override
@@ -204,7 +209,7 @@ public class GameplayPhase implements GamePhase, Proceedable {
 
    @Override
    public void skip() {
-      kilAllSpirits();
+      kilAllSpirits(false);
       gameOver = true;
       gamePhaseHandler.changePhase(Phases.CREDITS);
    }

@@ -36,7 +36,6 @@ public class SpiritSpawner implements Updateable {
       }
       deltaTimer.update(delta);
       if (currentSpawn == null || deltaTimer.reached(currentSpawn.durationUntil)) {
-         deltaTimer.reset();
          if (currentSpawn != null) {
             for (SpiritType type : currentSpawn.spawns) {
                spawnSpirit(type);

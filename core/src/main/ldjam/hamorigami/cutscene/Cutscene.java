@@ -46,14 +46,15 @@ public class Cutscene {
    }
 
    public void stop(GameContext2D context) {
-      SharedTweenManager.getInstance().killAll();
+      for (Map.Entry<Float, List<CutsceneStep>> entry : steps.entrySet()) {
+         for (CutsceneStep step : entry.getValue()) {
+            step.stop();
+         }
+      }
       for (Tween tween : tweens) {
          tween.free();
       }
       tweens.clear();
-      for (GameObject obj : context.getGameWorld().getGroup("cutscene")) {
-         context.getGameWorld().remove(obj.getId());
-      }
    }
 
    public boolean isOver() {

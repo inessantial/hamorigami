@@ -44,6 +44,12 @@ public class CutsceneBuilder {
                   .target(1f)
                   .start(SharedTweenManager.getInstance());
          }
+
+         @Override
+         public void stop() {
+            GameObject obj = context.getGameWorld().getObjectById(id);
+            SharedTweenManager.getInstance().killTarget(obj);
+         }
       });
       return this;
    }
@@ -54,6 +60,11 @@ public class CutsceneBuilder {
          public void execute() {
             GameObject obj = context.getGameWorld().getObjectById(id);
             obj.removeAttribute(attribute);
+         }
+
+         @Override
+         public void stop() {
+
          }
       });
       return this;
@@ -67,6 +78,12 @@ public class CutsceneBuilder {
             GameObject obj = context.getGameWorld().getObjectById(id);
             obj.setAttribute(attribute, true);
          }
+
+         @Override
+         public void stop() {
+            GameObject obj = context.getGameWorld().getObjectById(id);
+            obj.removeAttribute(attribute);
+         }
       });
       return this;
    }
@@ -78,6 +95,11 @@ public class CutsceneBuilder {
          public void execute() {
             GameObject obj = context.getGameWorld().getObjectById(id);
             SharedTweenManager.getInstance().killTarget(obj);
+         }
+
+         @Override
+         public void stop() {
+
          }
       });
       return this;
@@ -118,6 +140,12 @@ public class CutsceneBuilder {
                tween.start(SharedTweenManager.getInstance());
             }
          }
+
+         @Override
+         public void stop() {
+            GameObject obj = context.getGameWorld().getObjectById(id);
+            SharedTweenManager.getInstance().killTarget(obj);
+         }
       });
       return this;
    }
@@ -142,6 +170,13 @@ public class CutsceneBuilder {
                context.getEntityFactory().spawnSpirit(spirit, x, y, mutator, "cutscene");
             }
          }
+
+         @Override
+         public void stop() {
+            if (!persistent) {
+               context.getGameWorld().remove(id);
+            }
+         }
       });
       return this;
    }
@@ -151,6 +186,11 @@ public class CutsceneBuilder {
          @Override
          public void execute() {
             context.getGameCamera().setPosition(x, y);
+         }
+
+         @Override
+         public void stop() {
+
          }
       });
       return this;
@@ -174,6 +214,11 @@ public class CutsceneBuilder {
             GameObject obj = context.getGameWorld().getObjectById(id);
             context.getEmoteManager().say(Bundle.get(text), obj);
          }
+
+         @Override
+         public void stop() {
+
+         }
       });
       emoteTime += SPEECH_FADE_IN_DURATION + SPEECH_DELAY_DURATION_PER_CHARACTER * text.length() + SPEECH_FADE_OUT_DURATION;
       return this;
@@ -185,6 +230,11 @@ public class CutsceneBuilder {
          public void execute() {
             GameObject obj = context.getGameWorld().getObjectById(id);
             context.getEmoteManager().emote(emote, obj);
+         }
+
+         @Override
+         public void stop() {
+
          }
       });
       emoteTime += EMOTE_FADE_IN_DURATION + EMOTE_DELAY_DURATION + EMOTE_FADE_OUT_DURATION;
@@ -210,6 +260,11 @@ public class CutsceneBuilder {
                      .start(SharedTweenManager.getInstance());
             }
          }
+
+         @Override
+         public void stop() {
+            SharedTweenManager.getInstance().killTarget(context.getGameCamera());
+         }
       });
       return this;
    }
@@ -219,6 +274,11 @@ public class CutsceneBuilder {
          @Override
          public void execute() {
             context.getScreenTransitions().in(seconds);
+         }
+
+         @Override
+         public void stop() {
+
          }
       });
       return this;
@@ -230,6 +290,11 @@ public class CutsceneBuilder {
          public void execute() {
             context.getScreenTransitions().out(seconds);
          }
+
+         @Override
+         public void stop() {
+
+         }
       });
       return this;
    }
@@ -240,6 +305,11 @@ public class CutsceneBuilder {
          public void execute() {
             context.getGameCamera().shake(intensity, seconds);
          }
+
+         @Override
+         public void stop() {
+
+         }
       });
       return this;
    }
@@ -249,6 +319,11 @@ public class CutsceneBuilder {
          @Override
          public void execute() {
             context.getAudioManager().spawnSound(soundPath, x, y, 1f, 1f, 300);
+         }
+
+         @Override
+         public void stop() {
+
          }
       });
       return this;
@@ -264,6 +339,11 @@ public class CutsceneBuilder {
          public void execute() {
             context.getAudioManager().playMusic(musicPath);
          }
+
+         @Override
+         public void stop() {
+            context.getAudioManager().stopMusic(musicPath);
+         }
       });
       return this;
    }
@@ -274,10 +354,14 @@ public class CutsceneBuilder {
          public void execute() {
             context.getAudioManager().stopMusic(musicPath);
          }
+
+         @Override
+         public void stop() {
+
+         }
       });
       return this;
    }
-
 
 
    public CutsceneBuilder remove(final String id, final float delay) {
@@ -295,6 +379,11 @@ public class CutsceneBuilder {
                      }
                   })
                   .start(SharedTweenManager.getInstance());
+         }
+
+         @Override
+         public void stop() {
+
          }
       });
       currentTime += delay;

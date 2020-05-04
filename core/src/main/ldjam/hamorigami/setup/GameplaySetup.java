@@ -4,7 +4,7 @@ import java.util.List;
 
 public class GameplaySetup {
 
-   public static float SECONDS_PER_DAY = 120.0f;
+   public static float SECONDS_PER_DAY = 60.0f;
 
    private int currentDay;
    private List<DaySetup> daySetups;
