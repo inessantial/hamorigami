@@ -16,10 +16,13 @@ import de.bitbrain.braingdx.tweens.SharedTweenManager;
 import de.bitbrain.braingdx.world.GameObject;
 import ldjam.hamorigami.Assets;
 import ldjam.hamorigami.context.HamorigamiContext;
+import ldjam.hamorigami.cutscene.Cutscene;
+import ldjam.hamorigami.cutscene.CutsceneBuilder;
 import ldjam.hamorigami.i18n.Bundle;
 import ldjam.hamorigami.i18n.Messages;
 import ldjam.hamorigami.input.Proceedable;
 import ldjam.hamorigami.input.ingame.ProceedableControllerAdapter;
+import ldjam.hamorigami.model.SpiritType;
 import ldjam.hamorigami.ui.Styles;
 
 import static ldjam.hamorigami.Assets.Musics.OUTRO;
@@ -31,6 +34,7 @@ public class CreditsPhase implements GamePhase, Proceedable {
    private final GamePhaseHandler phaseHandler;
    private Music music;
    private Table layout;
+   private Cutscene cutscene;
 
    public CreditsPhase(GamePhaseHandler phaseHandler) {
       this.phaseHandler = phaseHandler;
@@ -40,6 +44,7 @@ public class CreditsPhase implements GamePhase, Proceedable {
    public void disable(final HamorigamiContext context, GameObject treeObject) {
       music.stop();
       SharedAssetManager.getInstance().get(Assets.Musics.CITYSCAPE, Music.class).setVolume(0.9f);
+      cutscene.stop(context);
       Tween.to(layout, ActorTween.ALPHA, 1f)
             .target(0f)
             .setCallbackTriggers(TweenCallback.COMPLETE)
@@ -69,25 +74,12 @@ public class CreditsPhase implements GamePhase, Proceedable {
             .start(SharedTweenManager.getInstance());
       layout.setFillParent(true);
 
-      Label credits1 = new Label(Bundle.get(Messages.CREDITS_1), Styles.STORY);
-      layout.add(credits1).row();
-      Label credits2 = new Label(Bundle.get(Messages.CREDITS_2), Styles.STORY);
-      layout.add(credits2).row();
-      Label credits3 = new Label(Bundle.get(Messages.CREDITS_3), Styles.STORY);
-      layout.add(credits3).row();
-      Label credits4 = new Label(Bundle.get(Messages.CREDITS_4), Styles.STORY);
-      layout.add(credits4).row();
-      Label credits5 = new Label(Bundle.get(Messages.CREDITS_5), Styles.STORY);
-      layout.add(credits5).row();
-      Label credits6 = new Label(Bundle.get(Messages.CREDITS_6), Styles.STORY);
-      layout.add(credits6).row();
-
       Label pressAnyButton = new Label(Bundle.get(Messages.THANKS), Styles.DIALOG_TEXT);
       layout.add(pressAnyButton).padTop(120f).row();
 
       context.getWorldStage().addActor(layout);
-
       context.getGameCamera().setZoom(800, GameCamera.ZoomMode.TO_WIDTH);
+
 
       pressAnyButton.getColor().a = 0f;
       Tween.to(pressAnyButton, ActorTween.ALPHA, 3f).target(1f).delay(3f)
@@ -99,6 +91,59 @@ public class CreditsPhase implements GamePhase, Proceedable {
             .ease(TweenEquations.easeInCubic)
             .repeatYoyo(Tween.INFINITY, 0f)
             .start(context.getTweenManager());
+
+      // setup cutscene
+      this.cutscene = new CutsceneBuilder(context)
+            .spawn("credits1", SpiritType.SPIRIT_SUN, context.getGameCamera().getScaledCameraWidth() / 2f, context.getGameCamera().getScaledCameraHeight() / 2f)
+            .fadeIn("credits1", 1.5f)
+            .wait(1.5f)
+            .say("credits.1", "credits1")
+            .wait(1f)
+            .moveBy("credits1", context.getGameCamera().getScaledCameraWidth() / 2f, context.getGameCamera().getScaledCameraHeight() / 2f, 4f)
+            .remove("credits1", 1f)
+
+            .spawn("credits2", SpiritType.SPIRIT_EARTH, context.getGameCamera().getScaledCameraWidth() / 2f, context.getGameCamera().getScaledCameraHeight() / 2f)
+            .fadeIn("credits2", 1.5f)
+            .wait(1.5f)
+            .say("credits.2", "credits2")
+            .wait(2f)
+            .moveBy("credits2", -context.getGameCamera().getScaledCameraWidth() / 2f, context.getGameCamera().getScaledCameraHeight() / 2f, 4f)
+            .remove("credits2", 1f)
+
+            .spawn("credits3", SpiritType.SPIRIT_WATER, context.getGameCamera().getScaledCameraWidth() / 2f, context.getGameCamera().getScaledCameraHeight() / 2f)
+            .fadeIn("credits3", 1.5f)
+            .wait(1.5f)
+            .say("credits.3", "credits3")
+            .wait(1f)
+            .moveBy("credits3", context.getGameCamera().getScaledCameraWidth() / 2f, -context.getGameCamera().getScaledCameraHeight() / 2f, 4f)
+            .remove("credits3", 1f)
+
+            .spawn("credits4", SpiritType.SPIRIT_EARTH, context.getGameCamera().getScaledCameraWidth() / 2f, context.getGameCamera().getScaledCameraHeight() / 2f)
+            .fadeIn("credits4", 1.5f)
+            .wait(1.5f)
+            .say("credits.4", "credits4")
+            .wait(1f)
+            .moveBy("credits4", context.getGameCamera().getScaledCameraWidth() / 2f, -context.getGameCamera().getScaledCameraHeight() / 2f, 4f)
+            .remove("credits4", 1f)
+
+            .spawn("credits5", SpiritType.SPIRIT_SUN, context.getGameCamera().getScaledCameraWidth() / 2f, context.getGameCamera().getScaledCameraHeight() / 2f)
+            .fadeIn("credits5", 1.5f)
+            .wait(1.5f)
+            .say("credits.5", "credits5")
+            .wait(1f)
+            .moveBy("credits5", context.getGameCamera().getScaledCameraWidth() / 2f, context.getGameCamera().getScaledCameraHeight() / 2f, 4f)
+            .remove("credits5", 1f)
+
+            .spawn("credits6", SpiritType.SPIRIT_SUN, context.getGameCamera().getScaledCameraWidth() / 2f, context.getGameCamera().getScaledCameraHeight() / 2f)
+            .fadeIn("credits6", 1.5f)
+            .wait(1.5f)
+            .say("credits.6", "credits6")
+            .wait(1f)
+            .moveBy("credits6", -context.getGameCamera().getScaledCameraWidth() / 2f, -context.getGameCamera().getScaledCameraHeight() / 2f, 4f)
+            .remove("credits6", 1f)
+
+            .build();
+      this.cutscene.play();
    }
 
    @Override
@@ -111,7 +156,7 @@ public class CreditsPhase implements GamePhase, Proceedable {
       if (!exiting && Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
          skip();
       }
-      if (!exiting && (Gdx.input.isTouched() || Gdx.input.isKeyJustPressed(Input.Keys.ANY_KEY))) {
+      if (!exiting && (Gdx.input.isKeyJustPressed(Input.Keys.ANY_KEY))) {
          proceed();
       }
    }

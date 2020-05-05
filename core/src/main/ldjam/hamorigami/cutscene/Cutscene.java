@@ -3,6 +3,7 @@ package ldjam.hamorigami.cutscene;
 import aurelienribon.tweenengine.BaseTween;
 import aurelienribon.tweenengine.Tween;
 import aurelienribon.tweenengine.TweenCallback;
+import com.badlogic.gdx.Gdx;
 import de.bitbrain.braingdx.context.GameContext2D;
 import de.bitbrain.braingdx.tweens.SharedTweenManager;
 import de.bitbrain.braingdx.world.GameObject;
@@ -30,9 +31,14 @@ public class Cutscene {
          for (final CutsceneStep step : entry.getValue()) {
             tweens.add(Tween.call(new TweenCallback() {
                @Override
-               public void onEvent(int type, BaseTween<?> tween) {
-                  step.execute();
-                  executedTweens.add(tween);
+               public void onEvent(int type, final BaseTween<?> tween) {
+                  Gdx.app.postRunnable(new Runnable() {
+                     @Override
+                     public void run() {
+                        step.execute();
+                        executedTweens.add(tween);
+                     }
+                  });
                }
             }).setCallbackTriggers(TweenCallback.COMPLETE)
                   .delay(delay)

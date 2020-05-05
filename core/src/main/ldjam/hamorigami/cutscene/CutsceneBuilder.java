@@ -39,10 +39,12 @@ public class CutsceneBuilder {
          @Override
          public void execute() {
             GameObject obj = context.getGameWorld().getObjectById(id);
-            obj.getColor().a = 0f;
-            Tween.to(obj, GameObjectTween.ALPHA, duration)
-                  .target(1f)
-                  .start(SharedTweenManager.getInstance());
+            if (obj != null) {
+               obj.getColor().a = 0f;
+               Tween.to(obj, GameObjectTween.ALPHA, duration)
+                     .target(1f)
+                     .start(SharedTweenManager.getInstance());
+            }
          }
 
          @Override
