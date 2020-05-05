@@ -25,8 +25,15 @@ public interface Assets {
       String GAUGE_OVERLAY = "texture/gauge-overlay.png";
       String GAUGE_GRASS = "texture/gauge-grass.png";
 
-      String CITY_DAY = "texture/city-scape-midday.png";
-      String CITY_EVENING = "texture/city-scape-twilight.png";
+      String SKY_DAY = "texture/sky-midday-clear.png";
+      String SKY_EVENING = "texture/sky-evening-clear.png";
+
+      String CITYSCAPE_DAY_FRONT = "texture/city-scape-midday-front.png";
+      String CITYSCAPE_DAY_MIDDLE = "texture/city-scape-midday-middle.png";
+      String CITYSCAPE_DAY_FAR = "texture/city-scape-midday-far.png";
+      String CITYSCAPE_EVENING_FRONT = "texture/city-scape-evening-front.png";
+      String CITYSCAPE_EVENING_MIDDLE = "texture/city-scape-evening-middle.png";
+      String CITYSCAPE_EVENING_FAR = "texture/city-scape-evening-far.png";
 
       String BUBBLE = "texture/bubble.9.png";
       String BUBBLE_BOTTOM = "texture/bubble-bottom.png";

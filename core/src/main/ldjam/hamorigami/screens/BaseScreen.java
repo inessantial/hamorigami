@@ -1,8 +1,9 @@
 package ldjam.hamorigami.screens;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.utils.GdxRuntimeException;
 import de.bitbrain.braingdx.graphics.GameCamera;
 import de.bitbrain.braingdx.graphics.animation.AnimationConfig;
 import de.bitbrain.braingdx.graphics.animation.AnimationFrames;
@@ -23,8 +24,6 @@ import ldjam.hamorigami.model.SpiritType;
 import ldjam.hamorigami.model.TreeStatus;
 import ldjam.hamorigami.setup.GameplaySetup;
 
-import java.io.IOException;
-
 import static com.badlogic.gdx.graphics.g2d.Animation.PlayMode.LOOP;
 import static ldjam.hamorigami.Assets.Textures.*;
 import static ldjam.hamorigami.model.SpiritType.SPIRIT_SUN;
@@ -35,6 +34,7 @@ public abstract class BaseScreen extends BrainGdxScreen2D<HamorigamiGame, Hamori
    protected GameObject treeObject;
    protected Cityscape cityscape;
    protected GameplaySetup setup;
+   private HamorigamiContext context;
 
    public BaseScreen(final HamorigamiGame game) {
       super(game, new ArgumentFactory<AbstractScreen<HamorigamiGame, HamorigamiContext>, HamorigamiContext>() {
@@ -47,6 +47,8 @@ public abstract class BaseScreen extends BrainGdxScreen2D<HamorigamiGame, Hamori
 
    @Override
    protected void onCreate(final HamorigamiContext context) {
+      this.context = context;
+      context.getGameCamera().setStickToWorldBounds(false);
       context.getGameCamera().setZoom(800, GameCamera.ZoomMode.TO_WIDTH);
       this.setup = buildGameplaySetup(context);
       ColorTransition colorTransition = new ColorTransition();
@@ -55,13 +57,23 @@ public abstract class BaseScreen extends BrainGdxScreen2D<HamorigamiGame, Hamori
       context.setDebug(getGame().isDebug());
       setupLevel(context);
       setupGraphics(context);
-      cityscape = new Cityscape(setup);
+      cityscape = new Cityscape(setup, context);
       context.getRenderPipeline().putAfter(RenderPipeIds.BACKGROUND, "cityscape", cityscape);
    }
 
    @Override
    protected void onUpdate(float delta) {
       super.onUpdate(delta);
+      if (Gdx.input.isKeyPressed(Input.Keys.J)) {
+         context.getGameCamera().getInternalCamera().position.x -= 22.5f * delta;
+      } else if (Gdx.input.isKeyPressed(Input.Keys.L)) {
+         context.getGameCamera().getInternalCamera().position.x += 22.5f * delta;
+      }
+      if (Gdx.input.isKeyPressed(Input.Keys.I)) {
+         context.getGameCamera().getInternalCamera().position.y += 22.5f * delta;
+      } else if (Gdx.input.isKeyPressed(Input.Keys.K)) {
+         context.getGameCamera().getInternalCamera().position.y -= 22.5f * delta;
+      }
    }
 
    private void setupLevel(HamorigamiContext context) {
