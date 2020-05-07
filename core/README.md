@@ -8,7 +8,7 @@ Please put assets into the following directories:
 
 | Directory        | Purpose           | Naming conventions  |
 | ------------- |:-------------:| -----:|
-| assets/font | rue Type (.ttf) fonts | fontname.ttf |
+| assets/font | True Type (.ttf) fonts | fontname.ttf |
 | assets/i18n | translation strings | translations_XX.properties where XX is an official [locale code](https://www.viralpatel.net/java-locale-list-tutorial/) |
 | assets/music | music in .ogg format | *.ogg |
 | assets/sound |sound in .ogg format | *.ogg |
