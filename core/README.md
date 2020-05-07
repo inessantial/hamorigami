@@ -8,13 +8,13 @@ Please put assets into the following directories:
 
 | Directory        | Purpose           | Naming conventions  |
 | ------------- |:-------------:| -----:|
-| assets/font | True Type (.ttf) fonts | fontname.ttf |
-| assets/i18n | translation strings | translations_XX.properties where XX is an official [locale code](https://www.viralpatel.net/java-locale-list-tutorial/) |
-| assets/music | music in .ogg format | *.ogg |
-| assets/sound |sound in .ogg format | *.ogg |
-| assets/particles | 2D particle effects | name.p |
-| assets/texture | various textures | *.jpg, *.gif, *.png |
-| assets/game.play | The gameplay file | *.play |
+| [assets/font](assets/font) | True Type (.ttf) fonts | fontname.ttf |
+| [assets/i18n](assets/i18n) | translation strings | translations_XX.properties where XX is an official [locale code](https://www.viralpatel.net/java-locale-list-tutorial/) |
+| [assets/music](assets/music) | music in .ogg format | *.ogg |
+| [assets/sound](assets/sound) |sound in .ogg format | *.ogg |
+| [assets/particles](assets/particles) | 2D particle effects | name.p |
+| [assets/texture](assets/texture) | various textures | *.jpg, *.gif, *.png |
+| [assets/game.play](assets/game.play) | The gameplay file | *.play |
 
 ## Gameplay file
 
