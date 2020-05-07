@@ -128,7 +128,7 @@ cutscene.day1.kodama.01=Das ist ein Dialog
 ```
 Within the cutscene instruction, you then can automatically let the entity say the translated sentence:
 ```
-player says cutscene.day1.kodama.02
+player says cutscene.day1.kodama.01
 ```
 Depending on the language configured on the operating system of the player, the language gets automatically loaded (English is default).
 
