@@ -22,7 +22,7 @@ public class SpeechBubble extends Actor {
 
    private static final float PADDING = 6f;
    private static final float OFFSET_Y = 5f;
-   private static final float EMOTE_SIZE = 16f;
+   private static final float EMOTE_SIZE = 32f;
 
    private final GameContext2D context;
    private final String targetId;
@@ -126,9 +126,11 @@ public class SpeechBubble extends Actor {
          return;
       }
       batch.setColor(getColor());
-      background.draw(batch, getX(), getY(), getWidth(), getHeight());
-      bottom.setColor(getColor());
-      bottom.draw(batch, parentAlpha);
+      if (emote == null) {
+         background.draw(batch, getX(), getY(), getWidth(), getHeight());
+         bottom.setColor(getColor());
+         bottom.draw(batch, parentAlpha);
+      }
       if (emote != null) {
          Animation<TextureRegion> animation = emote.getAnimation();
          TextureRegion region = animation.getKeyFrame(deltaTimer.getTicks());

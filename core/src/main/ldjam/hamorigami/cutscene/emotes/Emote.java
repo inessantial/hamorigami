@@ -11,7 +11,7 @@ public enum Emote {
    SMILE(0),
    CONFUSION(0),
    SADNESS(0),
-   SHAKE_HEAD(0),
+   DISAGREE(0),
    AGREE(0);
 
    private Animation<TextureRegion> animation;
@@ -24,7 +24,7 @@ public enum Emote {
    public Animation<TextureRegion> getAnimation() {
       if (this.animation == null) {
          final int frames = 8;
-         final int size = 16;
+         final int size = 32;
          final float duration = 0.05f;
          final Texture texture = SharedAssetManager.getInstance().get(Assets.Textures.EMOTE_SPRITESHEET);
          Array<TextureRegion> regions = new Array<TextureRegion>();
