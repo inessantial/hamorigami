@@ -69,6 +69,12 @@ entity spawns at x,y
 *`x` is the horizontal position of the scene (0 is left)*
 *`y` is the vertical position of the scene (0 is bottom)*
 
+The following spirit entities are currently supported:
+
+* ame
+* hi
+*player
+
 #### Waiting
 
 A very important concept is waiting. This allows certain things to happen before the cutscene continues.
