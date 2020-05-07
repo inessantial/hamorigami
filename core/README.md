@@ -8,13 +8,13 @@ Please put assets into the following directories:
 
 | Directory        | Purpose           | Naming conventions  |
 | ------------- |:-------------:| -----:|
-| assets/font | rue Type (.ttf) fonts | fontname.ttf |
-| assets/i18n | translation strings | translations_XX.properties where XX is an official [locale code](https://www.viralpatel.net/java-locale-list-tutorial/) |
-| assets/music | music in .ogg format | *.ogg |
-| assets/sound |sound in .ogg format | *.ogg |
-| assets/particles | 2D particle effects | name.p |
-| assets/texture | various textures | *.jpg, *.gif, *.png |
-| assets/game.play | The gameplay file | *.play |
+| [assets/font](assets/font) | True Type (.ttf) fonts | fontname.ttf |
+| [assets/i18n](assets/i18n) | translation strings | translations_XX.properties where XX is an official [locale code](https://www.viralpatel.net/java-locale-list-tutorial/) |
+| [assets/music](assets/music) | music in .ogg format | *.ogg |
+| [assets/sound](assets/sound) |sound in .ogg format | *.ogg |
+| [assets/particles](assets/particles) | 2D particle effects | name.p |
+| [assets/texture](assets/texture) | various textures | *.jpg, *.gif, *.png |
+| [assets/game.play](assets/game.play) | The gameplay file | *.play |
 
 ## Gameplay file
 
@@ -69,6 +69,12 @@ entity spawns at x,y
 *`x` is the horizontal position of the scene (0 is left)*
 *`y` is the vertical position of the scene (0 is bottom)*
 
+The following spirit entities are currently supported:
+
+* ame
+* hi
+* player
+
 #### Waiting
 
 A very important concept is waiting. This allows certain things to happen before the cutscene continues.
@@ -114,23 +120,48 @@ It is recommended to define sentences within the `assets/i18n` folder.
 
 For example within: `assets/i18n/translations.properties`
 ```
-my.dialog.01=This is a dialog
+cutscene.day1.kodama.01=This is a dialog
 ```
 and within: `assets/i18n/translations_DE.properties` you could define a German translation:
 ```
-my.dialog.01=Das ist ein Dialog
+cutscene.day1.kodama.01=Das ist ein Dialog
 ```
 Within the cutscene instruction, you then can automatically let the entity say the translated sentence:
 ```
-player says my.dialog.01
+player says cutscene.day1.kodama.01
 ```
 Depending on the language configured on the operating system of the player, the language gets automatically loaded (English is default).
+
+Please choose a name for the sentence that makes sense and is easy to remember. Some bad examples:
+```
+# very bad - when does he say this? What if I want to add another sentence for a particular day?
+cutscene.ame.01=hey
+# oops even worse!
+sentence1=you
+```
+Instead, we should have the concept of specific and general sentences per spirit. For example, there might be things certain spirits always say like certain catchphrases etc. while for story, some things are only said once:
+```
+# general sentences
+cutscene.ame.yawn=Yaaaaawn
+
+# day 1
+cutscene.day1.ame.01=Oh hey!
+cutscene.day1.ame.02=nice to see you
+cutscene.day1.hi.01=wow hey
+cutscene.day1.hi.02=mhhh
+
+# day 2
+cutscene.day2.ame.01=another day, another life
+cutscene.day2.ame.02=why? I wanna be friends with you...
+cutscene.day2.hi.01=stop talking to me
+cutscene.day2.hi.02=mhhh...
+```
 
 ##### Multiple sentences
 A player can say multiple sentences at once:
 ```
-player says my.dialog.01
-player says my.dialog.02
+ame says cutscene.day4.ame.01
+ame says cutscene.day4.ame.02
 ```
 It is quite impossible for someone to say two things at the same time, so those sentences get shown after another.
 
