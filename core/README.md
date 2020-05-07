@@ -73,7 +73,7 @@ The following spirit entities are currently supported:
 
 * ame
 * hi
-*player
+* player
 
 #### Waiting
 
