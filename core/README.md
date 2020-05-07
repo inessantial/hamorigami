@@ -145,16 +145,16 @@ Instead, we should have the concept of specific and general sentences per spirit
 cutscene.ame.yawn=Yaaaaawn
 
 # day 1
-cutscene.day1.ame.01
-cutscene.day1.ame.02
-cutscene.day1.hi.01
-cutscene.day1.hi.02
+cutscene.day1.ame.01=Oh hey!
+cutscene.day1.ame.02=nice to see you
+cutscene.day1.hi.01=wow hey
+cutscene.day1.hi.02=mhhh
 
 # day 2
-cutscene.day2.ame.01
-cutscene.day2.ame.02
-cutscene.day2.hi.01
-cutscene.day2.hi.02
+cutscene.day2.ame.01=another day, another life
+cutscene.day2.ame.02=why? I wanna be friends with you...
+cutscene.day2.hi.01=stop talking to me
+cutscene.day2.hi.02=mhhh...
 ```
 
 ##### Multiple sentences
