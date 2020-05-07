@@ -120,15 +120,15 @@ It is recommended to define sentences within the `assets/i18n` folder.
 
 For example within: `assets/i18n/translations.properties`
 ```
-my.dialog.01=This is a dialog
+cutscene.day1.kodama.01=This is a dialog
 ```
 and within: `assets/i18n/translations_DE.properties` you could define a German translation:
 ```
-my.dialog.01=Das ist ein Dialog
+cutscene.day1.kodama.01=Das ist ein Dialog
 ```
 Within the cutscene instruction, you then can automatically let the entity say the translated sentence:
 ```
-player says my.dialog.01
+player says cutscene.day1.kodama.02
 ```
 Depending on the language configured on the operating system of the player, the language gets automatically loaded (English is default).
 
@@ -160,8 +160,8 @@ cutscene.day2.hi.02=mhhh...
 ##### Multiple sentences
 A player can say multiple sentences at once:
 ```
-player says my.dialog.01
-player says my.dialog.02
+ame says cutscene.day4.ame.01
+ame says cutscene.day4.ame.02
 ```
 It is quite impossible for someone to say two things at the same time, so those sentences get shown after another.
 
