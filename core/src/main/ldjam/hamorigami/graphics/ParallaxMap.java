@@ -11,11 +11,12 @@ import de.bitbrain.braingdx.graphics.GameCamera;
 public class ParallaxMap {
 
    private final float initialOffsetX;
+   private final float initialOffsetY;
    private Sprite sprite;
 
    private GameCamera camera;
 
-   private float parallaxity;
+   private double parallaxity;
 
    private float width, height;
 
@@ -25,15 +26,17 @@ public class ParallaxMap {
 
    private float alpha = 1f;
 
-   public ParallaxMap(String assetId, GameCamera camera, float parallaxity) {
+   public ParallaxMap(String assetId, GameCamera camera, double parallaxity) {
       this.camera = camera;
       this.sprite = new Sprite(SharedAssetManager.getInstance().get(assetId, Texture.class));
       this.parallaxity = parallaxity;
       this.width = sprite.getWidth();
       this.height = sprite.getHeight();
 
-      float targetX = getTargetX(camera.getLeft());
-      this.initialOffsetX = targetX - camera.getLeft();
+      double targetX = getTarget(camera.getLeft());
+      double targetY = getTarget(camera.getTop());
+      this.initialOffsetX = (float) (targetX - camera.getLeft());
+      this.initialOffsetY = (float) (targetY - camera.getTop());
    }
 
    public void setAlpha(float alpha) {
@@ -52,16 +55,19 @@ public class ParallaxMap {
       float scaleOffetX = -(width * this.scale - width) / 2f;
       float scaleOffetY = -(height * this.scale - height) / 2f;
 
-      float baseX = camera.getLeft();
-      float baseY = camera.getTop();
+      float baseX = camera.getLeft() - camera.getShake().x;
+      float baseY = camera.getTop() - camera.getShake().y;
       // correct X position
-      float targetX = getTargetX(baseX);
-      sprite.setPosition(targetX - initialOffsetX + scaleOffetX, baseY + scaleOffetY);
+      double targetX = getTarget(baseX);
+      double targetY = getTarget(baseY);
+      sprite.setPosition(
+            (float)targetX - initialOffsetX + scaleOffetX,
+            (float)targetY - initialOffsetY + scaleOffetY);
       sprite.setSize(width * this.scale, height * this.scale);
       sprite.draw(batch, alpha);
    }
 
-   private float getTargetX(float focusX) {
-      return focusX / parallaxity;
+   private double getTarget(double focus) {
+      return focus / parallaxity;
    }
 }
