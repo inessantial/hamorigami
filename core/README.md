@@ -132,6 +132,31 @@ player says my.dialog.01
 ```
 Depending on the language configured on the operating system of the player, the language gets automatically loaded (English is default).
 
+Please choose a name for the sentence that makes sense and is easy to remember. Some bad examples:
+```
+# very bad - when does he say this? What if I want to add another sentence for a particular day?
+cutscene.ame.01=hey
+# oops even worse!
+sentence1=you
+```
+Instead, we should have the concept of specific and general sentences per spirit. For example, there might be things certain spirits always say like certain catchphrases etc. while for story, some things are only said once:
+```
+# general sentences
+cutscene.ame.yawn=Yaaaaawn
+
+# day 1
+cutscene.day1.ame.01
+cutscene.day1.ame.02
+cutscene.day1.hi.01
+cutscene.day1.hi.02
+
+# day 2
+cutscene.day2.ame.01
+cutscene.day2.ame.02
+cutscene.day2.hi.01
+cutscene.day2.hi.02
+```
+
 ##### Multiple sentences
 A player can say multiple sentences at once:
 ```
